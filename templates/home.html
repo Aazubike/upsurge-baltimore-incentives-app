@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UpSurge Baltimore — Incentives Matching</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore">
+    <span class="mark">Incentives &amp; Grants Matching</span>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">Baltimore region incentive matching</div>
+    <h1>117 programs. <span class="accent">One shortlist</span> for your company.</h1>
+    <p class="sub">
+      Answer a few questions about your business and we'll match you against
+      every active incentive, tax credit, and grant program available across
+      the Baltimore region — ranked and explained.
+    </p>
+    <div class="ledger-stat">
+      <span class="num">{{ program_count }}</span>
+      <span class="lbl">active programs across 7 counties</span>
+    </div>
+  </section>
+
+  <section class="paths">
+    <a href="/match/known" class="path-card">
+      <span class="tag">Known company</span>
+      <h2>Find your company</h2>
+      <p>Already in the Baltimore region database? We'll pull what we know and only ask what's missing.</p>
+      <span class="go">Search companies <span class="arrow">&#8599;</span></span>
+    </a>
+
+    <a href="/match/new" class="path-card">
+      <span class="tag">New company</span>
+      <h2>Start from scratch</h2>
+      <p>Not in our records yet, or prefer to enter everything yourself. Five quick questions.</p>
+      <span class="go">Start intake <span class="arrow">&#8599;</span></span>
+    </a>
+  </section>
+
+  <section class="how-it-works">
+    <h3>How matching works</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="index">01</div>
+        <h4>Five questions</h4>
+        <p>Region, stage, size, industry, and ownership — confirmed or asked fresh.</p>
+      </div>
+      <div class="step">
+        <div class="index">02</div>
+        <h4>Rules-based filter</h4>
+        <p>Hard eligibility gates narrow 117 programs to what you actually qualify for.</p>
+      </div>
+      <div class="step">
+        <div class="index">03</div>
+        <h4>Ranked results</h4>
+        <p>Gemini reasons over the shortlist and explains why each program fits.</p>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

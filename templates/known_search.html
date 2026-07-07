@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find your company — UpSurge Baltimore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
+    <span class="mark">Known company</span>
+  </header>
+
+  <section class="flow-wrap">
+    <div class="eyebrow">Step 1 of 2</div>
+    <h1 class="flow-h1">Find your company</h1>
+    <p class="flow-sub">Start typing your company name. We'll pull what we already know.</p>
+
+    <input type="text" id="search" class="search-input" placeholder="e.g. 410 Labs, EcoMap Technologies..." autocomplete="off">
+    <div id="results" class="search-results"></div>
+
+    <p class="flow-alt">Not finding your company? <a href="/match/new">Start from scratch instead &#8599;</a></p>
+  </section>
+
+  <script>
+    const input = document.getElementById('search');
+    const results = document.getElementById('results');
+    let debounceTimer;
+
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      const q = input.value.trim();
+      if (q.length < 2) { results.innerHTML = ''; return; }
+      debounceTimer = setTimeout(() => {
+        fetch('/api/companies/search?q=' + encodeURIComponent(q))
+          .then(r => r.json())
+          .then(data => {
+            results.innerHTML = '';
+            if (data.length === 0) {
+              results.innerHTML = '<div class="no-results">No match. Try a different spelling, or start from scratch.</div>';
+              return;
+            }
+            data.forEach(company => {
+              const div = document.createElement('a');
+              div.className = 'result-row';
+              div.href = '/match/known/confirm?account=' + encodeURIComponent(company.account_name);
+              div.innerHTML = '<span class="rn">' + company.account_name + '</span><span class="rc">' + (company.county || '') + '</span>';
+              results.appendChild(div);
+            });
+          });
+      }, 200);
+    });
+  </script>
+
+</body>
+</html>

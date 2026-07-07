@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your matches — UpSurge Baltimore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
+    <span class="mark">{{ company_name }}</span>
+  </header>
+
+  <section class="results-wrap">
+    <div class="eyebrow">Results</div>
+    <h1 class="flow-h1">{{ shortlist|length }} programs you're eligible for</h1>
+    <p class="flow-sub">
+      Filtered from {{ total_programs }} total programs based on your answers.
+      {% if gemini_error %}
+      <span class="notice">{{ gemini_error }}</span>
+      {% endif %}
+    </p>
+
+    <div class="results-list">
+      {% for program in shortlist %}
+      <div class="result-card">
+        <div class="result-card-head">
+          <h3>{{ program['Program Name'] }}</h3>
+          {% if program['Acronym'] %}<span class="acronym">{{ program['Acronym'] }}</span>{% endif %}
+          {% if program.get('fit_score') %}<span class="fit-score">{{ program['fit_score'] }}% fit</span>{% endif %}
+        </div>
+        {% if program.get('reasoning') %}
+        <p class="result-reasoning">{{ program['reasoning'] }}</p>
+        {% endif %}
+        {% if program.get('flag') %}
+        <p class="result-flag">&#9888; {{ program['flag'] }}</p>
+        {% endif %}
+        {% if program.get('Program Description') and program['Program Description'] == program['Program Description'] %}
+        <p class="result-desc">{{ program['Program Description'] }}</p>
+        {% endif %}
+        <div class="result-meta">
+          <span><span class="ml">Type</span> {{ program['Instrument Type'] }}</span>
+          <span><span class="ml">Award</span> {{ program['Min Award / Benefit'] }} &ndash; {{ program['Max Award / Benefit'] }}</span>
+        </div>
+      </div>
+      {% else %}
+      <p class="flow-sub">No programs matched. This usually means the criteria were narrow — try adjusting your answers.</p>
+      {% endfor %}
+    </div>
+
+    <a href="/" class="flow-alt-link">&larr; Start over</a>
+  </section>
+
+</body>
+</html>

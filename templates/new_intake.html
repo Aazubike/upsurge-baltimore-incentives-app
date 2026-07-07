@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tell us about your company — UpSurge Baltimore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
+    <span class="mark">New company</span>
+  </header>
+
+  <section class="flow-wrap">
+    <div class="eyebrow">Step 1 of 1</div>
+    <h1 class="flow-h1">Tell us about your company</h1>
+    <p class="flow-sub">Five questions. Takes about a minute.</p>
+
+    <form method="POST" action="/match/results" class="flow-form">
+      <input type="hidden" name="company_name" value="New company (not on file)">
+
+      <div class="field-group">
+        <label class="field-label new">County</label>
+        <select name="county" required>
+          <option value="" disabled selected>Select a county</option>
+          {% for c in counties %}
+          <option value="{{ c }}">{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label new">Business stage</label>
+        <select name="stage" required>
+          <option value="" disabled selected>Select a stage</option>
+          {% for s in stages %}
+          <option value="{{ s }}">{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label new">Employee count</label>
+          <input type="number" name="employee_count" min="0" placeholder="e.g. 8">
+        </div>
+        <div class="field-group">
+          <label class="field-label new">Annual revenue ($)</label>
+          <input type="number" name="annual_revenue" min="0" placeholder="e.g. 400000">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label new">Industry</label>
+        <select name="industry" required>
+          <option value="" disabled selected>Select an industry</option>
+          {% for i in industries %}
+          <option value="{{ i }}">{{ i }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label new">Ownership</label>
+        <div class="checkbox-group">
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="woman-owned"> Woman-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="minority-owned"> Minority-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="veteran-owned"> Veteran-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of these apply</label>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">See my matches <span class="arrow">&#8599;</span></button>
+    </form>
+  </section>
+
+</body>
+</html>

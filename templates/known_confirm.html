@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm details — UpSurge Baltimore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
+    <span class="mark">{{ company.get('Account Name', '') }}</span>
+  </header>
+
+  <section class="flow-wrap">
+    <div class="eyebrow">Step 2 of 2</div>
+    <h1 class="flow-h1">Confirm a few things</h1>
+    <p class="flow-sub">Pulled from your record on file. Fix anything that's changed.</p>
+
+    <form method="POST" action="/match/results" class="flow-form">
+      <input type="hidden" name="company_name" value="{{ company.get('Account Name', '') }}">
+
+      <div class="field-group">
+        <label class="field-label confirmed">County <span class="src">from record</span></label>
+        <select name="county" required>
+          {% for c in counties %}
+          <option value="{{ c }}" {% if c == default_county %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label {% if suggested_stage %}suggested{% else %}new{% endif %}">
+          Business stage
+          {% if suggested_stage %}<span class="src">suggested from funding history</span>{% else %}<span class="src">not tracked — please select</span>{% endif %}
+        </label>
+        <select name="stage" required>
+          {% for s in stages %}
+          <option value="{{ s }}" {% if s == suggested_stage %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label confirmed">Employee count <span class="src">from record</span></label>
+          <input type="number" name="employee_count" value="{{ default_employees or '' }}" min="0">
+        </div>
+        <div class="field-group">
+          <label class="field-label confirmed">Annual revenue ($) <span class="src">from record</span></label>
+          <input type="number" name="annual_revenue" value="{{ default_revenue or '' }}" min="0">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label confirmed">Industry <span class="src">from record</span></label>
+        <select name="industry" required>
+          {% for i in industries %}
+          <option value="{{ i }}" {% if i == default_industry %}selected{% endif %}>{{ i }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label new">Ownership <span class="src">not tracked anywhere — please select</span></label>
+        <div class="checkbox-group">
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="woman-owned"> Woman-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="minority-owned"> Minority-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="veteran-owned"> Veteran-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of these apply</label>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">See my matches <span class="arrow">&#8599;</span></button>
+    </form>
+  </section>
+
+</body>
+</html>
