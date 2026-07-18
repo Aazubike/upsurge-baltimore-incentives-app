@@ -17,7 +17,7 @@
 
   <section class="hero">
     <div class="eyebrow">Baltimore region incentive matching</div>
-    <h1>117 programs. <span class="accent">One shortlist</span> for your company.</h1>
+    <h1>{{ program_count }} programs. <span class="accent">One shortlist</span> for your company.</h1>
     <p class="sub">
       Answer a few questions about your business and we'll match you against
       every active incentive, tax credit, and grant program available across
@@ -56,7 +56,7 @@
       <div class="step">
         <div class="index">02</div>
         <h4>Rules-based filter</h4>
-        <p>Hard eligibility gates narrow 117 programs to what you actually qualify for.</p>
+        <p>Hard eligibility gates narrow {{ program_count }} programs to what you actually qualify for.</p>
       </div>
       <div class="step">
         <div class="index">03</div>
@@ -64,6 +64,7 @@
         <p>Gemini reasons over the shortlist and explains why each program fits.</p>
       </div>
     </div>
+    <a href="/how-it-works" class="flow-alt-link">Learn more about how ranking works &#8599;</a>
   </section>
 
 </body>

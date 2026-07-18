@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Ranking Works — UpSurge Baltimore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
+    <span class="mark">How Ranking Works</span>
+  </header>
+
+  <section class="flow-wrap">
+    <div class="eyebrow">Methodology</div>
+    <h1 class="flow-h1">How we match and rank programs</h1>
+    <p class="flow-sub">
+      This tool never guesses at eligibility silently. Here's exactly what happens
+      between your answers and the results you see.
+    </p>
+
+    <div class="method-block">
+      <h3 class="method-h3">Step 1 — Hard eligibility filter</h3>
+      <p class="method-p">
+        Before any AI is involved, a deterministic rules engine checks your region, business
+        stage, and any explicit industry exclusions against every program's stated
+        requirements. If a program flatly doesn't apply to your region or stage, it's
+        removed here — no AI judgment call, just a direct rule.
+      </p>
+    </div>
+
+    <div class="method-block">
+      <h3 class="method-h3">Step 2 — Weighted fit scoring</h3>
+      <p class="method-p">
+        Everything that survives the hard filter gets scored by Gemini against a fixed rubric:
+      </p>
+      <div class="rubric-list">
+        <div class="rubric-row"><span class="rubric-label">Location fit</span><span class="rubric-bar" style="width:20%"></span><span class="rubric-pct">20%</span></div>
+        <div class="rubric-row"><span class="rubric-label">Business stage fit</span><span class="rubric-bar" style="width:20%"></span><span class="rubric-pct">20%</span></div>
+        <div class="rubric-row"><span class="rubric-label">Size (employees/revenue)</span><span class="rubric-bar" style="width:15%"></span><span class="rubric-pct">15%</span></div>
+        <div class="rubric-row"><span class="rubric-label">Industry fit</span><span class="rubric-bar" style="width:15%"></span><span class="rubric-pct">15%</span></div>
+        <div class="rubric-row"><span class="rubric-label">Ownership / MWBE fit</span><span class="rubric-bar" style="width:10%"></span><span class="rubric-pct">10%</span></div>
+        <div class="rubric-row"><span class="rubric-label">Overall program relevance</span><span class="rubric-bar" style="width:20%"></span><span class="rubric-pct">20%</span></div>
+      </div>
+      <p class="method-p">
+        Some programs (from the Maryland Business Compass dataset) don't have data
+        for stage, size, or ownership at all. When that's the case, that dimension is
+        left out of the score entirely rather than penalizing the program for missing data.
+      </p>
+    </div>
+
+    <div class="method-block">
+      <h3 class="method-h3">Step 3 — Match tiers</h3>
+      <p class="method-p">
+        Scores are grouped into tiers so you can scan results quickly:
+      </p>
+      <div class="tier-legend">
+        <span class="tier-badge tier-strong">Strong Match</span><span class="tier-desc">75%+ fit</span>
+        <span class="tier-badge tier-good">Good Match</span><span class="tier-desc">50&ndash;74% fit</span>
+        <span class="tier-badge tier-possible">Possible Match</span><span class="tier-desc">Below 50% fit</span>
+      </div>
+    </div>
+
+    <div class="method-block">
+      <h3 class="method-h3">Step 4 — "Verification needed" programs</h3>
+      <p class="method-p">
+        If a program states a specific requirement your profile clearly doesn't meet
+        (for example, an employee cap you exceed), we don't force a percentage onto it.
+        Instead it's shown separately with the exact reason, so you can judge for yourself
+        rather than trust a number we're not confident in.
+      </p>
+    </div>
+
+    <div class="method-block">
+      <h3 class="method-h3">Step 5 — Baltimore-area vs. statewide</h3>
+      <p class="method-p">
+        Programs that specifically name a Baltimore-region county are shown first, since
+        they're the most locally targeted. Statewide Maryland programs you also qualify
+        for are shown in a second section below — still eligible, just broader in scope.
+      </p>
+    </div>
+
+    <a href="/" class="flow-alt-link">&larr; Back to home</a>
+  </section>
+
+</body>
+</html>

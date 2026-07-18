@@ -14,7 +14,7 @@ _rounds_df = None
 
 def load_all():
     global _incentives_df, _companies_df, _rounds_df
-    _incentives_df = pd.read_excel(DATA_DIR / "Incentives_Classifier_Normalized.xlsx")
+    _incentives_df = pd.read_excel(DATA_DIR / "Incentives_Master_Combined.xlsx")
     _companies_df = pd.read_excel(DATA_DIR / "Known_Companies_Clean.xlsx")
     _rounds_df = pd.read_excel(DATA_DIR / "Venture_Rounds_Clean.xlsx")
     return _incentives_df, _companies_df, _rounds_df
@@ -80,12 +80,21 @@ def suggest_stage_from_rounds(account_id: str) -> str | None:
 
 def get_industry_options():
     """Clean, deduped industry list for the intake form dropdown."""
+    # Known spelling/pluralization variants from different source data --
+    # these are the SAME category, just written differently across sources.
+    CANONICAL_MERGE = {
+        "aerospace and defence": "Aerospace and Defense",
+        "aerospace and defense": "Aerospace and Defense",
+        "medical device": "Medical Devices",
+        "medical devices": "Medical Devices",
+    }
     df = get_companies()
     raw = df["Industry SoT"].dropna().tolist()
     cleaned = set()
     for v in raw:
         v = str(v).split(" - ")[0].strip()
         if v and v.lower() != "no value":
+            v = CANONICAL_MERGE.get(v.lower(), v)
             cleaned.add(v)
     return sorted(cleaned)
 

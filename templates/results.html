@@ -17,22 +17,72 @@
 
   <section class="results-wrap">
     <div class="eyebrow">Results</div>
-    <h1 class="flow-h1">{{ shortlist|length }} programs you're eligible for</h1>
-    <p class="flow-sub">
-      Filtered from {{ total_programs }} total programs based on your answers.
-      {% if gemini_error %}
-      <span class="notice">{{ gemini_error }}</span>
-      {% endif %}
-    </p>
+    {% set match_list = shortlist | selectattr('match_tier', 'equalto', 'match') | list %}
+    {% set possible_list = shortlist | selectattr('match_tier', 'equalto', 'possible') | sort(attribute='fit_score', reverse=true) | list %}
+    {% set ineligible_list = shortlist | selectattr('eligibility', 'equalto', 'likely_ineligible') | list %}
 
-    <div class="results-list">
-      {% for program in shortlist %}
+    {% if match_list %}
+    <h1 class="flow-h1">{{ match_list|length }} Match{{ 'es' if match_list|length != 1 else '' }} for your company</h1>
+    <p class="flow-sub">
+      {% if possible_list %}Plus {{ possible_list|length }} more possible match{{ 'es' if possible_list|length != 1 else '' }} on the next page.{% endif %}
+      {% if gemini_error %}<span class="notice">{{ gemini_error }}</span>{% endif %}
+    </p>
+    {% elif possible_list %}
+    <h1 class="flow-h1">{{ possible_list|length }} possible match{{ 'es' if possible_list|length != 1 else '' }} found</h1>
+    <p class="flow-sub">
+      Worth a look, but not exact fits.
+      {% if gemini_error %}<span class="notice">{{ gemini_error }}</span>{% endif %}
+    </p>
+    {% else %}
+    <h1 class="flow-h1">No matches found</h1>
+    <p class="flow-sub">
+      This usually means the criteria were narrow — try adjusting your answers.
+      {% if gemini_error %}<span class="notice">{{ gemini_error }}</span>{% endif %}
+    </p>
+    {% endif %}
+
+    {% macro tier_badge(tier) %}
+      {% if tier == 'match' %}<span class="tier-badge tier-strong">Match</span>
+      {% elif tier == 'possible' %}<span class="tier-badge tier-possible">Possible Match</span>
+      {% endif %}
+    {% endmacro %}
+
+    {% macro status_icon(status) %}
+      {% if status == 'match' %}<span class="s-icon s-match">&#10003;</span>
+      {% elif status == 'unmet' %}<span class="s-icon s-unmet">&#10007;</span>
+      {% elif status == 'partial' %}<span class="s-icon s-partial">~</span>
+      {% else %}<span class="s-icon s-no_data">&#8211;</span>
+      {% endif %}
+    {% endmacro %}
+
+    {% macro program_card(program) %}
+      {% set link = program.get('Registration / Program Link') %}
       <div class="result-card">
         <div class="result-card-head">
           <h3>{{ program['Program Name'] }}</h3>
-          {% if program['Acronym'] %}<span class="acronym">{{ program['Acronym'] }}</span>{% endif %}
-          {% if program.get('fit_score') %}<span class="fit-score">{{ program['fit_score'] }}% fit</span>{% endif %}
+          {% if program.get('Acronym') and program['Acronym'] == program['Acronym'] %}<span class="acronym">{{ program['Acronym'] }}</span>{% endif %}
+          {{ tier_badge(program.get('match_tier')) }}
+          {% if program.get('fit_score') and program.get('breakdown') %}
+          <details class="score-toggle">
+            <summary class="fit-score">{{ program['fit_score'] }}% fit</summary>
+            <div class="breakdown-panel">
+              {% for key, label in [('location','Location'),('stage','Stage'),('size','Size'),('industry','Industry'),('mwbe','MWBE'),('overall','Overall')] %}
+                {% set item = program['breakdown'].get(key) %}
+                {% if item %}
+                <div class="breakdown-line">
+                  {{ status_icon(item.get('status')) }}
+                  <span class="breakdown-label">{{ label }}</span>
+                  <span class="breakdown-note">{{ item.get('note','') }}</span>
+                </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </details>
+          {% elif program.get('fit_score') %}
+          <span class="fit-score">{{ program['fit_score'] }}% fit</span>
+          {% endif %}
         </div>
+
         {% if program.get('reasoning') %}
         <p class="result-reasoning">{{ program['reasoning'] }}</p>
         {% endif %}
@@ -42,17 +92,128 @@
         {% if program.get('Program Description') and program['Program Description'] == program['Program Description'] %}
         <p class="result-desc">{{ program['Program Description'] }}</p>
         {% endif %}
+
         <div class="result-meta">
           <span><span class="ml">Type</span> {{ program['Instrument Type'] }}</span>
-          <span><span class="ml">Award</span> {{ program['Min Award / Benefit'] }} &ndash; {{ program['Max Award / Benefit'] }}</span>
+          {% set min_award = program.get('Min Award / Benefit') %}
+          {% set max_award = program.get('Max Award / Benefit') %}
+          {% set min_ok = min_award and min_award == min_award %}
+          {% set max_ok = max_award and max_award == max_award %}
+          {% if min_ok or max_ok %}
+          <span><span class="ml">Award</span> {{ min_award if min_ok else 'N/A' }} &ndash; {{ max_award if max_ok else 'N/A' }}</span>
+          {% endif %}
+          {% if link and link == link and link is string and link.startswith('http') %}
+          <a href="{{ link }}" target="_blank" rel="noopener" class="program-link">Apply / learn more &#8599;</a>
+          {% endif %}
         </div>
       </div>
-      {% else %}
-      <p class="flow-sub">No programs matched. This usually means the criteria were narrow — try adjusting your answers.</p>
-      {% endfor %}
+    {% endmacro %}
+
+    {% set match_baltimore = match_list | selectattr('Norm_Counties', 'ne', 'ALL') | list %}
+    {% set match_statewide = match_list | selectattr('Norm_Counties', 'equalto', 'ALL') | list %}
+
+    {% if possible_list %}
+    <div class="pagination-controls" id="top-pagination">
+      <button type="button" onclick="goToPage(-1)" id="page-prev">&#8249; Previous</button>
+      <span id="page-label">Page 1 of {{ ((possible_list|length - 1) // 12) + 2 }}</span>
+      <button type="button" onclick="goToPage(1)" id="page-next">Next &#8250;</button>
+    </div>
+    {% endif %}
+
+    <div id="match-section">
+      {% if match_baltimore %}
+      <div class="results-list">
+        {% for program in match_baltimore %}
+          {{ program_card(program) }}
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if match_statewide %}
+      <div class="section-divider">
+        <h2>Statewide Maryland Programs</h2>
+        <p>Not Baltimore-specific, but you still qualify — broader in scope.</p>
+      </div>
+      <div class="results-list">
+        {% for program in match_statewide %}
+          {{ program_card(program) }}
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
 
+    {% if possible_list %}
+    <div id="possible-section" style="display: none;">
+      <div class="section-divider">
+        <h2>Possible Matches</h2>
+        <p>Also worth exploring for your company.</p>
+      </div>
+      <div class="results-list" id="possible-list">
+        {% for program in possible_list %}
+          <div class="paginated-card" data-page="{{ loop.index0 // 12 }}">
+            {{ program_card(program) }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="pagination-controls">
+      <button type="button" onclick="goToPage(-1)" id="page-prev-bottom">&#8249; Previous</button>
+      <span id="page-label-bottom">Page 1 of {{ ((possible_list|length - 1) // 12) + 2 }}</span>
+      <button type="button" onclick="goToPage(1)" id="page-next-bottom">Next &#8250;</button>
+    </div>
+
+    <script>
+      (function() {
+        var currentPage = 1;
+        var possiblePageCount = {{ ((possible_list|length - 1) // 12) + 1 }};
+        var totalPages = 1 + possiblePageCount;
+
+        function render() {
+          var matchSection = document.getElementById('match-section');
+          var possibleSection = document.getElementById('possible-section');
+
+          if (currentPage === 1) {
+            matchSection.style.display = '';
+            possibleSection.style.display = 'none';
+          } else {
+            matchSection.style.display = 'none';
+            possibleSection.style.display = '';
+            var possiblePageIndex = currentPage - 2;
+            document.querySelectorAll('#possible-list .paginated-card').forEach(function(card) {
+              card.style.display = (parseInt(card.getAttribute('data-page')) === possiblePageIndex) ? '' : 'none';
+            });
+          }
+
+          var labelText = 'Page ' + currentPage + ' of ' + totalPages;
+          ['page-label', 'page-label-bottom'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.textContent = labelText;
+          });
+          ['page-prev', 'page-prev-bottom'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.style.visibility = (currentPage === 1) ? 'hidden' : 'visible';
+          });
+          ['page-next', 'page-next-bottom'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.style.visibility = (currentPage === totalPages) ? 'hidden' : 'visible';
+          });
+
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.goToPage = function(delta) {
+          currentPage = Math.max(1, Math.min(totalPages, currentPage + delta));
+          render();
+        };
+
+        render();
+      })();
+    </script>
+    {% endif %}
+
     <a href="/" class="flow-alt-link">&larr; Start over</a>
+    <a href="/how-it-works" class="flow-alt-link" style="margin-left: 1.5rem;">How ranking works &#8599;</a>
   </section>
 
 </body>

@@ -64,13 +64,28 @@
         </select>
       </div>
 
-      <div class="field-group">
-        <label class="field-label new">Ownership</label>
+      <div class="field-group field-card">
+        <label class="checkbox-option">
+          <input type="checkbox" id="ez-interest" onclick="document.getElementById('ez-zip-wrap').style.display = this.checked ? 'block' : 'none';">
+          I might be in a Maryland Enterprise Zone — check my address
+        </label>
+        <div id="ez-zip-wrap" style="display: none; margin-top: 1rem;">
+          <label class="field-label info">ZIP code <span class="src">used to check Enterprise Zone-specific programs</span></label>
+          <input type="text" name="zip_code" placeholder="e.g. 21201" maxlength="10">
+        </div>
+      </div>
+
+      <div class="field-group field-card">
+        <label class="field-label info">Ownership <span class="src">optional — helps match certification-specific programs (e.g. MBE, WBE)</span></label>
         <div class="checkbox-group">
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="woman-owned"> Woman-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="minority-owned"> Minority-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="veteran-owned"> Veteran-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of these apply</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Black"> Black or African American-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Hispanic/Latino"> Hispanic or Latino-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Asian"> Asian-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Native American"> Native American or Indigenous-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Women"> Women-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Veteran"> Veteran-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Disabled"> Owned by a person with a disability</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of these apply / prefer not to answer</label>
         </div>
       </div>
 

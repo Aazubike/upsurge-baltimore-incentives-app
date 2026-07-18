@@ -24,12 +24,25 @@ def startup():
     print("Data loaded: incentives, known companies, venture rounds.")
 
 
+@app.get("/ping")
+def ping():
+    """Lightweight endpoint for an uptime monitor (e.g. UptimeRobot) to keep
+    the Render free-tier instance from spinning down after 15 min idle.
+    Returns instantly, no template rendering or data access."""
+    return {"status": "ok"}
+
+
 @app.get("/")
 def home(request: Request):
     program_count = len(get_incentives())
     return templates.TemplateResponse(
         "home.html", {"request": request, "program_count": program_count}
     )
+
+
+@app.get("/how-it-works")
+def how_it_works(request: Request):
+    return templates.TemplateResponse("how_it_works.html", {"request": request})
 
 
 @app.get("/match/known")
@@ -103,6 +116,7 @@ def match_results(
     employee_count: Optional[str] = Form(None),
     annual_revenue: Optional[str] = Form(None),
     mwbe_groups: List[str] = Form([]),
+    zip_code: Optional[str] = Form(None),
 ):
     def to_int_or_none(val):
         if val is None or val.strip() == "":
@@ -119,15 +133,18 @@ def match_results(
         "annual_revenue": to_int_or_none(annual_revenue),
         "industry": industry,
         "mwbe_groups": [g for g in mwbe_groups if g != "none"],
+        "zip_code": zip_code.strip() if zip_code else None,  # captured for future Enterprise Zone verification, not yet used to filter
     }
     shortlist_df = filter_eligible(answers)
-    ranked_shortlist, gemini_error = rank_shortlist(answers, shortlist_df)
+    ranked_shortlist, dropped_count, gemini_error = rank_shortlist(answers, shortlist_df)
 
     return templates.TemplateResponse("results.html", {
         "request": request,
         "company_name": company_name,
         "shortlist": ranked_shortlist,
         "total_programs": len(get_incentives()),
+        "total_eligible": len(shortlist_df),
+        "dropped_count": dropped_count,
         "gemini_enabled": gemini_error is None,
         "gemini_error": gemini_error,
     })
