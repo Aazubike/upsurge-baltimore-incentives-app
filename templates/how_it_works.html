@@ -56,22 +56,40 @@
     <div class="method-block">
       <h3 class="method-h3">Step 3 — Match tiers</h3>
       <p class="method-p">
-        Scores are grouped into tiers so you can scan results quickly:
+        Only two tiers are ever shown to you — anything scoring below 75% is
+        left out entirely rather than cluttering your results with weak fits:
       </p>
-      <div class="tier-legend">
-        <span class="tier-badge tier-strong">Strong Match</span><span class="tier-desc">75%+ fit</span>
-        <span class="tier-badge tier-good">Good Match</span><span class="tier-desc">50&ndash;74% fit</span>
-        <span class="tier-badge tier-possible">Possible Match</span><span class="tier-desc">Below 50% fit</span>
+
+      <div class="tier-scale">
+        <div class="tier-scale-bar">
+          <div class="tier-scale-segment tier-scale-hidden" style="width: 75%;"></div>
+          <div class="tier-scale-segment tier-scale-possible" style="width: 15%;"></div>
+          <div class="tier-scale-segment tier-scale-match" style="width: 10%;"></div>
+        </div>
+        <div class="tier-scale-labels">
+          <span style="left: 0%;">0%</span><span style="left: 75%;">75%</span><span style="left: 90%;">90%</span><span style="left: 100%;">100%</span>
+        </div>
       </div>
+
+      <div class="tier-legend">
+        <span class="tier-badge tier-strong">Match</span><span class="tier-desc">90%+ fit — shown first</span>
+        <span class="tier-badge tier-possible">Possible Match</span><span class="tier-desc">75&ndash;89% fit — shown on later pages</span>
+      </div>
+      <p class="method-p">
+        Below 75%, a program isn't shown at all — we'd rather give you a short,
+        confident list than a long one padded with weak fits.
+      </p>
     </div>
 
     <div class="method-block">
-      <h3 class="method-h3">Step 4 — "Verification needed" programs</h3>
+      <h3 class="method-h3">Step 4 — Enterprise Zone programs</h3>
       <p class="method-p">
-        If a program states a specific requirement your profile clearly doesn't meet
-        (for example, an employee cap you exceed), we don't force a percentage onto it.
-        Instead it's shown separately with the exact reason, so you can judge for yourself
-        rather than trust a number we're not confident in.
+        If a program requires being in a Maryland Enterprise Zone, it's checked
+        against your ZIP code against real state Enterprise Zone data — not guessed.
+        No ZIP entered means those programs are left out; a ZIP that matches a real
+        zone shows the specific zone by name. One honest limitation: this check is
+        ZIP-code level, not exact-address level, so it's a strong signal but not a
+        substitute for confirming your specific address against the zone boundary.
       </p>
     </div>
 

@@ -10,62 +10,223 @@
 </head>
 <body>
 
+  <div id="intro-overlay" class="intro-overlay">
+    <div class="intro-glow"></div>
+    <img id="intro-logo" class="intro-logo" src="/static/img/upsurge_logo_white_transparent.png" alt="UpSurge Baltimore">
+  </div>
+
   <header class="site-header">
-    <img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore">
-    <span class="mark">Incentives &amp; Grants Matching</span>
+    <img id="header-logo" class="logo" src="/static/img/upsurge_logo_white_transparent.png" alt="UpSurge Baltimore" style="opacity: 0;">
   </header>
 
-  <section class="hero">
+  <section class="hero" id="main-hero">
     <div class="eyebrow">Baltimore region incentive matching</div>
     <h1>{{ program_count }} programs. <span class="accent">One shortlist</span> for your company.</h1>
-    <p class="sub">
-      Answer a few questions about your business and we'll match you against
-      every active incentive, tax credit, and grant program available across
-      the Baltimore region — ranked and explained.
-    </p>
-    <div class="ledger-stat">
+    <p class="sub">Type your company name to get started.</p>
+
+    <div class="unified-search-wrap" id="search-wrap">
+      <input type="text" id="company-search" class="unified-search-input"
+             placeholder="Type your company name..." autocomplete="off">
+      <div id="company-search-results" class="unified-search-results"></div>
+      <a id="scratch-link" href="#" class="scratch-link" onclick="startFromScratch(); return false;">
+        Can't find it? Continue anyway <span class="arrow">&#8599;</span>
+      </a>
+    </div>
+
+    <div class="ledger-stat" id="ledger-stat">
       <span class="num">{{ program_count }}</span>
       <span class="lbl">active programs across 7 counties</span>
     </div>
   </section>
 
-  <section class="paths">
-    <a href="/match/known" class="path-card">
-      <span class="tag">Known company</span>
-      <h2>Find your company</h2>
-      <p>Already in the Baltimore region database? We'll pull what we know and only ask what's missing.</p>
-      <span class="go">Search companies <span class="arrow">&#8599;</span></span>
-    </a>
+  <section class="flow-wrap questions-section" id="questions-section" style="display: none;">
+    <div class="eyebrow">Almost there</div>
+    <h1 class="flow-h1" id="questions-heading">A few quick things</h1>
+    <p class="flow-sub" id="questions-sub">We'll only ask what we don't already know.</p>
 
-    <a href="/match/new" class="path-card">
-      <span class="tag">New company</span>
-      <h2>Start from scratch</h2>
-      <p>Not in our records yet, or prefer to enter everything yourself. Five quick questions.</p>
-      <span class="go">Start intake <span class="arrow">&#8599;</span></span>
-    </a>
+    <form method="POST" action="/match/results" class="flow-form">
+      <div class="field-group">
+        <label class="field-label new">Company name</label>
+        <input type="text" name="company_name" id="f-company-name" placeholder="Your company name" required>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label new">County</label>
+        <select name="county" id="f-county" required>
+          <option value="" disabled selected>Select a county</option>
+          {% for c in counties %}
+          <option value="{{ c }}">{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label new">Business stage</label>
+        <select name="stage" id="f-stage" required>
+          <option value="" disabled selected>Select a stage</option>
+          {% for s in stages %}
+          <option value="{{ s }}">{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label new">Employee count</label>
+          <input type="number" name="employee_count" id="f-employees" min="0" placeholder="e.g. 8">
+        </div>
+        <div class="field-group">
+          <label class="field-label new">Annual revenue ($)</label>
+          <input type="number" name="annual_revenue" id="f-revenue" min="0" placeholder="e.g. 400000">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label new">Industry</label>
+        <select name="industry" id="f-industry" required>
+          <option value="" disabled selected>Select an industry</option>
+          {% for i in industries %}
+          <option value="{{ i }}">{{ i }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field-group field-card">
+        <label class="field-label info">Business address <span class="src">optional — also used to check Enterprise Zone-specific programs</span></label>
+        <input type="text" name="street_address" id="f-address" placeholder="e.g. 400 E Pratt St, Baltimore, MD" style="margin-bottom: 0.85rem;">
+        <input type="text" name="zip_code" id="f-zip" placeholder="ZIP code, e.g. 21201" maxlength="10">
+      </div>
+
+      <div class="field-group field-card">
+        <label class="field-label info">Ownership <span class="src">optional — helps match certification-specific programs (e.g. MBE, WBE)</span></label>
+        <div class="checkbox-group">
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Black"> Black or African American-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Hispanic/Latino"> Hispanic or Latino-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Asian"> Asian-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Native American"> Native American or Indigenous-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Women"> Women-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Veteran"> Veteran-owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Disabled"> Owned by a person with a disability</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of these apply / prefer not to answer</label>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">See my matches <span class="arrow">&#8599;</span></button>
+    </form>
   </section>
 
-  <section class="how-it-works">
-    <h3>How matching works</h3>
-    <div class="steps">
-      <div class="step">
-        <div class="index">01</div>
-        <h4>Five questions</h4>
-        <p>Region, stage, size, industry, and ownership — confirmed or asked fresh.</p>
-      </div>
-      <div class="step">
-        <div class="index">02</div>
-        <h4>Rules-based filter</h4>
-        <p>Hard eligibility gates narrow {{ program_count }} programs to what you actually qualify for.</p>
-      </div>
-      <div class="step">
-        <div class="index">03</div>
-        <h4>Ranked results</h4>
-        <p>Gemini reasons over the shortlist and explains why each program fits.</p>
-      </div>
-    </div>
-    <a href="/how-it-works" class="flow-alt-link">Learn more about how ranking works &#8599;</a>
-  </section>
+  <script>
+    /* ---------- Intro sequence ---------- */
+    (function() {
+      const introOverlay = document.getElementById('intro-overlay');
+      const introLogo = document.getElementById('intro-logo');
+      const headerLogo = document.getElementById('header-logo');
+      const introGlow = document.querySelector('.intro-glow');
+
+      function runFlip() {
+        const targetRect = headerLogo.getBoundingClientRect();
+        const startRect = introLogo.getBoundingClientRect();
+
+        const scale = targetRect.height / startRect.height;
+        const deltaX = (targetRect.left + targetRect.width / 2) - (startRect.left + startRect.width / 2);
+        const deltaY = (targetRect.top + targetRect.height / 2) - (startRect.top + startRect.height / 2);
+
+        // Glow stays lit behind the logo for the entire flip.
+        // It only fades out at the very end, together with the overlay —
+        // so it reads as one continuous motion instead of vanishing early.
+
+        // Longer, smoother flip
+        introLogo.style.transition = 'transform 1.3s cubic-bezier(0.65, 0, 0.35, 1)';
+        introLogo.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scale})`;
+
+        // Overlay starts dissolving while the flip is still finishing —
+        // this overlap is what makes it read as one continuous motion.
+        setTimeout(() => {
+          headerLogo.style.transition = 'opacity 0.6s ease';
+          headerLogo.style.opacity = '1';
+          introOverlay.style.transition = 'opacity 0.9s ease';
+          introOverlay.style.opacity = '0';
+          setTimeout(() => { introOverlay.style.display = 'none'; }, 900);
+        }, 700);
+      }
+
+      setTimeout(runFlip, 900);
+    })();
+
+    /* ---------- Unified search ---------- */
+    const searchInput = document.getElementById('company-search');
+    const resultsBox = document.getElementById('company-search-results');
+    let debounceTimer;
+
+    searchInput.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      const q = searchInput.value.trim();
+
+      if (q.length < 2) {
+        resultsBox.innerHTML = '';
+        resultsBox.classList.remove('has-results');
+        return;
+      }
+      debounceTimer = setTimeout(() => {
+        fetch('/api/companies/search?q=' + encodeURIComponent(q))
+          .then(r => r.json())
+          .then(data => {
+            resultsBox.innerHTML = '';
+            if (data.length === 0) {
+              resultsBox.classList.remove('has-results');
+              return;
+            }
+            data.forEach(company => {
+              const div = document.createElement('a');
+              div.className = 'result-row';
+              div.href = '#';
+              div.innerHTML = '<span class="rn">' + company.account_name + '</span><span class="rc">' + (company.county || '') + '</span>';
+              div.onclick = (e) => { e.preventDefault(); selectCompany(company.account_name); };
+              resultsBox.appendChild(div);
+            });
+            resultsBox.classList.add('has-results');
+          });
+      }, 100);
+    });
+
+    function revealQuestions(heading, sub) {
+      document.getElementById('questions-heading').textContent = heading;
+      document.getElementById('questions-sub').textContent = sub;
+      const section = document.getElementById('questions-section');
+      section.style.display = '';
+      setTimeout(() => { section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+    }
+
+    function clearForm() {
+      ['f-county', 'f-stage', 'f-industry'].forEach(id => document.getElementById(id).value = '');
+      ['f-employees', 'f-revenue', 'f-address', 'f-zip'].forEach(id => document.getElementById(id).value = '');
+    }
+
+    function selectCompany(accountName) {
+      resultsBox.innerHTML = '';
+      resultsBox.classList.remove('has-results');
+      searchInput.value = accountName;
+
+      fetch('/api/companies/details?account=' + encodeURIComponent(accountName))
+        .then(r => r.json())
+        .then(data => {
+          clearForm();
+          document.getElementById('f-company-name').value = accountName;
+          if (data.county) document.getElementById('f-county').value = data.county;
+          if (data.stage) document.getElementById('f-stage').value = data.stage;
+          if (data.industry) document.getElementById('f-industry').value = data.industry;
+          if (data.employee_count) document.getElementById('f-employees').value = data.employee_count;
+          if (data.address) document.getElementById('f-address').value = data.address;
+          if (data.zip_code) document.getElementById('f-zip').value = data.zip_code;
+          revealQuestions('Confirm a few things for ' + accountName, "Pulled from your record on file — fix anything that's changed.");
+        });
+    }
+
+    function startFromScratch() {
+      const typed = searchInput.value.trim();
+      window.location.href = '/match/new' + (typed ? '?name=' + encodeURIComponent(typed) : '');
+    }
+  </script>
 
 </body>
 </html>

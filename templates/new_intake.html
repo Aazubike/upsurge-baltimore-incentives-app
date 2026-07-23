@@ -12,16 +12,18 @@
 
   <header class="site-header">
     <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
-    <span class="mark">New company</span>
+    <span class="mark">{{ prefilled_name if prefilled_name else "New company" }}</span>
   </header>
 
   <section class="flow-wrap">
-    <div class="eyebrow">Step 1 of 1</div>
-    <h1 class="flow-h1">Tell us about your company</h1>
-    <p class="flow-sub">Five questions. Takes about a minute.</p>
+    <h1 class="flow-h1">{% if prefilled_name %}Tell us about {{ prefilled_name }}{% else %}Tell us about your company{% endif %}</h1>
+    <p class="flow-sub">Not on file yet — five quick questions and you're set.</p>
 
     <form method="POST" action="/match/results" class="flow-form">
-      <input type="hidden" name="company_name" value="New company (not on file)">
+      <div class="field-group">
+        <label class="field-label new">Company name</label>
+        <input type="text" name="company_name" value="{{ prefilled_name if prefilled_name else '' }}" placeholder="Your company name" required>
+      </div>
 
       <div class="field-group">
         <label class="field-label new">County</label>
@@ -65,14 +67,9 @@
       </div>
 
       <div class="field-group field-card">
-        <label class="checkbox-option">
-          <input type="checkbox" id="ez-interest" onclick="document.getElementById('ez-zip-wrap').style.display = this.checked ? 'block' : 'none';">
-          I might be in a Maryland Enterprise Zone — check my address
-        </label>
-        <div id="ez-zip-wrap" style="display: none; margin-top: 1rem;">
-          <label class="field-label info">ZIP code <span class="src">used to check Enterprise Zone-specific programs</span></label>
-          <input type="text" name="zip_code" placeholder="e.g. 21201" maxlength="10">
-        </div>
+        <label class="field-label info">Business address <span class="src">optional — also used to check Enterprise Zone-specific programs</span></label>
+        <input type="text" name="street_address" placeholder="e.g. 400 E Pratt St, Baltimore, MD" style="margin-bottom: 0.85rem;">
+        <input type="text" name="zip_code" placeholder="ZIP code, e.g. 21201" maxlength="10">
       </div>
 
       <div class="field-group field-card">

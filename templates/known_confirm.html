@@ -16,7 +16,6 @@
   </header>
 
   <section class="flow-wrap">
-    <div class="eyebrow">Step 2 of 2</div>
     <h1 class="flow-h1">Confirm a few things</h1>
     <p class="flow-sub">Pulled from your record on file. Fix anything that's changed.</p>
 
@@ -65,14 +64,12 @@
       </div>
 
       <div class="field-group field-card">
-        <label class="checkbox-option">
-          <input type="checkbox" id="ez-interest" onclick="document.getElementById('ez-zip-wrap').style.display = this.checked ? 'block' : 'none';">
-          I might be in a Maryland Enterprise Zone — check my address
+        <label class="field-label {{ 'confirmed' if default_address else 'info' }}">
+          Business address
+          <span class="src">{{ 'from record' if default_address else 'not on file — optional, also used to check Enterprise Zone-specific programs' }}</span>
         </label>
-        <div id="ez-zip-wrap" style="display: none; margin-top: 1rem;">
-          <label class="field-label info">ZIP code <span class="src">used to check Enterprise Zone-specific programs</span></label>
-          <input type="text" name="zip_code" placeholder="e.g. 21201" maxlength="10">
-        </div>
+        <input type="text" name="street_address" value="{{ default_address or '' }}" placeholder="e.g. 400 E Pratt St, Baltimore, MD" style="margin-bottom: 0.85rem;">
+        <input type="text" name="zip_code" value="{{ default_zip or '' }}" placeholder="ZIP code, e.g. 21201" maxlength="10">
       </div>
 
       <div class="field-group field-card">

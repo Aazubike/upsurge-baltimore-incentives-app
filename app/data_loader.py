@@ -1,7 +1,8 @@
 """
 Loads the three source datasets once at startup and keeps them in memory.
-No database needed at this scale (117 programs, ~540 companies, ~480 rounds).
+No database needed at this scale (117 programs, ~560 companies, ~480 rounds).
 """
+import re
 import pandas as pd
 from pathlib import Path
 
@@ -12,10 +13,32 @@ _companies_df = None
 _rounds_df = None
 
 
+def _extract_zip_from_address(address) -> str | None:
+    """Address SoT is free text like '822 guilford avenue, baltimore, md 21202'
+    (sometimes with a trailing source tag like ' - Li'). Pull out a 5-digit
+    zip, preferring one in Maryland's real range (206xx-219xx) if there's
+    more than one number that looks zip-shaped, since some addresses include
+    stray numbers (suite numbers, etc)."""
+    if not address or not isinstance(address, str):
+        return None
+    matches = re.findall(r"\b(\d{5})\b", address)
+    for m in matches:
+        if 20600 <= int(m) <= 21999:
+            return m
+    return matches[0] if matches else None
+
+
 def load_all():
     global _incentives_df, _companies_df, _rounds_df
     _incentives_df = pd.read_excel(DATA_DIR / "Incentives_Master_Combined.xlsx")
-    _companies_df = pd.read_excel(DATA_DIR / "Known_Companies_Clean.xlsx")
+
+    # This export has a title block before the real header row (row 12, 0-indexed).
+    companies = pd.read_excel(DATA_DIR / "Known_Companies_v2.xlsx", header=12)
+    companies = companies.loc[:, ~companies.columns.str.startswith("Unnamed")]
+    companies = companies[companies["Account Name"].notna()].copy()
+    companies["Derived_Zip"] = companies["Address SoT"].apply(_extract_zip_from_address)
+    _companies_df = companies
+
     _rounds_df = pd.read_excel(DATA_DIR / "Venture_Rounds_Clean.xlsx")
     return _incentives_df, _companies_df, _rounds_df
 
