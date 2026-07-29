@@ -10,7 +10,7 @@ from app.data_loader import (
 )
 from app.rules_engine import filter_eligible
 from app.gemini_matcher import rank_shortlist
-from sheets_logger import log_submission, update_feedback
+from app.sheets_logger import log_submission, update_feedback
 app = FastAPI(title="Baltimore Incentives Matching Tool")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
