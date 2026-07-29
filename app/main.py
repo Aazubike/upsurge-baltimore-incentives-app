@@ -10,7 +10,7 @@ from app.data_loader import (
 )
 from app.rules_engine import filter_eligible
 from app.gemini_matcher import rank_shortlist
-
+from sheets_logger import log_submission, update_feedback
 app = FastAPI(title="Baltimore Incentives Matching Tool")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -178,6 +178,22 @@ def match_results(
     shortlist_df = filter_eligible(answers)
     ranked_shortlist, dropped_count, gemini_error = rank_shortlist(answers, shortlist_df)
 
+# Log this submission to the Google Sheet -- every program that came
+    # back gets logged, both "match" (90%+) and "possible" (75-89%)
+    is_known_company = get_company_by_name(company_name) is not None
+    submission_id = log_submission(
+        flow_type="portfolio" if is_known_company else "intake",
+        company_name=company_name,
+        region=county,
+        stage=stage,
+        industry=industry,
+        ownership="|".join(answers["mwbe_groups"]) if answers["mwbe_groups"] else "",
+        zip_code=answers["zip_code"] or "",
+        matched_programs=[p["Program Name"] for p in ranked_shortlist],
+        match_tiers=[p["match_tier"] for p in ranked_shortlist],
+        match_scores=[p.get("fit_score") for p in ranked_shortlist],
+    )
+
     return templates.TemplateResponse("results.html", {
         "request": request,
         "company_name": company_name,
@@ -187,4 +203,5 @@ def match_results(
         "dropped_count": dropped_count,
         "gemini_enabled": gemini_error is None,
         "gemini_error": gemini_error,
+        "submission_id": submission_id,
     })
