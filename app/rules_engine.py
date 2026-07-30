@@ -8,7 +8,7 @@ per the schematic. Anything the normalization couldn't parse cleanly
 (Needs_Manual_Review == True) is never hard-excluded by this filter; it's
 passed through and left for Gemini to reason about using the raw text.
 
-Answers dict shape (all 5 questions):
+Answers dict shape:
 {
     "county": "Baltimore City",                # one of the 7 counties
     "stage": "seed",                            # pre-seed | seed | early | growth | established
@@ -16,6 +16,9 @@ Answers dict shape (all 5 questions):
     "annual_revenue": 450000,                    # dollars, or None if unknown/declined
     "industry": "Enterprise Technology",         # free text, matched loosely against exclusions
     "mwbe_groups": ["women-owned"],              # list, possibly empty
+    "zip_code": "21201",                         # optional, used for Enterprise Zone matching
+    "oz_eligible": True,                         # optional, from opportunity_zones.check_opportunity_zone()
+    "oz_tract": "24001000800",                   # optional, the matched census tract
 }
 """
 import pandas as pd
@@ -138,6 +141,38 @@ def enterprise_zone_note(row, zip_code):
     )
 
 
+def _is_named_opportunity_zone_program(row) -> bool:
+    name = row.get("Program Name", "")
+    return isinstance(name, str) and "opportunity zone" in name.lower()
+
+
+def _opportunity_zone_ok(row, oz_eligible: bool) -> bool:
+    """
+    Hard exclude Opportunity Zone programs unless the submitted address
+    geocoded to a census tract on the eligible-tracts list. Mirrors
+    _enterprise_zone_ok -- no verified match = excluded, never shown as an
+    unverifiable guess. oz_eligible is computed ONCE per submission (see
+    opportunity_zones.check_opportunity_zone), not recomputed per row.
+    """
+    if not _is_named_opportunity_zone_program(row):
+        return True
+    return bool(oz_eligible)
+
+
+def opportunity_zone_note(row, oz_eligible: bool, oz_tract):
+    """
+    For programs that passed _opportunity_zone_ok, returns a caveat naming
+    the matched census tract so the person can verify it themselves. Returns
+    None for anything that isn't an Opportunity Zone program.
+    """
+    if not _is_named_opportunity_zone_program(row) or not oz_eligible or not oz_tract:
+        return None
+    return (
+        f"Your address matched census tract {oz_tract}, a designated Qualified "
+        f"Opportunity Zone."
+    )
+
+
 def filter_eligible(answers: dict) -> pd.DataFrame:
     """
     Returns the shortlist of programs that pass every parseable hard gate.
@@ -145,6 +180,7 @@ def filter_eligible(answers: dict) -> pd.DataFrame:
     """
     df = get_incentives()
     zip_code = answers.get("zip_code")
+    oz_eligible = answers.get("oz_eligible", False)
 
     keep_mask = df.apply(
         lambda row: (
@@ -154,6 +190,7 @@ def filter_eligible(answers: dict) -> pd.DataFrame:
             and _employee_ok(row, answers.get("employee_count"))
             and _industry_ok(row, answers.get("industry"))
             and _enterprise_zone_ok(row, zip_code)
+            and _opportunity_zone_ok(row, oz_eligible)
         ),
         axis=1,
     )

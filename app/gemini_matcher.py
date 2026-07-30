@@ -36,7 +36,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 from google import genai
 
-from app.rules_engine import locality_tier, enterprise_zone_note
+from app.rules_engine import locality_tier, enterprise_zone_note, opportunity_zone_note
 
 load_dotenv(Path(__file__).parent.parent / ".env")
 
@@ -271,6 +271,10 @@ def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame):
         zone_note = enterprise_zone_note(row, answers.get("zip_code"))
         if zone_note:
             record["flag"] = zone_note
+
+        oz_note = opportunity_zone_note(row, answers.get("oz_eligible", False), answers.get("oz_tract"))
+        if oz_note:
+            record["flag"] = oz_note
 
         merged.append(record)
 

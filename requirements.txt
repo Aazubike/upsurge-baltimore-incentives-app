@@ -9,3 +9,4 @@ google-genai
 python-multipart==0.0.12
 gspread
 google-auth
+requests
