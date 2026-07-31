@@ -168,6 +168,8 @@ def match_results(
             return None
 
     cleaned_address = street_address.strip() if street_address else None
+    cleaned_employee_count = to_int_or_none(employee_count)
+    cleaned_annual_revenue = to_int_or_none(annual_revenue)
 
     # Opportunity Zone check -- ONE geocode call per submission (not per
     # program), since it's a network call. Same "no address = not eligible"
@@ -177,31 +179,35 @@ def match_results(
     answers = {
         "county": county,
         "stage": stage,
-        "employee_count": to_int_or_none(employee_count),
-        "annual_revenue": to_int_or_none(annual_revenue),
+        "employee_count": cleaned_employee_count,
+        "annual_revenue": cleaned_annual_revenue,
         "industry": industry,
         "mwbe_groups": [g for g in mwbe_groups if g != "none"],
         "zip_code": zip_code.strip() if zip_code else None,  # used for real Enterprise Zone matching (see rules_engine._enterprise_zone_ok)
-        "street_address": cleaned_address,  # captured for the future admin/data-capture system, and now also used for Opportunity Zone geocoding
+        "street_address": cleaned_address,  # used for Opportunity Zone geocoding, and now also logged in full
         "oz_eligible": oz_eligible,  # used for real Opportunity Zone matching (see rules_engine._opportunity_zone_ok)
         "oz_tract": oz_tract,
     }
     shortlist_df = filter_eligible(answers)
     ranked_shortlist, dropped_count, gemini_error = rank_shortlist(answers, shortlist_df)
 
-    # Log this submission to the Google Sheet -- every program that came
-    # back gets logged, both "match" (90%+) and "possible" (75-89%)
+    # Log this submission to the Google Sheet -- every intake field, plus
+    # every matched program split into 3 score tiers (90+, 80-89, 75-79)
     is_known_company = get_company_by_name(company_name) is not None
     submission_id = log_submission(
         flow_type="portfolio" if is_known_company else "intake",
         company_name=company_name,
         region=county,
         stage=stage,
+        employee_count=cleaned_employee_count,
+        annual_revenue=cleaned_annual_revenue,
         industry=industry,
         ownership="|".join(answers["mwbe_groups"]) if answers["mwbe_groups"] else "",
         zip_code=answers["zip_code"] or "",
+        street_address=answers["street_address"] or "",
+        oz_eligible=oz_eligible,
+        oz_tract=oz_tract or "",
         matched_programs=[p["Program Name"] for p in ranked_shortlist],
-        match_tiers=[p["match_tier"] for p in ranked_shortlist],
         match_scores=[p.get("fit_score") for p in ranked_shortlist],
     )
 

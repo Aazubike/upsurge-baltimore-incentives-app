@@ -1,8 +1,9 @@
 """
 sheets_logger.py
 
-Logs every app submission (intake answers + matched programs) to a Google Sheet,
-then updates that same row later when thumbs up/down + comment feedback comes in.
+Logs every app submission (every intake field + every matched program,
+split into 3 score tiers) to a Google Sheet, then updates that same row
+later when thumbs up/down + comment feedback comes in.
 
 Requires:
     pip install gspread google-auth
@@ -30,12 +31,17 @@ COLUMNS = [
     "company_name",
     "region",
     "stage",
+    "employee_count",
+    "annual_revenue",
     "industry",
     "ownership",
     "zip_code",
-    "matched_programs",
-    "match_tiers",
-    "match_scores",
+    "street_address",
+    "oz_eligible",
+    "oz_tract",
+    "matches_90_plus",
+    "matches_80_89",
+    "matches_75_79",
     "thumbs",
     "comment",
 ]
@@ -60,16 +66,42 @@ def _get_sheet():
     return _sheet
 
 
+def _bucket_matches(matched_programs, match_scores):
+    """
+    Splits matched programs into 3 tiers by fit_score, so the Sheet has one
+    clean column per tier instead of one cluttered blob. Each entry is
+    "Program Name (93%)" so the score travels with the name without needing
+    its own separate column. Programs with no score (likely_ineligible) are
+    skipped here -- they were never a scored match to begin with.
+    """
+    tier_90_plus, tier_80_89, tier_75_79 = [], [], []
+    for name, score in zip(matched_programs or [], match_scores or []):
+        if score is None:
+            continue
+        entry = f"{name} ({score}%)"
+        if score >= 90:
+            tier_90_plus.append(entry)
+        elif score >= 80:
+            tier_80_89.append(entry)
+        elif score >= 75:
+            tier_75_79.append(entry)
+    return tier_90_plus, tier_80_89, tier_75_79
+
+
 def log_submission(
     flow_type: str,
     company_name: str = "",
     region: str = "",
     stage: str = "",
+    employee_count=None,
+    annual_revenue=None,
     industry: str = "",
     ownership: str = "",
     zip_code: str = "",
-    matched_programs: list[str] | None = None,
-    match_tiers: list[str] | None = None,
+    street_address: str = "",
+    oz_eligible: bool = False,
+    oz_tract: str = "",
+    matched_programs: list | None = None,
     match_scores: list | None = None,
 ) -> str:
     """
@@ -77,13 +109,15 @@ def log_submission(
     Returns a submission_id — hang onto it (e.g. in the session or pass to the
     frontend) so you can attach feedback to this exact row later.
 
-    matched_programs / match_tiers / match_scores should all be the FULL lists
-    from ranked_shortlist -- every program that came back (both "match" 90%+
-    and "possible" 75-89%), not just the top ones. Pass them in the same
-    order so row N in each list refers to the same program.
+    matched_programs / match_scores should be the FULL lists from
+    ranked_shortlist -- every program that came back, in the same order
+    (row N in each list refers to the same program). This function buckets
+    them into 3 tier columns automatically.
     """
     sheet = _get_sheet()
     submission_id = str(uuid.uuid4())
+
+    tier_90_plus, tier_80_89, tier_75_79 = _bucket_matches(matched_programs, match_scores)
 
     row = [
         datetime.now(timezone.utc).isoformat(),
@@ -92,12 +126,17 @@ def log_submission(
         company_name,
         region,
         stage,
+        employee_count if employee_count is not None else "",
+        annual_revenue if annual_revenue is not None else "",
         industry,
         ownership,
         zip_code,
-        "|".join(matched_programs or []),
-        "|".join(match_tiers or []),
-        "|".join(str(s) for s in (match_scores or [])),
+        street_address,
+        "yes" if oz_eligible else "no",
+        oz_tract,
+        "|".join(tier_90_plus),
+        "|".join(tier_80_89),
+        "|".join(tier_75_79),
         "",  # thumbs - filled in later
         "",  # comment - filled in later
     ]
