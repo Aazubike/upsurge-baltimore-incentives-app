@@ -146,6 +146,9 @@ def match_new(request: Request, name: str = ""):
         "prefilled_name": name,
     })
 
+@app.get("/match/results")
+def match_results_get_redirect():
+    return RedirectResponse("/")
 
 @app.post("/match/results")
 def match_results(
