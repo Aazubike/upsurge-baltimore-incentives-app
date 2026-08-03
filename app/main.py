@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, BackgroundTasks
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from typing import List, Optional
+from uuid import uuid4
 import pandas as pd
 from app.data_loader import (
     load_all, get_incentives, search_companies, get_company_by_name,
@@ -149,6 +150,7 @@ def match_new(request: Request, name: str = ""):
 @app.post("/match/results")
 def match_results(
     request: Request,
+    background_tasks: BackgroundTasks,
     company_name: str = Form(...),
     county: str = Form(...),
     stage: str = Form(...),
@@ -174,6 +176,8 @@ def match_results(
     # Opportunity Zone check -- ONE geocode call per submission (not per
     # program), since it's a network call. Same "no address = not eligible"
     # rule as Enterprise Zones: no evidence, so no unverifiable claim shown.
+    # This one DOES have to finish before we can filter programs, so it stays
+    # on the main path -- but it only runs if an address was actually given.
     oz_eligible, oz_tract = check_opportunity_zone(cleaned_address)
 
     answers = {
@@ -191,10 +195,15 @@ def match_results(
     shortlist_df = filter_eligible(answers)
     ranked_shortlist, dropped_count, gemini_error = rank_shortlist(answers, shortlist_df)
 
-    # Log this submission to the Google Sheet -- every intake field, plus
-    # every matched program split into 3 score tiers (90+, 80-89, 75-79)
+    # Google Sheets logging -- generate the id instantly (no network), then
+    # schedule the actual Sheets write as a BACKGROUND task so it runs AFTER
+    # the results page has already been sent back. The person never waits
+    # on Google Sheets to see their results.
     is_known_company = get_company_by_name(company_name) is not None
-    submission_id = log_submission(
+    submission_id = str(uuid4())
+    background_tasks.add_task(
+        log_submission,
+        submission_id=submission_id,
         flow_type="portfolio" if is_known_company else "intake",
         company_name=company_name,
         region=county,

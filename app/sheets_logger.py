@@ -5,6 +5,14 @@ Logs every app submission (every intake field + every matched program,
 split into 3 score tiers) to a Google Sheet, then updates that same row
 later when thumbs up/down + comment feedback comes in.
 
+IMPORTANT: log_submission does a real network call to Google Sheets, which
+takes real time. It's meant to be run as a FastAPI BackgroundTask -- AFTER
+the response has already been sent to the browser -- so the person doesn't
+sit and wait on it. That's why it takes submission_id as an argument instead
+of generating one internally: the caller generates the id immediately
+(instant, no network), uses it right away in the response, and only the
+actual Sheets write happens in the background afterward.
+
 Requires:
     pip install gspread google-auth
 
@@ -15,7 +23,6 @@ Env vars required:
 
 import os
 import json
-import uuid
 from datetime import datetime, timezone
 
 import gspread
@@ -89,6 +96,7 @@ def _bucket_matches(matched_programs, match_scores):
 
 
 def log_submission(
+    submission_id: str,
     flow_type: str,
     company_name: str = "",
     region: str = "",
@@ -103,20 +111,14 @@ def log_submission(
     oz_tract: str = "",
     matched_programs: list | None = None,
     match_scores: list | None = None,
-) -> str:
+) -> None:
     """
-    Call this right after Gemini ranking completes.
-    Returns a submission_id — hang onto it (e.g. in the session or pass to the
-    frontend) so you can attach feedback to this exact row later.
-
-    matched_programs / match_scores should be the FULL lists from
-    ranked_shortlist -- every program that came back, in the same order
-    (row N in each list refers to the same program). This function buckets
-    them into 3 tier columns automatically.
+    Writes one row to the Sheet. Meant to be scheduled as a FastAPI
+    BackgroundTask so the network call doesn't delay the response --
+    see the module docstring. Does not return anything since nothing
+    downstream needs to wait on it.
     """
     sheet = _get_sheet()
-    submission_id = str(uuid.uuid4())
-
     tier_90_plus, tier_80_89, tier_75_79 = _bucket_matches(matched_programs, match_scores)
 
     row = [
@@ -141,7 +143,6 @@ def log_submission(
         "",  # comment - filled in later
     ]
     sheet.append_row(row, value_input_option="USER_ENTERED")
-    return submission_id
 
 
 def update_feedback(submission_id: str, thumbs: str = "", comment: str = "") -> bool:
