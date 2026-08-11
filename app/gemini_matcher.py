@@ -42,8 +42,12 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 
 MODEL_NAME = "gemini-3.1-flash-lite"
 MAX_RETRIES = 2
-BATCH_SIZE = 6  # smaller batches = faster individual responses
-MAX_PARALLEL_BATCHES = 25  # paid tier allows 150-300 RPM; push higher since headroom is confirmed
+BATCH_SIZE = 20  # covers most real shortlists in a single wave of parallel calls
+MAX_PARALLEL_BATCHES = 10  # raised from 5 now that credit exhaustion (not burst
+                           # concurrency) looks like the real cause of the earlier
+                           # 429s -- Tier 1 RPM/TPM usage never actually got close
+                           # to its ceiling, so there's real headroom here. Still
+                           # well under the 25 that caused problems originally.
 SAFETY_NET_MAX_CANDIDATES = 300  # not a normal operating limit -- just prevents a pathological
                                   # worst-case query (e.g. an almost-unrestricted profile matching
                                   # hundreds of statewide programs) from generating a runaway bill.
