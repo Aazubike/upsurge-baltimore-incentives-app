@@ -1,0 +1,713 @@
+index,status,http_status,error,company_name,county,stage,industry,employee_count,annual_revenue,street_address,zip_code,timestamp
+0,success,200,,Plant Sensory Systems (synthetic-0),Baltimore City,pre-seed,Aerospace and Defense,6,0,"5520 research park drive, catonsville, md 21228",21228,2026-08-10 11:55:05
+4,success,200,,Tradeswell (Incremental) (synthetic-4),Howard,growth,Other Healthcare Technology Systems,5,65745,"115 west st, ste 301, annapolis, maryland 21401, us - Li",21401,2026-08-10 11:55:05
+3,success,200,,RFIDKNOW (synthetic-3),Baltimore City,established,Autonomous Vehicles,30,1857463,"3701 a, southwestern blvd, baltimore, md 21229",21229,2026-08-10 11:55:05
+5,success,200,,Kion (synthetic-5),Anne Arundel,growth,Telecommunications,30,177717,"3130 frederick ave, baltimore, md 21229",21229,2026-08-10 11:55:05
+1,success,200,,Zentail Inc (synthetic-1),Baltimore City,early,Quantum Computing,125,1672499,"30 e padonia rd, timonium, md 21093",21093,2026-08-10 11:55:07
+2,success,200,,Longeviti (synthetic-2),Baltimore City,established,Biotechnology Research,210,162083,"8 market place, suite 200, baltimore, md 21202",21202,2026-08-10 11:55:08
+6,success,200,,Medisolv (synthetic-6),Anne Arundel,pre-seed,Medical Supplies,30,0,"4820 seton drive, suite l, baltimore, maryland 21215, us - Li",21215,2026-08-10 11:55:31
+8,success,200,,Scene Health (synthetic-8),Baltimore City,established,Construction / Engineering,350,93963,"6751 columbia gateway dr, suite 300, columbia, md, 21046, usa, columbia, md 21046",21046,2026-08-10 11:55:33
+7,success,200,,INFINITE FOCUS (synthetic-7),Baltimore City,pre-seed,GovTech,30,0,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 11:55:34
+9,success,200,,iBallistix (synthetic-9),Anne Arundel,established,Energy,5,0,"855 n. wolfe st., baltimore, md 21205",21205,2026-08-10 11:55:37
+10,success,200,,Cellomics Technology (synthetic-10),Baltimore City,pre-seed,Gaming,5,0,"4709 harford rd, baltimore, maryland 21214, us - Li",21214,2026-08-10 11:55:38
+11,success,200,,OncoSTING (synthetic-11),Baltimore City,seed,Retail,6,173476,"6021 university boulevard, ellicott city, md 21043",21043,2026-08-10 11:55:42
+12,success,200,,Early Works (synthetic-12),Baltimore City,early,Biotechnology,3,16956248,"701 east pratt street, baltimore, md 21202",21202,2026-08-10 11:55:53
+14,success,200,,Soundtrack (synthetic-14),Baltimore City,seed,IT Consulting and Outsourcing,210,74963,"1300 bayard street, baltimore, md 21230",21230,2026-08-10 11:55:57
+16,success,200,,"Accelevir Diagnostics (AccelevirDx, LLC) (synthetic-16)",Baltimore City,established,Other Healthcare Technology Systems,6,0,"6750 alexander bell dr, suite 420, columbia, maryland 21046, us - Li",21046,2026-08-10 11:56:00
+13,success,200,,Infosec Learning (synthetic-13),Baltimore County,pre-seed,Advanced Manufacturing,6,3789533,"3500 boston street, baltimore, md 21224",21224,2026-08-10 11:56:02
+17,success,200,,Intent (Human Capital Services) (synthetic-17),Baltimore City,seed,Supply Chain & Logistics,6,0,"baltimore, maryland, 21211 - Pb",21211,2026-08-10 11:56:05
+15,success,200,,Noble Life Sciences (synthetic-15),Baltimore City,seed,Research Services,30,27875,"8110 maple lawn blvd., suite 200, fulton, maryland 20759, us - Li",20759,2026-08-10 11:56:07
+18,success,200,,Plant Bliss (synthetic-18),Anne Arundel,pre-seed,Biotechnology Research,30,0,"baltimore, maryland 21202, us - Li",21202,2026-08-10 11:56:13
+19,success,200,,Storytime AI LLC (synthetic-19),Baltimore City,pre-seed,Cybersecurity,6,102736,"columbia, maryland, 21046 - Pb",21046,2026-08-10 11:56:19
+20,success,200,,Thermoreg (synthetic-20),Baltimore City,pre-seed,IT Services and IT Consulting,6,129006,"3811 canterbury rd. #803, baltimore, md 21218, us - Li",21218,2026-08-10 11:56:34
+21,success,200,,Further Insights (synthetic-21),Howard,seed,HR Tech,6,0,"221 east thomas avenue, baltimore, md 21225, us - Li",21225,2026-08-10 11:56:36
+23,success,200,,Khrysalys (synthetic-23),Howard,pre-seed,Sporting Goods / Recreation,2,188726,"954 ridgebrook rd, sparks glencoe, md 21152",21152,2026-08-10 11:56:37
+25,success,200,,"Foreman (OBM, Inc.) (synthetic-25)",Baltimore City,growth,Cannabis,5,11296,"3001 rosekemp ave, baltimore, md 21214",21214,2026-08-10 11:56:43
+24,success,200,,Everywhere Communications (synthetic-24),Baltimore City,seed,Consumer Tech,6,559391,"14800 york road, suite 866, sparks glencoe, md 21152",21152,2026-08-10 11:56:44
+26,success,200,,"Vita Therapeutics, Inc. (synthetic-26)",Baltimore City,early,Semiconductors,30,101805,"3717 boston st., 131, baltimore, md 21224, us - Li",21224,2026-08-10 11:56:49
+27,success,200,,SciGenesis LLC (synthetic-27),Baltimore City,growth,Robotics,30,0,"6030 day break circle, suite a150-342,clarksville, md united states 21029 - direct",21029,2026-08-10 11:56:54
+28,success,200,,CurveAssure (synthetic-28),Baltimore City,pre-seed,Personal Care,375,118471,"101 n haven st., baltimore, md 21224, us - Li",21224,2026-08-10 11:57:05
+29,success,200,,Maryland Proton Treatment Center (synthetic-29),Baltimore City,pre-seed,Biotechnology Research,6,182703,"1300 bayard st, baltimore, maryland 21230, us - Li",21230,2026-08-10 11:57:10
+30,success,200,,Motifworks (synthetic-30),Howard,established,MarComm,175,0,"3840 bank street baltimore md, baltimore, md 21224",21224,2026-08-10 11:57:11
+31,success,200,,WiConnectGlobal Corp. (synthetic-31),Baltimore County,established,Other Commercial Services,6,808466,"750 md route 3 south, suite 19 gambrills, md 21054, gambrills, md 21054",21054,2026-08-10 11:57:14
+22,success,200,,ReGeltec (synthetic-22),Baltimore City,growth,Venture Studio,6,838648,"laurel, maryland, 20708 - Pb",20708,2026-08-10 11:57:16
+32,success,200,,Untethered Voyages (synthetic-32),Baltimore City,seed,Aerospace and Defence,6,1919355,"307 washington avenue,towson, md united states 21204 - direct",21204,2026-08-10 11:57:19
+33,success,200,,JHU Social Innovation Lab (synthetic-33),Howard,seed,Travel & Tourism,6,193178,"7090 columbia gateway drive, columbia, md 21046",21046,2026-08-10 11:57:28
+34,success,200,,Aletira Therapeutics (synthetic-34),Baltimore City,seed,Hospitals and Health Care,5,551183,"1812 ashland avenue suite 110, baltimore, md 21205, us - Li",21205,2026-08-10 11:57:34
+35,success,200,,Sonavi Labs (synthetic-35),Baltimore City,early,MarComm,30,1940489,"801 cromwell park drive, suite 108, glen burnie, maryland 21061, us - Li",21061,2026-08-10 11:57:38
+36,success,200,,NovvaCup (synthetic-36),Howard,seed,Other Healthcare Technology Systems,6,216549,"7572 rain flower way, columbia, md 21046",21046,2026-08-10 11:57:39
+38,success,200,,Slay Naturals (synthetic-38),Anne Arundel,early,Medical Supplies,6,1712598,"303 international circle, cockeysville, maryland 21030, us - Li",21030,2026-08-10 11:57:43
+37,success,200,,Dill Dinkers (synthetic-37),Baltimore County,seed,MarComm,75,26887,"1954 greenspring dr, timonium, md 21093, us - Li",21093,2026-08-10 11:57:43
+39,success,200,,Fearless Sports (synthetic-39),Baltimore City,seed,Other Commercial Services,30,179232,"6751 columbia gateway drive, columbia, md 21046",21046,2026-08-10 11:57:51
+40,success,200,,Terbium Labs (synthetic-40),Baltimore City,established,Environmental Services (B2B),0,59569,"1402 william st baltimore md 21230, baltimore, md 21230",21230,2026-08-10 11:57:54
+42,success,200,,Coastal Private Lending (synthetic-42),Howard,pre-seed,Creative Technology,125,0,"1300 thames st., baltimore, md 21231",21231,2026-08-10 11:58:04
+44,success,200,,DOOR Ventures (synthetic-44),Howard,growth,Travel & Tourism,5,162721,"303 international circle, cockeysville, maryland 21030, us - Li",21030,2026-08-10 11:58:08
+43,success,200,,IndyGeneUS Bio (synthetic-43),Howard,growth,Hospitals and Health Care,6,0,"towson, maryland, 21204 - Pb",21204,2026-08-10 11:58:09
+41,success,200,,PrintLess (synthetic-41),Baltimore City,early,Gaming,125,191120,"1215 east fort avenue, baltimore, md 21230",21230,2026-08-10 11:58:18
+45,success,200,,iBallistix (synthetic-45),Baltimore County,early,Enterprise Technology,6,1249679,"411 n howard st, baltimore, md 21218",21218,2026-08-10 11:58:19
+46,success,200,,Azadi Health (synthetic-46),Baltimore City,pre-seed,Enterprise Technology,125,13790411,"baltimore, md 21230, us - Li",21230,2026-08-10 11:58:20
+47,success,200,,Tenable (synthetic-47),Baltimore City,pre-seed,Diagnostics,125,15228645,"5723 narcissus avenue, baltimore, md 21215",21215,2026-08-10 11:58:31
+49,success,200,,KyurMD (synthetic-49),Howard,seed,Enterprise Technology,6,0,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 11:58:33
+48,success,200,,ChemPacific (synthetic-48),Baltimore City,seed,Nanotechnology,350,0,"9520 berger rd, columbia, maryland 21046, us - Li",21046,2026-08-10 11:58:37
+50,success,200,,Buku (Rentals) (synthetic-50),Baltimore City,growth,Network Management Software,175,44638,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 11:58:39
+52,success,200,,Pinkaloo Technologies (synthetic-52),Baltimore City,early,Telecommunications,5,89260,"1812 ashland avenue, suite 110, baltimore, md 21205",21205,2026-08-10 11:58:46
+51,success,200,,MuduPay (synthetic-51),Baltimore City,seed,Social/Platform Software,30,1855960,"1812 ashland avenue, suite 110, baltimore, md 21205",21205,2026-08-10 11:58:50
+53,success,200,,STEER (synthetic-53),Baltimore City,seed,Sporting Goods / Recreation,6,196569,"6030 daybreak circle, clarksville, md 21029",21029,2026-08-10 11:58:55
+54,success,200,,JIO ROBOTICS LLC (synthetic-54),Baltimore City,growth,Financial Services,30,118617,"6996 columbia gateway dr, columbia, maryland 21046, us - Li",21046,2026-08-10 11:58:59
+55,success,200,,Era (synthetic-55),Baltimore City,pre-seed,MarComm,30,929264,"109 belfast road, timonium, md 21093",21093,2026-08-10 11:59:04
+56,success,200,,Curuvar (synthetic-56),Baltimore City,pre-seed,Diagnostic Equipment,0,15916827,"1302 glenmont rd, baltimore, md 21239",21239,2026-08-10 11:59:09
+57,success,200,,CloutScore (synthetic-57),Anne Arundel,early,Autonomous Vehicles,30,0,"640 frederick road, baltimore, md 21228",21228,2026-08-10 11:59:13
+58,success,200,,gSpin Technologies (synthetic-58),Howard,pre-seed,Social/Platform Software,30,1063348,"6711 iron ore 317 elkridge md 21075, elkridge, md 21075",21075,2026-08-10 11:59:20
+59,success,200,,Maritime Applied Physics (synthetic-59),Baltimore County,early,Research Services,5,82601,"1100 wicomico st 600 c,baltimore, md united states 20777 - direct",20777,2026-08-10 11:59:25
+60,success,200,,Infanity (synthetic-60),Howard,growth,Telecommunications,6,0,"71 old mill bottom rd n, annapolis, md 21409",21409,2026-08-10 11:59:31
+62,success,200,,Provider Partner Health Plans (synthetic-62),Howard,early,Telecommunications,2,24868,"baltimore, md 20152, us - Li",20152,2026-08-10 11:59:35
+61,success,200,,Mindgrub Technologies (synthetic-61),Baltimore City,pre-seed,Healthcare Services,30,1811146,"24 chasemount court, baltimore, md 21209",21209,2026-08-10 11:59:36
+63,success,200,,Somnair (synthetic-63),Baltimore City,growth,Medical Supplies,6,0,"115 west st, ste 301, annapolis, maryland 21401, us - Li",21401,2026-08-10 11:59:43
+64,success,200,,Insightin Health (synthetic-64),Baltimore City,growth,Aerospace and Defense,51200,10812,"4 west aylesbury road, lutherville timonium, md 21093",21093,2026-08-10 11:59:48
+68,success,200,,SixMap (synthetic-68),Anne Arundel,established,IT Consulting and Outsourcing,30,890159,"1215 e fort ave, suite 200, baltimore, maryland 21230, us - Li",21230,2026-08-10 11:59:59
+65,success,200,,Light Rider (synthetic-65),Howard,established,Diagnostics,210,0,"300 east lombard st, baltimore, md 21202",21202,2026-08-10 11:59:59
+66,success,200,,Tight & Right Hair Revolution (synthetic-66),Baltimore City,seed,Consumer Tech,30,4569004,"201 milford mill rd, 202a, pikesville, maryland 21208, us - Li",21208,2026-08-10 12:00:07
+67,success,200,,Vorbeck (synthetic-67),Baltimore City,growth,Medical Device,6,2078051,"2919 middlebridge court,crofton, md 21114, crofton, md 21114",21114,2026-08-10 12:00:09
+69,success,200,,Alcamena Stem Cell Therapeutics (synthetic-69),Anne Arundel,early,Medical Device,1150,98882,"8320 sherwick ct., jessup, md 20794",20794,2026-08-10 12:00:14
+70,success,200,,Outlook Company (synthetic-70),Baltimore City,early,Aerospace and Defence,6,561948,"8 market place, suite 300, baltimore, md 21202",21202,2026-08-10 12:00:14
+71,success,200,,Profectus BioSciences (synthetic-71),Baltimore City,early,GovTech,125,0,"3570 poole street, baltimore, md 21211",21211,2026-08-10 12:00:23
+72,success,200,,Packaging Strategies (synthetic-72),Baltimore City,established,IT Consulting and Outsourcing,30,197554,"glen burnie, maryland, 21060 - Pb",21060,2026-08-10 12:00:27
+73,success,200,,SphereHub (synthetic-73),Howard,early,Construction / Engineering,6,86267,"3 ruxton green ct, towson, md 21204",21204,2026-08-10 12:00:31
+75,success,200,,Jovian Concepts (synthetic-75),Baltimore City,seed,Medical Device,6,15985616,"columbia, maryland 21044, us - Li",21044,2026-08-10 12:00:31
+76,success,200,,"Joget, Inc. (synthetic-76)",Howard,growth,IT Consulting and Outsourcing,6,1171082,"1100 wicomico st, baltimore, maryland 21230, us - Li",21230,2026-08-10 12:00:32
+74,success,200,,Maryland Clean Energy Center (synthetic-74),Anne Arundel,established,Robotics,125,0,"1014 w 36th st, baltimore, md 21211",21211,2026-08-10 12:00:35
+77,success,200,,Sommos (synthetic-77),Anne Arundel,seed,Environmental Services (B2B),2,33139,"919 west 34th street, unit 4771, baltimore, md 21211",21211,2026-08-10 12:00:47
+81,success,200,,Zuul IoT (synthetic-81),Anne Arundel,established,Other Healthcare Technology Systems,6,224042,"6030 day break circle, suite a150-342,clarksville, md united states 21029 - direct",21029,2026-08-10 12:00:47
+78,success,200,,NasaClip (synthetic-78),Baltimore City,seed,Medical Device,125,148720,"333 w ostend st, baltimore, maryland 21230, us - Li",21230,2026-08-10 12:00:48
+80,success,200,,SWCreatives (synthetic-80),Howard,seed,Financial Services,6,187307,"1500 fannie dorsey rd sykesville, md 21784, sykesville, md 21784",21784,2026-08-10 12:00:48
+79,success,200,,Exorenal (synthetic-79),Anne Arundel,established,Environmental Services (B2B),4,463291,"6518 meadowridge rd, suite 100, elkridge, maryland 21075, us - Li",21075,2026-08-10 12:00:49
+85,success,200,,Catalyte (synthetic-85),Baltimore City,established,Medical Device,30,0,"3701 commerce dr, halethorpe, maryland 21227, us - Li",21227,2026-08-10 12:01:02
+84,success,200,,Rendr (synthetic-84),Baltimore City,established,Multimedia and Design Software,125,51159,"701 e pratt st, baltimore, maryland 21202, us - Li",21202,2026-08-10 12:01:02
+87,success,200,,"EBO, Corp. (synthetic-87)",Baltimore City,seed,Sporting Goods / Recreation,30,40462,"49 old solomons island road annapolis, md 21401, annapolis, md 21401",21401,2026-08-10 12:01:03
+83,success,200,,Speedvision Media Group (synthetic-83),Anne Arundel,pre-seed,Quantum Computing,30,6661145,"1393 progress way, eldersburg, md 21784",21784,2026-08-10 12:01:03
+86,success,200,,TeamWorx Security (synthetic-86),Baltimore City,early,Sporting Goods / Recreation,6,1703095,"7 south high street, baltimore, md 21202",21202,2026-08-10 12:01:04
+88,success,200,,Glacier (synthetic-88),Baltimore City,early,AgTech,6,0,"2402 bluefield circle, joppatowne, md 21085",21085,2026-08-10 12:01:21
+92,success,200,,BDP EnviroTech (synthetic-92),Anne Arundel,established,Aerospace and Defense,30,0,"6751 columbia gateway dr suite 300 columbia md 21046, columbia, md 21406",21046,2026-08-10 12:01:21
+89,success,200,,SixMap (synthetic-89),Baltimore City,early,Telecommunications,125,1994428,"1334 ashton rd, suite e, hanover, maryland 21076, us - Li",21076,2026-08-10 12:01:22
+91,success,200,,Tradeswell (Incremental) (synthetic-91),Howard,early,Other Healthcare Technology Systems,6,844193,"baltimore, maryland, 21218 - Pb",21218,2026-08-10 12:01:25
+90,success,200,,VitusVet (synthetic-90),Baltimore City,pre-seed,Semiconductors,5,204751,"7 south high street, baltimore, md 21202",21202,2026-08-10 12:01:26
+96,success,200,,Solar Oysters (synthetic-96),Baltimore City,growth,Therapeutics,30,16929382,"8825 stanford , suite 205 columbia, columbia, maryland 21045, us - Li",21045,2026-08-10 12:01:43
+93,success,200,,Pet Connect Business (synthetic-93),Howard,seed,Cannabis,6,138039,"baltimore, md 21228, us - Li",21228,2026-08-10 12:01:44
+94,success,200,,PathoVax (synthetic-94),Baltimore City,established,Fintech,30,13799127,"1450 s rolling road, halethorpe, md 21227-3863",21227,2026-08-10 12:01:44
+97,success,200,,TradeRiver USA (synthetic-97),Baltimore City,early,Consulting,14,122524,"8840 stanford blvd, suite 4450, columbia, md 21045",21045,2026-08-10 12:01:44
+95,success,200,,Storytime AI LLC (synthetic-95),Baltimore City,seed,Consulting,30,768377,"725 aliceanna st, baltimore, md 21202",21202,2026-08-10 12:01:45
+82,success,200,,Youreka Labs (synthetic-82),Baltimore County,established,Real Estate Services (B2C),125,0,"3846a falls rd, baltimore, maryland 21211, us - Li",21211,2026-08-10 12:01:46
+99,success,200,,The Berg Corporation (synthetic-99),Baltimore City,seed,Travel & Tourism,30,232781,"101 w dickman st, baltimore, maryland 21230, us - Li",21230,2026-08-10 12:01:52
+98,success,200,,Girl In Space Club (synthetic-98),Anne Arundel,growth,Medical Device,5,286652,"101 n haven st., baltimore, md 21224, us - Li",21224,2026-08-10 12:02:02
+160,success,200,True,,Mel's Workshop (synthetic-160),Baltimore County,seed,Supply Chain & Logistics,6,1941903,"baltimore, md 21217, us - Li",21217,2026-08-10 20:50:18
+105,success,200,True,,"TCOM, L.P. (synthetic-105)",Baltimore City,established,Cybersecurity,6,224229,"7067 columbia gateway drive, columbia, md 21046",21046,2026-08-10 20:50:18
+108,success,200,True,,Xeddy (synthetic-108),Howard,growth,Healthcare Services,125,1186467,"855 north wolfe street, suite 651, baltimore, md 21205",21205,2026-08-10 20:50:18
+122,success,200,True,,Infanity (synthetic-122),Baltimore City,pre-seed,Healthcare IT,9,0,"bwtech@umbc 1450 s rolling rd, baltimore, maryland 21227, us - Li",21227,2026-08-10 20:50:18
+163,success,200,True,,The Lor Company (synthetic-163),Baltimore City,growth,Diagnostics,125,169671,"2631 housley road, annapolis, md 21401",21401,2026-08-10 20:50:18
+149,success,200,True,,Cravety (synthetic-149),Howard,pre-seed,Other,30,169188,"3811 canterbury rd. #803, baltimore, md 21218, us - Li",21218,2026-08-10 20:51:48
+124,success,200,True,,KnowSilo (synthetic-124),Anne Arundel,early,Healthcare IT,6,1820889,"802 cromwell park dr., glen burnie, md 21061",21061,2026-08-10 20:51:48
+119,success,200,True,,EcoMap Technologies (synthetic-119),Baltimore County,seed,Consumer Tech,30,103420,"6750 alexander bell dr, suite 420, columbia, maryland 21046, us - Li",21046,2026-08-10 20:51:48
+162,success,200,True,,Kydes Pharmaceuticals (synthetic-162),Baltimore City,seed,Cannabis,210,0,"1100 wicomico street, suite 650, baltimore, md 21230",21230,2026-08-10 20:51:48
+158,success,200,True,,Pocket Plan (synthetic-158),Baltimore City,early,IT Consulting and Outsourcing,5,1663093,"1501 st. paul st., baltimore, md 21202, us - Li",21202,2026-08-10 20:51:48
+142,success,200,True,,Barttron (synthetic-142),Baltimore City,pre-seed,Diagnostics,6,0,"555 s president st, baltimore, maryland 21202, us - Li",21202,2026-08-10 20:53:18
+127,success,200,True,,Skye Media Group (synthetic-127),Baltimore City,established,Digital Health,45,1998691,"8681 robert fulton drive,columbia, md united states 21046 - direct",21046,2026-08-10 20:53:18
+152,success,200,True,,Equitea Co. (synthetic-152),Howard,pre-seed,Social/Platform Software,6,72964,"11501 pocomoke court, suite d, baltimore, md 21220, us - Li",21220,2026-08-10 20:53:18
+150,success,200,True,,Youreka Labs (synthetic-150),Baltimore City,seed,Travel & Tourism,16,0,"3 ruxton green ct, towson, md 21204",21204,2026-08-10 20:53:18
+157,success,200,True,,KleenUp (synthetic-157),Baltimore City,seed,Medical Device,6,171337,"705 south port street,baltimore, md united states 21224 - direct",21224,2026-08-10 20:53:18
+133,success,200,True,,Saffrosystems (synthetic-133),Howard,growth,Defense & Space,125,25054,"1200 east patapsco avenue, baltimore, md 21225",21225,2026-08-10 20:54:48
+134,success,200,True,,Ronday Technologies (synthetic-134),Baltimore City,early,AgTech,30,0,"6021 university blvd, suite 450, ellicott city, maryland 21073, us - Li",21073,2026-08-10 20:54:48
+110,success,200,True,,MO MarTech (synthetic-110),Baltimore City,early,Research Services,125,125508,"555 s president st, baltimore, maryland 21202, us - Li",21202,2026-08-10 20:54:48
+103,success,200,True,,Brinkbit (synthetic-103),Carroll,pre-seed,HR Tech,3,127341,"12 west madison street, baltimore, md 21201",21201,2026-08-10 20:54:48
+131,success,200,True,,Provider Partner Health Plans (synthetic-131),Anne Arundel,pre-seed,Real Estate Services (B2C),1150,10885,"2288 blue water blvd, suite #329, odenton, md 21113, us - Li",21113,2026-08-10 20:54:48
+146,success,200,True,,Dill Dinkers (synthetic-146),Howard,seed,Fintech,6,0,"1143 rock spring rd suite 115,bel air, md united states 21014 - direct",21014,2026-08-10 20:56:18
+136,success,200,True,,Mess in A Bottle (synthetic-136),Howard,seed,AgTech,6,123686,"1954 greenspring dr, timonium, md 21093, us - Li",21093,2026-08-10 20:56:18
+140,success,200,True,,Techslice (synthetic-140),Howard,growth,Apparel,6,75043,"6940 columbia gateway dr, suite 120, columbia, maryland 21046, us - Li",21046,2026-08-10 20:56:18
+125,success,200,True,,Infinite Biomedical Technologies (synthetic-125),Baltimore County,established,Construction / Engineering,4,142121,"855 n. wolfe st., baltimore, md 21205",21205,2026-08-10 20:56:18
+129,success,200,True,,Xeddy (synthetic-129),Anne Arundel,growth,Healthcare IT,6,0,"40 east cross street,baltimore, md united states 21230 - direct",21230,2026-08-10 20:56:18
+165,success,200,True,,DOOR Ventures (synthetic-165),Baltimore City,established,Consulting,125,31749,"101 west dickman street,baltimore, md united states 21230 - direct",21230,2026-08-10 20:57:48
+156,success,200,True,,MedRegen (synthetic-156),Baltimore City,pre-seed,Environmental Services (B2B),5,1102717,"5024 dorsey hall drive, ellicott city, md 21042",21042,2026-08-10 20:57:48
+164,success,200,True,,SecuLore Solutions (synthetic-164),Anne Arundel,pre-seed,Aerospace and Defence,30,62031,"629 lake dr, towson, maryland 21286, us - Li",21286,2026-08-10 20:57:48
+139,success,200,True,,Solar Oysters (synthetic-139),Baltimore City,established,Other Commercial Services,30,0,"100 international dr, 23rd floor, baltimore, maryland 21202, us - Li",21202,2026-08-10 20:57:48
+130,success,200,True,,BallMecca (synthetic-130),Baltimore City,growth,Software Development,210,120332,"5609 hess ave, baltimore, md 21212",21212,2026-08-10 20:57:48
+137,success,200,True,,BrightWave (synthetic-137),Baltimore City,seed,HR Tech,30,417552,"855 north wolfe street, suite 300, baltimore, md 21205",21205,2026-08-10 20:59:18
+154,success,200,True,,Tradeswell (Incremental) (synthetic-154),Howard,growth,Biotechnology,2,0,"baltimore, md 21230, us - Li",21230,2026-08-10 20:59:18
+113,success,200,True,,"MF Fire, Inc. (synthetic-113)",Baltimore City,established,Network Management Software,6,0,"405 north center street, westminster, md 21157",21157,2026-08-10 20:59:18
+143,success,200,True,,Zest Social Media Solutions (synthetic-143),Howard,growth,Enterprise Technology,15,16844026,"1004 dulaney valley road towson md 21204 suite 720, owings mills, md 21217",21204,2026-08-10 20:59:18
+159,success,200,True,,Pantheon Vision (synthetic-159),Baltimore City,growth,Research Services,125,0,"17 south chester street baltimore md 21231, baltimore, md 21231",21231,2026-08-10 20:59:18
+121,success,200,True,,Drul (synthetic-121),Baltimore City,pre-seed,Nanotechnology,18,20890,"columbia, maryland, 21046 - Pb",21046,2026-08-10 21:00:48
+118,success,200,True,,Gliknik (synthetic-118),Baltimore City,established,Other Healthcare Technology Systems,5,51119,"annapolis, md 21401, us - Li",21401,2026-08-10 21:00:48
+101,success,200,True,,Pinkaloo Technologies (synthetic-101),Howard,growth,Food & Beverage,125,47408,"6100 merriweather drive, columbia, md 21044, us - Li",21044,2026-08-10 21:00:48
+155,success,200,True,,Ambassadr (synthetic-155),Baltimore City,early,Consumer Tech,6,243809,"2401 w belvedere ave, bioincubator - lab 317, baltimore, maryland 21215, us - Li",21215,2026-08-10 21:00:48
+132,success,200,True,,"Bit Reactor, LLC (synthetic-132)",Baltimore City,pre-seed,Web3,7,1009406,"129 truck house road, severna park, md 21146",21146,2026-08-10 21:00:48
+147,success,200,True,,Volo (synthetic-147),Baltimore City,established,Aerospace and Defence,210,1335528,"baltimore, maryland 21202, us - Li",21202,2026-08-10 21:02:18
+135,success,200,True,,Slick (synthetic-135),Baltimore County,pre-seed,Construction / Engineering,30,0,"101 w dickman st, suite 703, baltimore, maryland 21230, us - Li",21230,2026-08-10 21:02:18
+144,success,200,True,,WBX Commerce (synthetic-144),Baltimore City,growth,Network Management Software,5,0,"towson, maryland, 21204 - Pb",21204,2026-08-10 21:02:18
+104,success,200,True,,PYNE Creative (synthetic-104),Baltimore County,early,Diagnostic Equipment,6,627654,"6731 columbia gateway drive, suite 200, columbia, md 21046, us - Li",21046,2026-08-10 21:02:18
+100,success,200,True,,Ronday Technologies (synthetic-100),Howard,early,Healthcare Services,5,187641,"hunt valley, maryland 21031, us - Li",21031,2026-08-10 21:02:18
+107,success,200,True,,Yet Analytics (synthetic-107),Baltimore County,pre-seed,Entertainment & Recreation,6,131490,"2514 greenmount ave, baltimore, md 21218",21218,2026-08-10 21:03:48
+115,success,200,True,,Harbor Link (synthetic-115),Baltimore City,growth,Gaming,5,156632,"36 s charles st , baltimore, md 21201, baltimore, md 21201",21201,2026-08-10 21:03:48
+151,success,200,True,,Transform (synthetic-151),Baltimore City,pre-seed,Diagnostic Equipment,30,0,"801 west baltimore st,baltimore, md united states 21201 - direct",21201,2026-08-10 21:03:48
+126,success,200,True,,Scholarly (synthetic-126),Howard,seed,AgTech,1,0,"6751 columbia gateway dr, columbia, md 21046",21046,2026-08-10 21:03:48
+117,success,200,True,,Further Insights (synthetic-117),Baltimore City,established,Travel & Tourism,6,1735565,"2922 excelsior springs court,ellicott city, md united states 21042 - direct",21042,2026-08-10 21:03:48
+141,success,200,True,,Sonavex (synthetic-141),Baltimore City,growth,Digital Health,6,758255,"180 admiral cochrane drive, annapolis, md 21401",21401,2026-08-10 21:05:18
+153,success,200,True,,Mindgrasp (synthetic-153),Baltimore City,established,Environmental Services (B2B),5,0,"3840 bank street baltimore md, baltimore, md 21224",21224,2026-08-10 21:05:18
+161,success,200,True,,Apkudo (synthetic-161),Howard,established,Web3,6,1674429,"785 elkridge landing rd, suite 300, linthicum heights, maryland 21090, us - Li",21090,2026-08-10 21:05:18
+102,success,200,True,,"Eccalon, LLC (synthetic-102)",Baltimore City,established,Food & Beverage,210,141395,"3600 clipper mill road,baltimore, md united states 21211 - direct",21211,2026-08-10 21:05:18
+116,success,200,True,,BDP EnviroTech (synthetic-116),Baltimore City,seed,Biotechnology,6,1637399,"columbia, maryland 21044, us - Li",21044,2026-08-10 21:05:18
+109,success,200,True,,Conarium Bioworks (synthetic-109),Baltimore City,early,Entertainment & Recreation,125,14467563,"8600 lasalle road, #212, towson, maryland 21286, us - Li",21286,2026-08-10 21:06:48
+114,success,200,True,,Norwegian Energy Solutions and Services (synthetic-114),Baltimore City,early,HR Tech,30,18794743,"9025 berger road, columbia, md 21046",21046,2026-08-10 21:06:48
+148,success,200,True,,JJ Innovative Materials (synthetic-148),Baltimore City,pre-seed,Venture Studio,30,283320,"2036 e pratt st, baltimore, maryland 21231, us - Li",21231,2026-08-10 21:06:48
+145,success,200,True,,Naturion (synthetic-145),Baltimore City,early,Research Services,125,241500,"5480 valmont road, 100, baltimore, md 80301",80301,2026-08-10 21:06:48
+138,success,200,True,,NovaSom (synthetic-138),Baltimore City,seed,Diagnostics,6,86495,"1100 wicomico street, suite 650, baltimore, md 21230",21230,2026-08-10 21:06:48
+128,success,200,True,,Maryland Proton Treatment Center (synthetic-128),Baltimore City,early,Financial Services,6,1411887,"34 diamond crest ct, baltimore, md 21209",21209,2026-08-10 21:08:18
+123,success,200,True,,HealthLink360 (synthetic-123),Baltimore City,early,Autonomous Vehicles,6,159036,"1800 s clinton st, baltimore, maryland 21224, us - Li",21224,2026-08-10 21:08:18
+111,success,200,True,,Nataur (synthetic-111),Baltimore City,pre-seed,Financial Services,30,223929,"100 international dr, 23rd floor, baltimore, maryland 21202, us - Li",21202,2026-08-10 21:08:18
+112,success,200,True,,VinPal (synthetic-112),Howard,pre-seed,Real Estate,125,29609,"802 cromwell park dr., glen burnie, md 21061",21061,2026-08-10 21:08:18
+106,success,200,True,,Novel Microdevices (synthetic-106),Baltimore City,growth,Aerospace and Defence,30,12790403,"1100 wicomico st, baltimore, maryland 21230, us - Li",21230,2026-08-10 21:08:18
+120,success,200,True,,United Power Technologies (synthetic-120),Baltimore City,established,Medical Devices,5,0,"5723 narcissus avenue, baltimore, md 21215",21215,2026-08-10 21:09:48
+166,success,200,True,,PYNE Creative (synthetic-166),Baltimore City,growth,Social/Platform Software,210,94666,"5480 valmont road, 100, baltimore, md 80301",80301,2026-08-10 21:09:48
+167,success,200,True,,Symphony42 (synthetic-167),Baltimore City,pre-seed,Creative Technology,6,0,"4 n martin luther king blvd 4mlk 3rd fl, ste l-17, baltimore, md 21201",21201,2026-08-10 21:09:48
+169,success,200,True,,APT Healthcare (synthetic-169),Anne Arundel,established,Construction / Engineering,30,0,"5835 york road suite 1136,baltimore, md united states 21212 - direct",21212,2026-08-10 21:09:48
+168,success,200,True,,Sunairio (synthetic-168),Howard,pre-seed,Creative Technology,5,32899,"903 pemberton road, baltimore, md 21212",21212,2026-08-10 21:09:48
+170,success,200,True,,Delfi Diagnostics (synthetic-170),Baltimore City,established,GovTech,6,238054,"100 light street baltimore, md 21202, baltimore, md 21202",21202,2026-08-10 21:11:18
+171,success,200,True,,Marta Ali Studios (synthetic-171),Baltimore City,early,Real Estate Services (B2C),30,36816,"3846a falls rd, baltimore, maryland 21211, us - Li",21211,2026-08-10 21:11:18
+173,success,200,True,,Potomac Photonics (synthetic-173),Baltimore City,early,Real Estate Services (B2C),1,53585,"810 glen eagles ct, towson, maryland 21286, us - Li",21286,2026-08-10 21:11:18
+172,success,200,True,,Sicura (synthetic-172),Baltimore City,growth,Apparel,5,184421,"701 e pratt st, baltimore, maryland 21202, us - Li",21202,2026-08-10 21:11:18
+175,success,200,True,,Chariot BioSciences (synthetic-175),Baltimore County,early,IT Consulting and Outsourcing,30,1499274,"5311 st albans way baltimore md 21212, baltimore, md 21212",21212,2026-08-10 21:11:18
+174,success,200,True,,StatPoint Medical (synthetic-174),Baltimore City,growth,Financial Services,5,95231,"3128 argent path, ellicott city, md 21042",21042,2026-08-10 21:12:48
+176,success,200,True,,Celcy (synthetic-176),Baltimore City,established,Supply Chain & Logistics,125,100905,"columbia, maryland 21044, us - Li",21044,2026-08-10 21:12:48
+177,success,200,True,,FLOHOM (synthetic-177),Baltimore City,pre-seed,Biotechnology Research,30,124069,"4537 pen lucy rd, baltimore, md 21229",21229,2026-08-10 21:12:48
+179,success,200,True,,Medssenger (synthetic-179),Baltimore City,growth,Real Estate Services (B2C),11,8292566,"300 e lombard st, suite 840, baltimore, maryland 21202, us - Li",21202,2026-08-10 21:12:48
+178,success,200,True,,Lumina Solar (synthetic-178),Baltimore City,seed,Consumer Tech,6,202066,"1548 ellsworth ave, crofton, maryland 21114, us - Li",21114,2026-08-10 21:12:48
+180,success,200,True,,Jbrds (synthetic-180),Baltimore City,seed,Fintech,75,1336081,"baltimore, md 21228, us - Li",21228,2026-08-10 21:14:18
+181,success,200,True,,PYNE Creative (synthetic-181),Anne Arundel,established,Autonomous Vehicles,51200,0,"7134 columbia gateway drive, columbia, md 21046",21046,2026-08-10 21:14:18
+182,success,200,True,,Clymb (synthetic-182),Baltimore City,early,Robotics,125,5143547,"701 east pratt street, baltimore, md 21202",21202,2026-08-10 21:14:18
+183,success,200,True,,Secure Mentem (synthetic-183),Baltimore City,established,Cannabis,6,581463,"4000 river crescent dr, annapolis, md 21401",21401,2026-08-10 21:14:18
+184,success,200,True,,Vibrint (synthetic-184),Baltimore City,pre-seed,Construction / Engineering,6,0,"201 milford mill rd, 202a, pikesville, maryland 21208, us - Li",21208,2026-08-10 21:14:18
+185,success,200,True,,Jovian Concepts (synthetic-185),Baltimore County,seed,Strategic Management Services,6,0,"6751 columbia gateway suite 300 columbia, md 21046 us, columbia, md 21046",21046,2026-08-10 21:15:48
+186,success,200,True,,INTELeTech (synthetic-186),Baltimore City,early,Consumer Tech,6,18365605,"25 west fayette street, baltimore, md 21201",21201,2026-08-10 21:15:48
+187,success,200,True,,SocialToaster Inc (synthetic-187),Baltimore City,early,MarComm,30,201124,"30 west street, annapolis, md 21401",21401,2026-08-10 21:15:48
+189,success,200,True,,SilcsBio (synthetic-189),Baltimore City,pre-seed,Cybersecurity,30,1653648,"6751 columbia gateway drive, suite 300,columbia, md united states 21046 - direct",21046,2026-08-10 21:15:48
+188,success,200,True,,TradeRiver USA (synthetic-188),Baltimore City,growth,Robotics,6,206396,"101 w dickman st, baltimore, maryland 21230, us - Li",21230,2026-08-10 21:15:48
+191,success,200,True,,Franklin Apprenticeships (synthetic-191),Baltimore City,early,Climate Tech,30,0,"801 cromwell park dr, glen burnie, md 21061",21061,2026-08-10 21:17:18
+190,success,200,True,,STEER (synthetic-190),Baltimore City,pre-seed,Fintech,210,242054,"4 n martin luther king blvd, baltimore, md 21201",21201,2026-08-10 21:17:18
+192,success,200,True,,Entinex (synthetic-192),Anne Arundel,growth,Apparel,5,0,"1004 dulaney valley road towson md 21204 suite 720, owings mills, md 21217",21204,2026-08-10 21:17:18
+193,success,200,True,,MedRegen (synthetic-193),Baltimore City,pre-seed,AgTech,51200,0,"1 village square, suite 150,baltimore, md united states 21210 - direct",21210,2026-08-10 21:17:18
+195,success,200,True,,LifeSprout (synthetic-195),Baltimore City,early,Apparel,6,106403,"1745 dorsey rd suite r,, hanover, md 21076",21076,2026-08-10 21:17:18
+194,success,200,True,,JHU Social Innovation Lab (synthetic-194),Howard,established,Environmental Services (B2B),30,1221008,"3846a falls rd, baltimore, maryland 21211, us - Li",21211,2026-08-10 21:18:48
+197,success,200,True,,Sunsa (synthetic-197),Baltimore City,pre-seed,Personal Care,6,30046,"6731 columbia gateway drive, suite 200, columbia, md 21046, us - Li",21046,2026-08-10 21:18:48
+196,success,200,True,,Snag-A-Slip (synthetic-196),Baltimore City,pre-seed,Cybersecurity,30,11394817,"307 washington avenue,towson, md united states 21204 - direct",21204,2026-08-10 21:18:48
+198,success,200,True,,Wild Bay Kombucha (synthetic-198),Baltimore City,early,Other Healthcare Technology Systems,201500,18374,"1014 w 36th st, baltimore, maryland 21211, us - Li",21211,2026-08-10 21:18:48
+199,success,200,True,,TBT Pharma (synthetic-199),Baltimore City,early,Hospitals and Health Care,6,1042874,"columbia, maryland, 21046 - Pb",21046,2026-08-10 21:18:48
+200,success,200,True,,Lorem Therapeutics (synthetic-200),Baltimore City,established,IT Services and IT Consulting,30,1150280,"baltimore, md 21230, us - Li",21230,2026-08-10 21:20:18
+202,success,200,True,,Solar Oysters (synthetic-202),Baltimore City,early,IT Services and IT Consulting,6,160779,"101 west dickman street,baltimore, md united states 21230 - direct",21230,2026-08-10 21:20:18
+201,success,200,True,,RGB Professional Services (synthetic-201),Baltimore City,established,Robotics,51200,0,"701 east pratt street suite 2026,baltimore, md united states 21202 - direct",21202,2026-08-10 21:20:18
+203,success,200,True,,InRoad Toys (synthetic-203),Anne Arundel,growth,Biotechnology,30,0,"3128 argent path, ellicott city, md 21042",21042,2026-08-10 21:20:18
+204,success,200,True,,FutureMakers (synthetic-204),Baltimore City,pre-seed,Aerospace and Defence,6,17354254,"2800 quarry lake dr, baltimore, maryland 21209, us - Li",21209,2026-08-10 21:20:18
+206,success,200,True,,ChemPacific (synthetic-206),Baltimore City,pre-seed,Aerospace and Defense,30,11870613,"1500 fannie dorsey rd sykesville, md 21784, sykesville, md 21784",21784,2026-08-10 21:21:48
+205,success,200,True,,Fem Equity (synthetic-205),Anne Arundel,early,Apparel,11,0,"6518 meadowridge rd, suite 100, elkridge, maryland 21075, us - Li",21075,2026-08-10 21:21:48
+207,success,200,True,,Meta PRN (synthetic-207),Baltimore City,growth,Enterprise Technology,4,0,"6200 seaforth st, suite a, baltimore, maryland 21224, us - Li",21224,2026-08-10 21:21:48
+208,success,200,True,,CoapTech (synthetic-208),Baltimore City,established,Telecommunications,6,130219,"1100 wicomico street, suite 1m, baltimore, md 21230",21230,2026-08-10 21:21:48
+209,success,200,True,,"Divaneering Lab, Inc (synthetic-209)",Baltimore City,growth,Biotechnology,6,199307,"701 east pratt street, baltimore, md 21202",21202,2026-08-10 21:21:48
+210,success,200,True,,Cajou Creamery (synthetic-210),Baltimore City,growth,Fintech,18,9337330,"1450 south rolling road, halethorpe, md 21227",21227,2026-08-10 21:23:18
+211,success,200,True,,EPOCH Epigenetics (synthetic-211),Baltimore City,pre-seed,Aerospace and Defence,6,0,"7880 milestone parkway, hanover, md 21076",21076,2026-08-10 21:23:18
+212,success,200,True,,Kydes Pharmaceuticals (synthetic-212),Baltimore City,established,Real Estate,30,0,"750 md route 3 south, suite 19 gambrills, md 21054, gambrills, md 21054",21054,2026-08-10 21:23:18
+213,success,200,True,,PsychGigs (synthetic-213),Howard,established,Cybersecurity,6,0,"8112 ellen way, savage, md 20763",20763,2026-08-10 21:23:18
+214,success,200,True,,Meta PRN (synthetic-214),Baltimore City,early,Cybersecurity,30,16994940,"822 guilford avenue, baltimore, md 21202",21202,2026-08-10 21:23:18
+215,success,200,True,,LTN Global Communications (synthetic-215),Howard,early,Other Healthcare Technology Systems,5,37568,"1304 bayard street, baltimore, md 21230",21230,2026-08-10 21:24:48
+216,success,200,True,,MuduPay (synthetic-216),Anne Arundel,early,Autonomous Vehicles,6,0,"4000 river crescent dr, annapolis, md 21401",21401,2026-08-10 21:24:48
+218,success,200,True,,Cell Mind (synthetic-218),Baltimore City,established,Consumer Tech,4,0,"801 cromwell park drive, suite 108, glen burnie, maryland 21061, us - Li",21061,2026-08-10 21:24:48
+217,success,200,True,,ARMR Systems Inc (synthetic-217),Baltimore City,early,Nanotechnology,1150,154300,"6100 merriweather drive, columbia, md 21044, us - Li",21044,2026-08-10 21:24:48
+219,success,200,True,,Coastal Private Lending (synthetic-219),Baltimore County,pre-seed,IT Services and IT Consulting,1,213399,"8325 guilford road, suite f, columbia, maryland 21046, us - Li",21046,2026-08-10 21:24:48
+220,success,200,True,,Infanity (synthetic-220),Howard,seed,Other Commercial Services,6,7522934,"4820 seton drive, suite l, baltimore, maryland 21215, us - Li",21215,2026-08-10 21:26:18
+222,success,200,True,,SafeRide (synthetic-222),Baltimore City,established,Multimedia and Design Software,6,225503,"613 yorktown manor ct, annapolis, md 21409",21409,2026-08-10 21:26:18
+221,success,200,True,,War Horse Cities (synthetic-221),Baltimore City,established,Strategic Management Services,30,233179,"6200 seaforth street, baltimore, md 21224",21224,2026-08-10 21:26:18
+224,success,200,True,,"Accelevir Diagnostics (AccelevirDx, LLC) (synthetic-224)",Baltimore County,seed,Creative Technology,9,161555,"6751 columbia gateway drive, columbia, md 21046",21046,2026-08-10 21:26:18
+223,success,200,True,,xMD Diagnostics (synthetic-223),Anne Arundel,pre-seed,Real Estate,6,0,"1200 east patapsco avenue, baltimore, md 21225",21225,2026-08-10 21:26:18
+225,success,200,True,,Offbeast (YC W22) (synthetic-225),Baltimore City,seed,AgTech,5,1571349,"lutherville timonium, maryland, 21093 - Pb",21093,2026-08-10 21:27:48
+226,success,200,True,,Precision Theranostics (synthetic-226),Baltimore County,established,IT Services and IT Consulting,6,408304,"9108 guilford rd, suite a, columbia, maryland 21046, us - Li",21046,2026-08-10 21:27:48
+227,success,200,True,,"Foreman (OBM, Inc.) (synthetic-227)",Baltimore City,growth,Enterprise Technology,30,1880185,"142 ¬ω monticello ave, annapolis, md 21401",21401,2026-08-10 21:27:48
+228,success,200,True,,SpringWear (synthetic-228),Baltimore City,seed,Cybersecurity,30,0,"1302 glenmont rd, baltimore, md 21239",21239,2026-08-10 21:27:49
+229,success,200,True,,Soundtrack (synthetic-229),Baltimore City,seed,Software Development Applications,30,108790,"1300 bayard street, baltimore, md 21230",21230,2026-08-10 21:27:49
+230,success,200,True,,Ronathan (synthetic-230),Baltimore City,early,Travel & Tourism,6,126063,"25 west fayette street, baltimore, md 21201",21201,2026-08-10 21:29:19
+231,success,200,True,,SENSANNA INCORPORATED (synthetic-231),Baltimore City,growth,Cannabis,125,87029,"670 w baltimore st, hsf-iii, baltimore, maryland 21201, us - Li",21201,2026-08-10 21:29:19
+233,success,200,True,,Vibrint (synthetic-233),Baltimore City,pre-seed,Fintech,6,194534,"3600 clipper mill road, baltimore, md 21211",21211,2026-08-10 21:29:19
+232,success,200,True,,Motifworks (synthetic-232),Baltimore County,pre-seed,Other Commercial Services,75,1453897,"2514 greenmount ave, baltimore, md 21218",21218,2026-08-10 21:29:19
+235,success,200,True,,Shield 7 Consulting (synthetic-235),Baltimore City,seed,Therapeutics,30,0,"6711 iron ore 317 elkridge md 21075, elkridge, md 21075",21075,2026-08-10 21:29:19
+234,success,200,True,,Vibrint (synthetic-234),Baltimore County,early,Research Services,30,0,"101 w dickman st, baltimore, md 21230",21230,2026-08-10 21:30:49
+237,success,200,True,,CloudQix (synthetic-237),Baltimore County,early,Construction / Engineering,6,175273,"glen burnie, maryland, 21061 - Pb",21061,2026-08-10 21:30:49
+236,success,200,True,,Mess in A Bottle (synthetic-236),Baltimore City,seed,Creative Technology,6,19955067,"1850 frankfurst ave., baltimore, md 21226, us - Li",21226,2026-08-10 21:30:49
+238,success,200,True,,Soundtrack (synthetic-238),Baltimore City,seed,Creative Technology,22,157813,"36 s charles st , baltimore, md 21201, baltimore, md 21201",21201,2026-08-10 21:30:49
+239,success,200,True,,Aegeria Soft Tissue (synthetic-239),Howard,growth,Aerospace and Defense,51200,62795,"11350 mccormick road,hunt valley, md united states 21031 - direct",21031,2026-08-10 21:30:49
+241,success,200,True,,Real Time Medical Systems (synthetic-241),Anne Arundel,early,Research Services,6,15458812,"1215 east fort avenue, baltimore, md 21230",21230,2026-08-10 21:32:19
+240,success,200,True,,Trackwell Inc (synthetic-240),Howard,established,Aerospace and Defence,30,13379482,"8115 maple lawn boulevard, fulton, md 20759",20759,2026-08-10 21:32:19
+243,success,200,True,,Soundtrack (synthetic-243),Howard,pre-seed,Cannabis,1,1485477,"6811 benjamin franklin dr, ste 170, columbia, maryland 21046, us - Li",21046,2026-08-10 21:32:19
+242,success,200,True,,Zentail Inc (synthetic-242),Baltimore City,pre-seed,Fintech,5,0,"801 cromwell park dr, glen burnie, md 21061",21061,2026-08-10 21:32:19
+244,success,200,True,,The Equity Brain Trust (synthetic-244),Baltimore City,early,Food & Beverage,210,171406,"4000 river crescent dr, annapolis, md 21401",21401,2026-08-10 21:32:19
+245,success,200,True,,MelaTech (synthetic-245),Baltimore City,pre-seed,Travel & Tourism,30,0,"6711-b moravia park drive, baltimore, md 21237, us - Li",21237,2026-08-10 21:33:49
+246,success,200,True,,Voyagier (synthetic-246),Baltimore City,seed,Financial Services,125,1335265,"303 international circle, cockeysville, maryland 21030, us - Li",21030,2026-08-10 21:33:49
+247,success,200,True,,Corrie Health (synthetic-247),Baltimore City,early,Consumer Tech,30,858294,"baltimore, md 21217, us - Li",21217,2026-08-10 21:33:49
+248,success,200,True,,Repriv.ai (synthetic-248),Baltimore City,early,Climate Tech,6,0,"3701 a, southwestern blvd, baltimore, md 21229",21229,2026-08-10 21:33:49
+249,success,200,True,,Dragos (synthetic-249),Baltimore City,seed,Fintech,251,37691,"1014 west 36th street, baltimore, md 21211",21211,2026-08-10 21:33:49
+250,success,200,True,,ICmed (synthetic-250),Anne Arundel,early,Web3,30,87239,"3811 canterbury rd. #803, baltimore, md 21218, us - Li",21218,2026-08-10 21:35:19
+251,success,200,True,,PYNE Creative (synthetic-251),Baltimore City,early,Aerospace and Defence,6,1923480,"5520 research park drive suite 100, baltimore, md 21228, baltimore, md 21228",21228,2026-08-10 21:35:19
+252,success,200,True,,Mason Dixie Biscuit Company (synthetic-252),Baltimore City,established,Aerospace and Defense,6,0,"70004 security boulevard suite 300, baltimore, md 21244",21244,2026-08-10 21:35:19
+254,success,200,True,,Storytime AI LLC (synthetic-254),Baltimore City,growth,Diagnostics,2,0,"4537 pen lucy rd, baltimore, md 21229",21229,2026-08-10 21:35:19
+253,success,200,True,,Sunsa (synthetic-253),Anne Arundel,established,IT Services and IT Consulting,210,816727,"145 west ostend street, baltimore, md 21230",21230,2026-08-10 21:35:19
+256,success,200,True,,Astek Diagnostics Inc. (synthetic-256),Anne Arundel,established,Personal Care,30,213821,"6021 university boulevard, ellicott city, md 21043",21043,2026-08-10 21:36:49
+255,success,200,True,,Hypermelt (synthetic-255),Baltimore City,early,Hospitals and Health Care,210,0,"1812 ashland ave,baltimore, md united states 21205 - direct",21205,2026-08-10 21:36:49
+258,success,200,True,,Purview (synthetic-258),Anne Arundel,growth,Hospitals and Health Care,6,0,"6751 columbia gateway drive suite 300 columbia md 21046, columbia, md 21046",21046,2026-08-10 21:36:49
+257,success,200,True,,Complete Omics (synthetic-257),Baltimore City,early,Enterprise Technology,6,54275,"10840 guilford rd, #401-402 annapolis junction, md 20701, annapolis junction, md 20701",20701,2026-08-10 21:36:49
+259,success,200,True,,"OBM, Inc. (synthetic-259)",Baltimore City,established,Quantum Computing,30,5322717,"5835 york road suite 1136,baltimore, md united states 21212 - direct",21212,2026-08-10 21:36:49
+260,success,200,True,,VitusVet (synthetic-260),Baltimore City,seed,Semiconductors,6,731967,"3700 koppers st, suite 530, baltimore, maryland 21227, us - Li",21227,2026-08-10 21:38:19
+262,success,200,True,,Uplift Geosystems (synthetic-262),Baltimore City,early,Network Management Software,6,1367809,"8115 maple lawn boulevard,fulton, md united states 20759 - direct",20759,2026-08-10 21:38:19
+261,success,200,True,,DiPole Materials (synthetic-261),Baltimore County,pre-seed,Food & Beverage,125,649275,"300 w pratt st, suite 400, baltimore, maryland 21201, us - Li",21201,2026-08-10 21:38:19
+264,success,200,True,,Untethered Voyages (synthetic-264),Baltimore City,established,Education / EdTech,210,0,"main office, baltimore, maryland 21212, us - Li",21212,2026-08-10 21:38:19
+263,success,200,True,,Equinox Innovative Systems (synthetic-263),Baltimore City,established,Social/Platform Software,30,0,"919 west 34th street, unit 4771, baltimore, md 21211",21211,2026-08-10 21:38:19
+266,success,200,True,,Era (synthetic-266),Baltimore City,seed,Medical Device,30,194431,"300 w pratt st, suite 400, baltimore, maryland 21201, us - Li",21201,2026-08-10 21:39:49
+265,success,200,True,,Skye Media Group (synthetic-265),Baltimore City,pre-seed,HR Tech,125,0,"1215 east fort avenue,baltimore, md united states 21230 - direct",21230,2026-08-10 21:39:49
+268,success,200,True,,KnowSilo (synthetic-268),Baltimore City,seed,Multimedia and Design Software,5,710005,"640 frederick road, baltimore, md 21228",21228,2026-08-10 21:39:49
+267,success,200,True,,Kuya (synthetic-267),Baltimore City,pre-seed,Travel & Tourism,18,59200,"6021 university blvd, suite 450, ellicott city, maryland 21073, us - Li",21073,2026-08-10 21:39:49
+269,success,200,True,,MO MarTech (synthetic-269),Baltimore City,growth,Enterprise Technology,6,42220,"10840 guilford rd, #401-402 annapolis junction, md 20701, annapolis junction, md 20701",20701,2026-08-10 21:39:49
+270,success,200,True,,DemandBridge (synthetic-270),Howard,seed,Therapeutics,30,0,"2425 rye st, baltimore, md 21230",21230,2026-08-10 21:41:19
+271,success,200,True,,Volo (synthetic-271),Baltimore County,established,Semiconductors,3,1586228,"6200 seaforth st, baltimore, maryland 21224, us - Li",21224,2026-08-10 21:41:19
+272,success,200,True,,Edyoucore Sports & Entertainment (synthetic-272),Anne Arundel,pre-seed,Other Healthcare Technology Systems,375,1993381,"101 w dickman st, suite 703, baltimore, maryland 21230, us - Li",21230,2026-08-10 21:41:19
+273,success,200,True,,Mind Over Machines (synthetic-273),Howard,pre-seed,Energy,30,1636253,"705 south port street,baltimore, md united states 21224 - direct",21224,2026-08-10 21:41:19
+274,success,200,True,,Arkavo (synthetic-274),Baltimore City,established,Creative Technology,30,0,"14800 york road, suite 866, sparks glencoe, md 21152",21152,2026-08-10 21:41:19
+275,success,200,True,,Ridgeback Network Defense (synthetic-275),Howard,seed,Apparel,6,5360535,"1200 east patapsco avenue, baltimore, md 21225",21225,2026-08-10 21:42:49
+276,success,200,True,,Fearless Sports (synthetic-276),Baltimore County,pre-seed,Digital Health,30,11405249,"6460 dobbin rd, suite a, columbia, md 21045",21045,2026-08-10 21:42:49
+278,success,200,True,,"Bit Reactor, LLC (synthetic-278)",Baltimore City,established,Digital Health,350,16447853,"954 ridgebrook rd, sparks glencoe, md 21152",21152,2026-08-10 21:42:49
+277,success,200,True,,MuduPay (synthetic-277),Baltimore City,early,Other Healthcare Technology Systems,2,15498665,"333 w ostend st. suite 100,baltimore, md united states 21230 - direct",21230,2026-08-10 21:42:49
+280,success,200,True,,Azadi Health (synthetic-280),Howard,growth,Therapeutics,3,139870,"baltimore, maryland, 21224 - Pb",21224,2026-08-10 21:42:49
+279,success,200,True,,ChemPacific (synthetic-279),Baltimore City,established,Fintech,5,0,"115 west street, annapolis, md 21401",21401,2026-08-10 21:44:19
+282,success,200,True,,"MF Fire, Inc. (synthetic-282)",Baltimore County,established,Climate Tech,201500,0,"6811 benjamin franklin dr, ste 170, columbia, maryland 21046, us - Li",21046,2026-08-10 21:44:19
+281,success,200,True,,"CoolTech, LLC (synthetic-281)",Howard,growth,Biotechnology,5,0,"142 ¬ω monticello ave, annapolis, md 21401",21401,2026-08-10 21:44:19
+283,success,200,True,,Advancement Strategy Consulting (synthetic-283),Howard,seed,Cybersecurity,30,0,"7480 conowingo avenue bay 18,jessup, md united states 20794 - direct",20794,2026-08-10 21:44:19
+284,success,200,True,,OrbiSharp Robotics (synthetic-284),Anne Arundel,seed,Healthcare Services,210,27788,"1800 s clinton st, baltimore, maryland 21224, us - Li",21224,2026-08-10 21:44:19
+286,success,200,True,,Pixelligent Technologies LLC (synthetic-286),Baltimore City,established,Research Services,30,248336,"3500 boston street, baltimore, md 21224",21224,2026-08-10 21:45:49
+285,success,200,True,,Fearless Sports (synthetic-285),Baltimore City,early,Aerospace and Defence,5,0,"2101 e biddle st, baltimore, maryland 21213, us - Li",21213,2026-08-10 21:45:49
+287,success,200,True,,NeuroIntact (synthetic-287),Baltimore City,growth,Cannabis,125,1315196,"11501 pocomoke court, suite d, baltimore, md 21220, us - Li",21220,2026-08-10 21:45:49
+288,success,200,True,,Volo (synthetic-288),Baltimore City,growth,Other,5,1921192,"1450 south rolling road, halethorpe, md 21227",21227,2026-08-10 21:45:49
+289,success,200,True,,Curuvar (synthetic-289),Baltimore City,early,Retail,30,13626177,"25 west fayette street, baltimore, md 21201",21201,2026-08-10 21:45:49
+290,success,200,True,,Astek Diagnostics Inc. (synthetic-290),Baltimore City,early,Medical Device,30,402586,"1001 katy lane, towson, md 21286",21286,2026-08-10 21:47:19
+291,success,200,True,,Everywhere Communications (synthetic-291),Baltimore City,pre-seed,Semiconductors,30,0,"1215 east fort avenue, baltimore, md 21230",21230,2026-08-10 21:47:19
+292,success,200,True,,Ronathan (synthetic-292),Baltimore City,seed,Medical Supplies,251,238397,"810 glen eagles ct, towson, maryland 21286, us - Li",21286,2026-08-10 21:47:19
+293,success,200,True,,EcoMap Technologies (synthetic-293),Baltimore City,early,Multimedia and Design Software,5,1732139,"1501 st. paul street, baltimore, maryland 21202",21202,2026-08-10 21:47:19
+294,success,200,True,,Game4Good (synthetic-294),Baltimore City,seed,Semiconductors,30,1104679,"6751 columbia gateway suite 300 columbia, md 21046 us, columbia, md 21046",21046,2026-08-10 21:47:19
+295,success,200,True,,Hex Performance (synthetic-295),Baltimore City,early,Travel & Tourism,5,13432672,"10840 guilford rd, #401-402 annapolis junction, md 20701, annapolis junction, md 20701",20701,2026-08-10 21:48:49
+296,success,200,True,,Advancing Synergy (synthetic-296),Baltimore City,pre-seed,Cannabis,229,61429,"6411 beckley st., holabird business park, baltimore, md 21224, us - Li",21224,2026-08-10 21:48:49
+298,success,200,True,,Tradeswell (Incremental) (synthetic-298),Baltimore City,early,Venture Studio,6,218752,"1300 thames st., baltimore, md 21231",21231,2026-08-10 21:48:49
+297,success,200,True,,Secretome Therapeutics (synthetic-297),Baltimore City,seed,Food & Beverage,6,15089860,"70004 security boulevard suite 300, baltimore, md 21244",21244,2026-08-10 21:48:49
+299,success,200,True,,NXT1 (synthetic-299),Baltimore City,established,Apparel,125,831093,"baltimore, md 21231, us - Li",21231,2026-08-10 21:48:49
+300,success,200,True,,Pixelligent Technologies LLC (synthetic-300),Baltimore City,established,Biotechnology Research,210,13715,"101 west dickman street, baltimore, md 21230",21230,2026-08-10 21:50:19
+301,success,200,True,,Conquest Technologies (synthetic-301),Howard,growth,Financial Services,30,105489,"3500 boston street, baltimore, md 21224",21224,2026-08-10 21:50:19
+302,success,200,True,,Elixirgen Therapeutics (synthetic-302),Howard,growth,Real Estate,351,0,"baltimore, maryland, 21205 - Pb",21205,2026-08-10 21:50:19
+303,success,200,True,,22Beacon (synthetic-303),Howard,early,Robotics,5,121266,"401 east pratt street, #2245, baltimore, maryland 21202, us - Li",21202,2026-08-10 21:50:19
+304,success,200,True,,Meta PRN (synthetic-304),Baltimore City,seed,Quantum Computing,30,0,"875 hollins st., baltimore, md 21202",21202,2026-08-10 21:50:19
+305,success,200,True,,Processa Pharmaceuticals (synthetic-305),Baltimore City,early,Nanotechnology,15,1003895,"1215 e fort ave, suite 200, baltimore, maryland 21230, us - Li",21230,2026-08-10 21:51:49
+306,success,200,True,,What2Do (synthetic-306),Anne Arundel,pre-seed,IT Services and IT Consulting,30,399846,"6810 deerpath road, suite 405, elkridge, md 21075",21075,2026-08-10 21:51:49
+308,success,200,True,,Packaging Strategies (synthetic-308),Baltimore City,pre-seed,Strategic Management Services,6,33042,"215 washington avenue, suite z, towson, md 21204, us - Li",21204,2026-08-10 21:51:49
+307,success,200,True,,Sotelix Endoscopy (synthetic-307),Baltimore County,pre-seed,Biotechnology,16,1797476,"250 west dickman st., baltimore, md 21230",21230,2026-08-10 21:51:49
+309,success,200,True,,Transform (synthetic-309),Baltimore City,established,Retail,251,49164,"411 n howard st, baltimore, md 21218",21218,2026-08-10 21:51:49
+310,success,200,True,,Dragos (synthetic-310),Baltimore City,established,Software Development,125,93039,"1 north haven street suite 3, baltimore, md 21224",21224,2026-08-10 21:53:19
+311,success,200,True,,Digital Harmonic (synthetic-311),Howard,seed,Education / EdTech,6,0,"1215 e fort ave, suite 104, baltimore, maryland 21230, us - Li",21230,2026-08-10 21:53:19
+312,success,200,True,,"RecurX Bio, Inc. (synthetic-312)",Howard,established,Fintech,30,0,"8110 maple lawn blvd, fulton, md 20759",20759,2026-08-10 21:53:19
+314,success,200,True,,Jbrds (synthetic-314),Baltimore City,growth,Creative Technology,6,47034,"3700 odonnell st, suite 200, baltimore, maryland 21224, us - Li",21224,2026-08-10 21:53:19
+313,success,200,True,,NovvaCup (synthetic-313),Anne Arundel,early,Sporting Goods / Recreation,30,156783,"1812 ashland avenue suite 110, baltimore, md 21205, us - Li",21205,2026-08-10 21:53:19
+315,success,200,True,,Rapafusyn Pharmaceuticals (synthetic-315),Baltimore County,seed,Food & Beverage,350,133338,"1400 west lombard street,baltimore, md united states 21223 - direct",21223,2026-08-10 21:54:49
+316,success,200,True,,Glacier (synthetic-316),Anne Arundel,pre-seed,Multimedia and Design Software,6,46619,"columbia, maryland 21044, us - Li",21044,2026-08-10 21:54:49
+318,success,200,True,,SIXGEN (synthetic-318),Baltimore City,seed,HR Tech,6,100364,"34 diamond crest ct, baltimore, md 21209",21209,2026-08-10 21:54:49
+317,success,200,True,,HealthLink360 (synthetic-317),Howard,established,Cybersecurity,125,63088,"855 north wolfe street, suite 651, baltimore, md 21205",21205,2026-08-10 21:54:49
+320,success,200,True,,MuduPay (synthetic-320),Anne Arundel,early,IT Services and IT Consulting,6,247860,"71 old mill bottom rd n, annapolis, md 21409",21409,2026-08-10 21:54:49
+319,success,200,True,,PathoVax (synthetic-319),Baltimore City,seed,Research Services,6,12496475,"main office, baltimore, maryland 21212, us - Li",21212,2026-08-10 21:56:19
+321,success,200,True,,Elixirgen Scientific (synthetic-321),Baltimore City,early,Consumer Tech,11,77103,"2919 middlebridge court,crofton, md 21114, crofton, md 21114",21114,2026-08-10 21:56:19
+322,success,200,True,,Corrie Health (synthetic-322),Anne Arundel,early,Creative Technology,30,1587862,"2919 middlebridge court,crofton, md 21114, crofton, md 21114",21114,2026-08-10 21:56:19
+323,success,200,True,,CSSi LifeSciences (synthetic-323),Baltimore City,seed,Social/Platform Software,5,100455,"850 west baltimore street, baltimore, maryland 21201, us - Li",21201,2026-08-10 21:56:19
+324,success,200,True,,Ambassadr (synthetic-324),Baltimore City,seed,Biotechnology Research,6,164667,"11350 mccormick rd, bldg iii, suite 102, hunt valley, maryland 21031, us - Li",21031,2026-08-10 21:56:19
+326,success,200,True,,Coastal Private Lending (synthetic-326),Baltimore City,growth,Biotechnology Research,6,0,"414 water st. #1606 baltimore md 21202, baltimore, md 21202",21202,2026-08-10 21:57:49
+325,success,200,True,,Somnair (synthetic-325),Baltimore City,early,IT Consulting and Outsourcing,6,61933,"8 market pl, baltimore, maryland 21202, us - Li",21202,2026-08-10 21:57:49
+327,success,200,True,,KyurMD (synthetic-327),Baltimore City,established,Semiconductors,1150,58587,"785 elkridge landing rd, suite 300, linthicum heights, maryland 21090, us - Li",21090,2026-08-10 21:57:49
+328,success,200,True,,Naturion (synthetic-328),Howard,early,Diagnostics,30,128389,"6810 deerpath road, suite 405, elkridge, md 21075",21075,2026-08-10 21:57:49
+329,success,200,True,,Untethered Voyages (synthetic-329),Baltimore City,seed,Entertainment & Recreation,30,1624001,"801 west baltimore st,baltimore, md united states 21201 - direct",21201,2026-08-10 21:57:49
+330,success,200,True,,Procare Ambulance (synthetic-330),Baltimore City,early,Aerospace and Defence,350,144857,"810 wyman park drive, baltimore, md 21211",21211,2026-08-10 21:59:19
+332,success,200,True,,HR Geckos (synthetic-332),Baltimore City,growth,Multimedia and Design Software,210,0,"49 old solomons island road annapolis, md 21401, annapolis, md 21401",21401,2026-08-10 21:59:19
+331,success,200,True,,iQuartic (synthetic-331),Baltimore City,growth,Quantum Computing,75,0,"towson, maryland, 21204 - Pb",21204,2026-08-10 21:59:19
+333,success,200,True,,Light Rider (synthetic-333),Baltimore City,growth,Cannabis,30,0,"columbia, maryland, 21046 - Pb",21046,2026-08-10 21:59:19
+334,success,200,True,,ReadyWorks (synthetic-334),Baltimore City,established,Personal Care,6,0,"850 west baltimore street, baltimore, maryland 21201, us - Li",21201,2026-08-10 21:59:19
+335,success,200,True,,SalesWarp (synthetic-335),Baltimore City,early,Medical Devices,250,0,"baltimore, maryland, 21218 - Pb",21218,2026-08-10 22:00:49
+336,success,200,True,,Youreka Labs (synthetic-336),Howard,established,AgTech,30,0,"5 north main street,bel air, md united states 21014 - webpage",21014,2026-08-10 22:00:49
+337,success,200,True,,SecuLore Solutions (synthetic-337),Howard,growth,Software Development Applications,6,191370,"1850 frankfurst ave., baltimore, md 21226, us - Li",21226,2026-08-10 22:00:49
+338,success,200,True,,SilcsBio (synthetic-338),Baltimore City,pre-seed,Creative Technology,2,10127874,"admiral cochrane dr, annapolis, maryland 21401, us - Li",21401,2026-08-10 22:00:49
+340,success,200,True,,Pocket Plan (synthetic-340),Baltimore City,pre-seed,Autonomous Vehicles,6,164995,"1 south street 30th floor baltimore md 21202, baltimore, md 21202",21202,2026-08-10 22:00:49
+339,success,200,True,,Trackwell Inc (synthetic-339),Howard,early,Aerospace and Defence,5,23142,"columbia, maryland, 21044 - Pb",21044,2026-08-10 22:02:19
+342,success,200,True,,Early Works (synthetic-342),Anne Arundel,early,Other,125,423508,"101 n. haven street, suite 109, baltimore, maryland 21224, us - Li",21224,2026-08-10 22:02:19
+341,success,200,True,,XONA Systems (synthetic-341),Baltimore City,pre-seed,Consumer Tech,6,38513,"baltimore, maryland, 21210 - Pb",21210,2026-08-10 22:02:19
+343,success,200,True,,Alcamena Stem Cell Therapeutics (synthetic-343),Anne Arundel,growth,IT Consulting and Outsourcing,6,0,"1215 east fort avenue, baltimore, md 21230",21230,2026-08-10 22:02:19
+344,success,200,True,,MAS Alliance (synthetic-344),Howard,pre-seed,MarComm,210,21505,"baltimore, md 21228, us - Li",21228,2026-08-10 22:02:19
+346,success,200,True,,Scene Health (synthetic-346),Baltimore City,seed,Social/Platform Software,5,212788,"1014 west 36th street, baltimore, md 21211",21211,2026-08-10 22:03:49
+345,success,200,True,,"Divaneering Lab, Inc (synthetic-345)",Baltimore County,pre-seed,Robotics,201500,152959,"8 market place, baltimore, md 21202",21202,2026-08-10 22:03:49
+348,success,200,True,,Sunrock Distributed Generation (synthetic-348),Baltimore County,growth,MarComm,6,236274,"8170 maple lawn boulevard,fulton, md united states 20759 - direct",20759,2026-08-10 22:03:49
+347,success,200,True,,Seedling (synthetic-347),Baltimore County,pre-seed,Network Management Software,30,70984,"1801 porter street,baltimore, md united states 21230 - direct",21230,2026-08-10 22:03:49
+349,success,200,True,,MedRegen (synthetic-349),Howard,growth,Apparel,6,167532,"baltimore, maryland, 21218 - Pb",21218,2026-08-10 22:03:49
+402,success,200,True,,LRI Energy Solutions (synthetic-402),Baltimore City,growth,Social/Platform Software,210,0,"101 west dickman street, baltimore, md 21230",21230,2026-08-10 22:09:50
+368,success,200,True,,GUDEA (synthetic-368),Baltimore City,seed,Consumer Tech,175,7945975,"annapolis, md 21401, us - Li",21401,2026-08-10 22:09:50
+362,success,200,True,,DemandBridge (synthetic-362),Anne Arundel,pre-seed,Hospitals and Health Care,30,0,"glen burnie, maryland, 21061 - Pb",21061,2026-08-10 22:09:50
+360,success,200,True,,Intent (Human Capital Services) (synthetic-360),Anne Arundel,early,Real Estate Services (B2C),6,131840,"1910 towne centre boulevard, suite 250 annapolis, md 21401, annapolis, md 21401",21401,2026-08-10 22:09:50
+373,success,200,True,,Soundtrack (synthetic-373),Howard,seed,GovTech,125,552512,"1200 south conkling street, baltimore, md 21224",21224,2026-08-10 22:09:50
+355,success,200,True,,Contiem (synthetic-355),Baltimore City,early,Software Development,6,129729,"919 west 34th street, unit 4771, baltimore, md 21211",21211,2026-08-10 22:11:20
+382,success,200,True,,Impruvon Health (synthetic-382),Baltimore City,pre-seed,Defense & Space,6,244194,"750 md route 3 south, suite 19 gambrills, md 21054, gambrills, md 21054",21054,2026-08-10 22:11:20
+412,success,200,True,,Alcamena Stem Cell Therapeutics (synthetic-412),Baltimore City,early,Personal Care,5,1640439,"columbia, maryland, 21044 - Pb",21044,2026-08-10 22:11:20
+398,success,200,True,,DOOR Ventures (synthetic-398),Baltimore City,seed,HR Tech,6,195278,"24 chasemount court, baltimore, md 21209",21209,2026-08-10 22:11:20
+401,success,200,True,,Ronday Technologies (synthetic-401),Baltimore City,established,Education / EdTech,1150,34144,"1100 wicomico st suite 323, baltimore, md 21230, baltimore, md 21230",21230,2026-08-10 22:11:20
+392,success,200,True,,Nataur (synthetic-392),Baltimore City,pre-seed,Medical Supplies,350,0,"6200 seaforth st, baltimore, maryland 21224, us - Li",21224,2026-08-10 22:12:50
+420,success,200,True,,Early Works (synthetic-420),Baltimore City,pre-seed,Aerospace and Defence,6,131954,"1801 porter street,baltimore, md united states 21230 - direct",21230,2026-08-10 22:12:50
+404,success,200,True,,CourseArc (synthetic-404),Baltimore City,early,Sporting Goods / Recreation,125,178286,"baltimore, maryland, 21210 - Pb",21210,2026-08-10 22:12:50
+372,success,200,True,,MethodData (synthetic-372),Baltimore City,established,Gaming,30,0,"101 w dickman st, baltimore, maryland 21230, us - Li",21230,2026-08-10 22:12:50
+366,success,200,True,,SchoolDuels (synthetic-366),Anne Arundel,growth,Retail,30,154313,"1, hanover, md 21076, us - Li",21076,2026-08-10 22:12:50
+385,success,200,True,,Hungry Harvest (synthetic-385),Baltimore County,early,Consulting,6,403571,"1100 wicomico street, 6th floor,baltimore, md united states 21230 - direct",21230,2026-08-10 22:14:20
+359,success,200,True,,Sparen Homes (synthetic-359),Baltimore City,early,Network Management Software,210,0,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 22:14:20
+419,success,200,True,,Advancing Synergy (synthetic-419),Baltimore City,pre-seed,HR Tech,30,195896,"columbia, maryland, 21046 - Pb",21046,2026-08-10 22:14:20
+411,success,200,True,,Century Engineering (synthetic-411),Baltimore City,pre-seed,Nanotechnology,6,18496775,"5311 st albans way baltimore md 21212, baltimore, md 21212",21212,2026-08-10 22:14:20
+409,success,200,True,,Sotelix Endoscopy (synthetic-409),Baltimore County,early,Research Services,6,961999,"333 w ostend st, baltimore, maryland 21230, us - Li",21230,2026-08-10 22:14:20
+405,success,200,True,,CapYear (synthetic-405),Baltimore City,seed,Biotechnology,6,0,"baltimore, md 21230, us - Li",21230,2026-08-10 22:15:50
+394,success,200,True,,HASI (synthetic-394),Baltimore City,seed,Creative Technology,125,239720,"1 village square, suite 150,baltimore, md united states 21210 - direct",21210,2026-08-10 22:15:50
+364,success,200,True,,Hiatus Cheesecake (synthetic-364),Baltimore City,seed,Multimedia and Design Software,30,861114,"101 west dickman street, baltimore, md 21230",21230,2026-08-10 22:15:50
+384,success,200,True,,Further Insights (synthetic-384),Baltimore City,established,Therapeutics,2,1607419,"baltimore, maryland, 21230 - Pb",21230,2026-08-10 22:15:50
+367,success,200,True,,Lifejoint Orthopedic Solutions (synthetic-367),Anne Arundel,early,Semiconductors,6,0,"2402 bluefield circle, joppatowne, md 21085",21085,2026-08-10 22:15:50
+393,success,200,True,,Entinex (synthetic-393),Baltimore City,growth,Real Estate Services (B2C),5,26453,"10337 nightmist ct., columbia, md 21044",21044,2026-08-10 22:17:20
+415,success,200,True,,Needworking (synthetic-415),Baltimore City,established,IT Consulting and Outsourcing,30,99996,"109 belfast road, timonium, md 21093",21093,2026-08-10 22:17:20
+386,success,200,True,,Advancement Strategy Consulting (synthetic-386),Baltimore City,early,Diagnostic Equipment,125,135100,"baltimore, md, 21218 - Li",21218,2026-08-10 22:17:20
+369,success,200,True,,TradeRiver USA (synthetic-369),Howard,growth,Web3,30,117468,"3 ruxton green ct, towson, md 21204",21204,2026-08-10 22:17:20
+378,success,200,True,,Irazu Oncology (synthetic-378),Howard,established,Food & Beverage,75,204345,"101 w dickman st, suite 800, baltimore, maryland 21230, us - Li",21230,2026-08-10 22:17:20
+371,success,200,True,,IndyGeneUS Bio (synthetic-371),Baltimore County,early,Apparel,9,0,"101 w dickman st, suite 800, baltimore, maryland 21230, us - Li",21230,2026-08-10 22:18:50
+395,success,200,True,,NovaSom (synthetic-395),Baltimore City,established,Energy,30,1972639,"785 elkridge landing road, suite 300, linthicum heights, md 21090, us - Li",21090,2026-08-10 22:18:50
+376,success,200,True,,NeoProgen (synthetic-376),Baltimore City,pre-seed,Food & Beverage,210,0,"2425 rye st, baltimore, md 21230",21230,2026-08-10 22:18:50
+361,success,200,True,,Porter (synthetic-361),Baltimore City,established,Fintech,210,0,"629 lake dr, towson, maryland 21286, us - Li",21286,2026-08-10 22:18:50
+407,success,200,True,,Nexgen Forensic Sciences (synthetic-407),Baltimore County,early,Diagnostic Equipment,30,117237,"admiral cochrane dr, annapolis, maryland 21401, us - Li",21401,2026-08-10 22:18:50
+399,success,200,True,,STEM City Baltimore (synthetic-399),Baltimore City,pre-seed,AgTech,175,198922,"main office, baltimore, maryland 21212, us - Li",21212,2026-08-10 22:20:20
+422,success,200,True,,Mason Dixie Biscuit Company (synthetic-422),Baltimore City,seed,Quantum Computing,125,0,"3700 odonnell st, suite 200, baltimore, maryland 21224, us - Li",21224,2026-08-10 22:20:20
+406,success,200,True,,Vagrant Coffee (synthetic-406),Baltimore County,seed,Social/Platform Software,6,0,"1450 south rolling road, halethorpe, md 21227",21227,2026-08-10 22:20:20
+418,success,200,True,,Astek Diagnostics Inc. (synthetic-418),Baltimore County,established,IT Services and IT Consulting,30,243325,"2720 sisson st, baltimore, maryland 21211, us - Li",21211,2026-08-10 22:20:20
+383,success,200,True,,Skye Media Group (synthetic-383),Baltimore City,seed,Web3,5,0,"1047 trails end road, pasadena, md 21122",21122,2026-08-10 22:20:20
+357,success,200,True,,R3 Score Technologies (synthetic-357),Baltimore City,seed,Medical Devices,6,952129,"baltimore, md 21230, us - Li",21230,2026-08-10 22:21:50
+403,success,200,True,,Tryspace (synthetic-403),Carroll,early,AgTech,125,858198,"3128 argent path, ellicott city, md 21042",21042,2026-08-10 22:21:50
+381,success,200,True,,Black Sands Entertainment (synthetic-381),Baltimore County,early,IT Consulting and Outsourcing,5,0,"30 e padonia rd, timonium, md 21093",21093,2026-08-10 22:21:50
+363,success,200,True,,Plated Foodservice (synthetic-363),Baltimore City,growth,HR Tech,210,103654,"8320 sherwick ct., jessup, md 20794",20794,2026-08-10 22:21:50
+387,success,200,True,,Early Charm Ventures (synthetic-387),Howard,established,AgTech,30,0,"owings mills, maryland, 21117 - Pb",21117,2026-08-10 22:21:50
+379,success,200,True,,Pet Connect Business (synthetic-379),Baltimore City,early,Medical Device,0,1860830,"1700 w 41st st, baltimore, md 21211",21211,2026-08-10 22:23:20
+414,success,200,True,,Medssenger (synthetic-414),Baltimore City,established,Energy,1150,125862,"2835 odonnell st, baltimore, maryland 21224, us - Li",21224,2026-08-10 22:23:20
+421,success,200,True,,KnowSilo (synthetic-421),Baltimore City,established,Digital Health,6,94455,"1 park pl, annapolis, md 21401",21401,2026-08-10 22:23:20
+397,success,200,True,,DevMinds (synthetic-397),Baltimore City,early,Travel & Tourism,4,195582,"954 ridgebrook rd, sparks glencoe, md 21152",21152,2026-08-10 22:23:20
+417,success,200,True,,TeamWorx Security (synthetic-417),Baltimore City,established,Retail,30,0,"6021 university blvd, suite 450, ellicott city, maryland 21073, us - Li",21073,2026-08-10 22:23:20
+390,success,200,True,,Irazu Oncology (synthetic-390),Baltimore City,growth,Software Development,2,0,"800 west baltimore street, baltimore, md 21201",21201,2026-08-10 22:24:50
+370,success,200,True,,Meaning (synthetic-370),Baltimore City,established,Gaming,6,0,"2720 sisson st, baltimore, maryland 21211, us - Li",21211,2026-08-10 22:24:50
+351,success,200,True,,Strydent Autonomous Technologies (synthetic-351),Baltimore City,early,Therapeutics,6,720969,"101 north haven street, suite 301, baltimore, maryland 21224, us - Li",21224,2026-08-10 22:24:50
+377,success,200,True,,Volo (synthetic-377),Baltimore City,pre-seed,Environmental Services (B2B),0,1396796,"main office, baltimore, maryland 21212, us - Li",21212,2026-08-10 22:24:50
+388,success,200,True,,InventoryQuant (synthetic-388),Howard,pre-seed,Other Commercial Services,30,166407,"5311 st albans way baltimore md 21212, baltimore, md 21212",21212,2026-08-10 22:24:50
+353,success,200,True,,Optosurgical (synthetic-353),Howard,established,Creative Technology,6,0,"11408 cronridge dr, suite c, owings mills, maryland 21117, us - Li",21117,2026-08-10 22:26:20
+410,success,200,True,,Tanzen Medical (synthetic-410),Baltimore City,seed,Education / EdTech,210,0,"954 ridgebrook rd, sparks glencoe, md 21152",21152,2026-08-10 22:26:20
+400,success,200,True,,Keffa Coffee (synthetic-400),Baltimore City,seed,Biotechnology,125,199936,"502 scrimshaw way, severna park, maryland 21146, us - Li",21146,2026-08-10 22:26:20
+408,success,200,True,,Snag-A-Slip (synthetic-408),Baltimore City,pre-seed,Web3,2,0,"baltimore, maryland, 21205 - Pb",21205,2026-08-10 22:26:20
+391,success,200,True,,Shwcase (synthetic-391),Anne Arundel,early,IT Consulting and Outsourcing,6,53349,"3570 poole street, baltimore, md 21211",21211,2026-08-10 22:26:20
+354,success,200,True,,Mind Over Machines (synthetic-354),Howard,seed,IT Consulting and Outsourcing,175,104082,"6241 falls road, baltimore, md 21209",21209,2026-08-10 22:27:50
+352,success,200,True,,Delfi Diagnostics (synthetic-352),Baltimore City,early,Other Commercial Services,30,126119,"11350 mccormick road,hunt valley, md united states 21031 - direct",21031,2026-08-10 22:27:50
+374,success,200,True,,FLOHOM (synthetic-374),Howard,growth,Environmental Services (B2B),6,302146,"baltimore, md 21230, us - Li",21230,2026-08-10 22:27:50
+358,success,200,True,,Skye Media Group (synthetic-358),Baltimore City,growth,Energy,30,94903,"208 s pulaski st, baltimore, maryland 21223, us - Li",21223,2026-08-10 22:27:50
+380,success,200,True,,Nanost (synthetic-380),Howard,pre-seed,Construction / Engineering,30,1282373,"101 north haven street, suite 301, baltimore, maryland 21224, us - Li",21224,2026-08-10 22:27:50
+413,success,200,True,,TruWatts (synthetic-413),Baltimore City,seed,Digital Health,210,0,"1501 st. paul st., baltimore, md 21202, us - Li",21202,2026-08-10 22:29:20
+416,success,200,True,,Plainr (synthetic-416),Baltimore City,seed,Creative Technology,30,159149,"baltimore, maryland, 21205 - Pb",21205,2026-08-10 22:29:20
+423,success,200,True,,Dragos (synthetic-423),Baltimore City,early,Digital Health,30,0,"1300 thames st., baltimore, md 21231",21231,2026-08-10 22:29:20
+396,success,200,True,,Prompt Diagnostics (synthetic-396),Baltimore City,established,Software Development,75,52162,"2401 west belvedere avenue, baltimore, md 21201",21201,2026-08-10 22:29:20
+375,success,200,True,,Tharros (synthetic-375),Baltimore City,seed,Social/Platform Software,30,0,"1215 e fort ave suite 200 baltimore md 21230, baltimore, md 21230",21230,2026-08-10 22:29:20
+356,success,200,True,,SilcsBio (synthetic-356),Baltimore County,growth,Medical Device,6,149693,"10710 gilroy rd, hunt valley, md 21031",21031,2026-08-10 22:30:50
+350,success,200,True,,Tradeswell (Incremental) (synthetic-350),Baltimore City,pre-seed,Construction / Engineering,6,146813,"502 scrimshaw way, severna park, maryland 21146, us - Li",21146,2026-08-10 22:30:50
+365,success,200,True,,Purview (synthetic-365),Howard,pre-seed,Hospitals and Health Care,30,17215290,"bwtech@umbc 1450 s rolling rd, baltimore, maryland 21227, us - Li",21227,2026-08-10 22:30:50
+389,success,200,True,,Exorenal (synthetic-389),Anne Arundel,established,Sporting Goods / Recreation,30,19786567,"9130 red branch rd, columbia, md 21045",21045,2026-08-10 22:30:50
+425,success,200,True,,BrightWave (synthetic-425),Howard,seed,Aerospace and Defense,5,0,"502 south sharp street, suite 2200, baltimore, md 21201",21201,2026-08-10 22:30:50
+424,success,200,True,,RGB Professional Services (synthetic-424),Anne Arundel,seed,Other,5,793399,"2800 quarry lake dr, baltimore, maryland 21209, us - Li",21209,2026-08-10 22:32:20
+427,success,200,True,,YoTengoBot (synthetic-427),Baltimore City,seed,Sporting Goods / Recreation,6,76460,"1215 e fort ave, suite 200, baltimore, maryland 21230, us - Li",21230,2026-08-10 22:32:20
+426,success,200,True,,Nexgen Forensic Sciences (synthetic-426),Baltimore City,established,Climate Tech,0,708046,"12 west madison street, baltimore, md 21201",21201,2026-08-10 22:32:20
+428,success,200,True,,"Joget, Inc. (synthetic-428)",Baltimore City,pre-seed,HR Tech,210,67877,"1014 w 36th st, baltimore, md 21211",21211,2026-08-10 22:32:20
+429,success,200,True,,Further Insights (synthetic-429),Baltimore City,growth,Multimedia and Design Software,5,149997,"4820 seton drive, suite l, baltimore, maryland 21215, us - Li",21215,2026-08-10 22:32:20
+430,success,200,True,,Somnair (synthetic-430),Howard,early,Consumer Tech,30,46897,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 22:33:50
+431,success,200,True,,SharpRank (synthetic-431),Baltimore City,established,Diagnostics,30,13793603,"855 north wolfe street, suite 651, baltimore, md 21205",21205,2026-08-10 22:33:50
+432,success,200,True,,Mera Kitchen Collective (synthetic-432),Baltimore City,growth,Quantum Computing,125,1117097,"9130 red branch rd, columbia, md 21045",21045,2026-08-10 22:33:50
+433,success,200,True,,CurveAssure (synthetic-433),Baltimore City,growth,AgTech,30,1263395,"700 east pratt street, suite 1200, baltimore, md 21202",21202,2026-08-10 22:33:50
+434,success,200,True,,Porter (synthetic-434),Anne Arundel,growth,Therapeutics,350,0,"annapolis, maryland, 21401 - Pb",21401,2026-08-10 22:33:50
+435,success,200,True,,N2K (synthetic-435),Baltimore County,growth,Medical Devices,6,1663698,"main office, baltimore, maryland 21212, us - Li",21212,2026-08-10 22:35:20
+437,success,200,True,,Sotelix Endoscopy (synthetic-437),Baltimore City,seed,AgTech,30,1574909,"1047 trails end road, pasadena, md 21122",21122,2026-08-10 22:35:20
+436,success,200,True,,Black Sands Entertainment (synthetic-436),Howard,seed,Cannabis,125,0,"1812 ashland avenue suite 110, baltimore, md 21205, us - Li",21205,2026-08-10 22:35:20
+438,success,200,True,,Jovian Concepts (synthetic-438),Howard,growth,Entertainment & Recreation,30,247490,"glen burnie, maryland, 21061 - Pb",21061,2026-08-10 22:35:20
+439,success,200,True,,"Foreman (OBM, Inc.) (synthetic-439)",Baltimore City,pre-seed,Medical Device,30,0,"800 w baltimore st, suite 151, baltimore, maryland 21201, us - Li",21201,2026-08-10 22:35:20
+440,success,200,True,,Fetal Therapy Technologies (synthetic-440),Baltimore City,pre-seed,Digital Health,210,473085,"6411 beckley st., holabird business park, baltimore, md 21224, us - Li",21224,2026-08-10 22:36:50
+441,success,200,True,,Geb-Ra Organics (synthetic-441),Baltimore City,seed,Enterprise Technology,5,0,"columbia, maryland 21044, us - Li",21044,2026-08-10 22:36:50
+443,success,200,True,,MuduPay (synthetic-443),Baltimore City,established,Other Healthcare Technology Systems,30,29024,"7 south high street, baltimore, md 21202",21202,2026-08-10 22:36:50
+442,success,200,True,,ReBokeh (synthetic-442),Baltimore County,pre-seed,Food & Beverage,6,0,"3001 rosekemp ave, baltimore, md 21214",21214,2026-08-10 22:36:50
+444,success,200,True,,Rapafusyn Pharmaceuticals (synthetic-444),Howard,early,Consumer Tech,30,40535,"owings mills, maryland, 21117 - Pb",21117,2026-08-10 22:36:50
+445,success,200,True,,NasaClip (synthetic-445),Howard,growth,Therapeutics,6,12737,"101 w dickman st, suite 703, baltimore, maryland 21230, us - Li",21230,2026-08-10 22:38:20
+446,success,200,True,,POWER UP (synthetic-446),Baltimore County,established,Software Development Applications,14,2493974,"954 ridgebrook rd, sparks glencoe, md 21152",21152,2026-08-10 22:38:20
+447,success,200,True,,Azadi Health (synthetic-447),Baltimore City,pre-seed,Consulting,125,174407,"9520 berger rd, columbia, maryland 21046, us - Li",21046,2026-08-10 22:38:20
+448,success,200,True,,SalesWarp (synthetic-448),Baltimore City,growth,Personal Care,6,95442,"4120 minstrel way ste 210 columbia md 21045, columbia, md 21045",21045,2026-08-10 22:38:20
+450,success,200,True,,InRoad Toys (synthetic-450),Howard,seed,Fintech,350,72726,"875 hollins st., baltimore, md 21202",21202,2026-08-10 22:38:20
+449,success,200,True,,Modelus (synthetic-449),Baltimore City,established,Healthcare Services,210,1731677,"4 n martin luther king blvd, baltimore, md 21201",21201,2026-08-10 22:39:50
+452,success,200,True,,Voyagier (synthetic-452),Howard,seed,Strategic Management Services,125,1839936,"250 w dickman st, second floor , baltimore, maryland 21230, us - Li",21230,2026-08-10 22:39:50
+451,success,200,True,,Rapafusyn Pharmaceuticals (synthetic-451),Baltimore City,growth,Retail,75,0,"855 north wolfe street, suite 651, baltimore, md 21205",21205,2026-08-10 22:39:50
+453,success,200,True,,Pantheon Vision (synthetic-453),Baltimore City,established,Healthcare IT,30,836199,"baltimore, md, 21218 - Li",21218,2026-08-10 22:39:50
+454,success,200,True,,OrbiSharp Robotics (synthetic-454),Howard,established,Sporting Goods / Recreation,5,195212,"4 n martin luther king blvd 4mlk 3rd fl, ste l-17, baltimore, md 21201",21201,2026-08-10 22:39:50
+455,success,200,True,,Modelus (synthetic-455),Baltimore County,pre-seed,Environmental Services (B2B),175,3180349,"6200 seaforth st, baltimore, maryland 21224, us - Li",21224,2026-08-10 22:41:20
+456,success,200,True,,Root3 Labs (synthetic-456),Baltimore County,early,Construction / Engineering,6,220967,"owings mills, maryland, 21117 - Pb",21117,2026-08-10 22:41:20
+457,success,200,True,,Vectech (synthetic-457),Baltimore City,early,GovTech,30,1475336,"700 east pratt street, suite 1200, baltimore, md 21202",21202,2026-08-10 22:41:20
+458,success,200,True,,Complete Omics (synthetic-458),Howard,established,Digital Health,45,1517470,"5520 research park dr, # 100, baltimore, maryland 21228, us - Li",21228,2026-08-10 22:41:20
+460,success,200,True,,Zest Tea (synthetic-460),Baltimore City,early,Medical Devices,30,0,"1402 william st baltimore md 21230, baltimore, md 21230",21230,2026-08-10 22:41:20
+459,success,200,True,,Untethered Voyages (synthetic-459),Baltimore City,pre-seed,Venture Studio,6,146274,"3200 james st, baltimore, maryland 21230, us - Li",21230,2026-08-10 22:42:50
+461,success,200,True,,Offbeast (YC W22) (synthetic-461),Baltimore City,seed,Nanotechnology,5,0,"222 severn ave, annapolis, md 21403, us - Li",21403,2026-08-10 22:42:50
+462,success,200,True,,Elixirgen Therapeutics (synthetic-462),Baltimore City,early,Web3,30,0,"8110 maple lawn blvd., suite 200, fulton, maryland 20759, us - Li",20759,2026-08-10 22:42:50
+463,success,200,True,,EliteGamingLIVE (synthetic-463),Baltimore City,early,IT Services and IT Consulting,0,7371427,"411 n howard st, baltimore, md 21218",21218,2026-08-10 22:42:50
+464,success,200,True,,pixee.ai (synthetic-464),Baltimore City,early,Environmental Services (B2B),6,15868,"954 ridgebrook rd, sparks glencoe, md 21152",21152,2026-08-10 22:42:50
+466,success,200,True,,Irazu Oncology (synthetic-466),Baltimore County,early,Medical Devices,125,167414,"3201 n. charles st., baltimore, md 21218",21218,2026-08-10 22:44:20
+465,success,200,True,,Portal BioScience (synthetic-465),Baltimore City,growth,Strategic Management Services,175,555008,"6751 columbia gateway suite 300 columbia, md 21046 us, columbia, md 21046",21046,2026-08-10 22:44:20
+468,success,200,True,,xMD Diagnostics (synthetic-468),Anne Arundel,early,Cybersecurity,2,9797310,"1812 ashland avenue, suite 110, baltimore, md 21205",21205,2026-08-10 22:44:20
+467,success,200,True,,Skye Media Group (synthetic-467),Baltimore City,established,Financial Services,30,102146,"2922 excelsior springs court,ellicott city, md united states 21042 - direct",21042,2026-08-10 22:44:20
+469,success,200,True,,DOOR Ventures (synthetic-469),Anne Arundel,established,Creative Technology,30,19371508,"2288 blue water blvd, suite #329, odenton, md 21113, us - Li",21113,2026-08-10 22:44:20
+470,success,200,True,,Gliknik (synthetic-470),Baltimore City,established,Telecommunications,34,146061,"columbia, maryland, 21046 - Pb",21046,2026-08-10 22:45:50
+472,success,200,True,,CraniUS (synthetic-472),Anne Arundel,growth,Retail,6,182425,"2922 excelsior springs court,ellicott city, md united states 21042 - direct",21042,2026-08-10 22:45:50
+471,success,200,True,,Alliance Material Handling (synthetic-471),Baltimore City,established,Real Estate,5,71044,"250 south president street, suite 2000, baltimore, md 21202",21202,2026-08-10 22:45:50
+473,success,200,True,,VoiceVibes (synthetic-473),Baltimore County,early,Biotechnology Research,6,226002,"1910 towne centre boulevard,annapolis, md united states 21401 - direct",21401,2026-08-10 22:45:50
+474,success,200,True,,FutureMakers (synthetic-474),Baltimore City,growth,Telecommunications,6,0,"903 pemberton road, baltimore, md 21212",21212,2026-08-10 22:45:50
+475,success,200,True,,CapYear (synthetic-475),Howard,established,HR Tech,4,246788,"9250 rumsey road, columbia, md 21045",21045,2026-08-10 22:47:21
+476,success,200,True,,RGB Professional Services (synthetic-476),Baltimore City,pre-seed,Venture Studio,6,1277486,"115 west st, ste 301, annapolis, maryland 21401, us - Li",21401,2026-08-10 22:47:21
+477,success,200,True,,Bcs Machine Company (synthetic-477),Baltimore City,early,Enterprise Technology,30,223496,"baltimore, md 21287, us - Li",21287,2026-08-10 22:47:21
+478,success,200,True,,The CyberWire (synthetic-478),Howard,seed,Strategic Management Services,6,0,"678 infinity drive, eldersburg, md 21784",21784,2026-08-10 22:47:21
+479,success,200,True,,Alliance Material Handling (synthetic-479),Baltimore County,pre-seed,Digital Health,6,208209,"5520 research park drive, catonsville, md 21228",21228,2026-08-10 22:47:21
+480,success,200,True,,"RecurX Bio, Inc. (synthetic-480)",Baltimore County,pre-seed,Sporting Goods / Recreation,5,0,"855 n. wolfe street, ground floor, suite b, baltimore, maryland 21205, us - Li",21205,2026-08-10 22:48:51
+481,success,200,True,,SalesWarp (synthetic-481),Baltimore City,established,Quantum Computing,9,56271,"columbia, maryland, 21045 - Pb",21045,2026-08-10 22:48:51
+482,success,200,True,,Diagnostic Biochips (synthetic-482),Carroll,early,Energy,5,1705496,"1215 east fort avenue,baltimore, md united states 21230 - direct",21230,2026-08-10 22:48:51
+483,success,200,True,,Mel's Workshop (synthetic-483),Howard,early,Other Commercial Services,6,264851,"baltimore, maryland, 21218 - Pb",21218,2026-08-10 22:48:51
+484,success,200,True,,Tanzen Medical (synthetic-484),Baltimore City,seed,Diagnostics,6,0,"7572 rain flower way, columbia, md 21046",21046,2026-08-10 22:48:51
+485,success,200,True,,StafQuik (synthetic-485),Baltimore City,pre-seed,Education / EdTech,351,0,"bwtech@umbc 1450 s rolling rd, baltimore, maryland 21227, us - Li",21227,2026-08-10 22:50:21
+486,success,200,True,,Geb-Ra Organics (synthetic-486),Baltimore City,pre-seed,IT Consulting and Outsourcing,125,1726448,"14800 york road, suite 866, sparks glencoe, md 21152",21152,2026-08-10 22:50:21
+488,success,200,True,,SalesWarp (synthetic-488),Howard,seed,Healthcare IT,6,198152,"250 south president street, suite 2000, baltimore, md 21202",21202,2026-08-10 22:50:21
+487,success,200,True,,MelaTech (synthetic-487),Baltimore City,seed,IT Consulting and Outsourcing,6,0,"7230 lee deforest drive, columbia, md 21046",21046,2026-08-10 22:50:21
+490,success,200,True,,ImmuCision Biotherapeutics (synthetic-490),Baltimore City,seed,Cybersecurity,2,0,"2425 rye st, baltimore, md 21230",21230,2026-08-10 22:50:21
+489,success,200,True,,Tanzen Medical (synthetic-489),Howard,established,Gaming,175,387821,"5311 st albans way baltimore md 21212, baltimore, md 21212",21212,2026-08-10 22:51:51
+491,success,200,True,,IndyGeneUS Bio (synthetic-491),Howard,early,Diagnostics,251,185026,"1703 south clinton street, baltimore, md 21224",21224,2026-08-10 22:51:51
+492,success,200,True,,Yet Analytics (synthetic-492),Baltimore City,growth,Fintech,30,1110313,"780 elkridge landing road,linthicum heights, md united states 21090 - webpage",21090,2026-08-10 22:51:51
+493,success,200,True,,Subscribe Pro (synthetic-493),Howard,early,Enterprise Technology,51200,38245,"7572 rain flower way, columbia, md 21046",21046,2026-08-10 22:51:51
+494,success,200,True,,Money Club (formerly called Ortus Academy) (synthetic-494),Baltimore City,seed,Software Development Applications,6,114940,"8115 maple lawn boulevard,fulton, md united states 20759 - direct",20759,2026-08-10 22:51:51
+496,success,200,True,,Parallax Enterprises (synthetic-496),Howard,early,Aerospace and Defense,1150,225438,"250 w dickman st, second floor , baltimore, maryland 21230, us - Li",21230,2026-08-10 22:53:21
+495,success,200,True,,Rapafusyn Pharmaceuticals (synthetic-495),Baltimore City,established,Financial Services,6,489099,"875 hollins st., baltimore, md 21202",21202,2026-08-10 22:53:21
+497,success,200,True,,Glacier (synthetic-497),Baltimore City,pre-seed,Cannabis,30,1222351,"1812 webster street, baltimore, md 21230",21230,2026-08-10 22:53:21
+498,success,200,True,,Old Line Spirits (synthetic-498),Baltimore City,seed,Semiconductors,6,1241490,"5609 hess ave, baltimore, md 21212",21212,2026-08-10 22:53:21
+499,success,200,True,,Maryland Clean Energy Center (synthetic-499),Baltimore County,established,Other Healthcare Technology Systems,6,136432,"1215 east fort avenue,baltimore, md united states 21230 - direct",21230,2026-08-10 22:53:21
+500,success,200,True,,Flavocure Biotech (synthetic-500),Howard,pre-seed,Research Services,4,99817,"1501 st. paul street, baltimore, md 21202",21202,2026-08-10 22:54:51
+501,success,200,True,,Mason Dixie Biscuit Company (synthetic-501),Baltimore City,established,Software Development Applications,210,176771,"333 w ostend st, baltimore, maryland 21230, us - Li",21230,2026-08-10 22:54:51
+502,success,200,True,,Caption Any Photo (synthetic-502),Baltimore City,seed,Personal Care,351,1997821,"1100 wicomico street,baltimore, md united states 21230 - direct",21230,2026-08-10 22:54:51
+504,success,200,True,,Nkabio (synthetic-504),Howard,growth,Therapeutics,6,964640,"100 light street baltimore, md 21202, baltimore, md 21202",21202,2026-08-10 22:54:51
+503,success,200,True,,Entinex (synthetic-503),Baltimore City,pre-seed,Biotechnology Research,5,0,"baltimore, md 21202, us - Li",21202,2026-08-10 22:54:51
+505,success,200,True,,Keppel and Kismet (synthetic-505),Baltimore City,established,Healthcare IT,5,1352855,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 22:56:21
+506,success,200,True,,Procare Ambulance (synthetic-506),Baltimore City,early,Semiconductors,12,566673,"columbia, maryland, 21046 - Pb",21046,2026-08-10 22:56:21
+507,success,200,True,,FullBlast S.T.E.A.M. (synthetic-507),Baltimore City,established,Social/Platform Software,7,46812,"2720 sisson st, baltimore, maryland 21211, us - Li",21211,2026-08-10 22:56:21
+508,success,200,True,,Hex Performance (synthetic-508),Howard,seed,Other Commercial Services,30,6897391,"annapolis, maryland, 21403 - Pb",21403,2026-08-10 22:56:21
+510,success,200,True,,Infosec Learning (synthetic-510),Baltimore City,established,Cannabis,6,81335,"baltimore, md 20152, us - Li",20152,2026-08-10 22:56:21
+509,success,200,True,,"Drio, LLC (synthetic-509)",Baltimore City,established,Medical Supplies,6,72526,"1966 greenspring dr, lutherville timonium, maryland 21093, us - Li",21093,2026-08-10 22:57:51
+511,success,200,True,,Total Talent Network (synthetic-511),Baltimore City,pre-seed,Biotechnology,30,1304354,"250 west dickman st., baltimore, md 21230",21230,2026-08-10 22:57:51
+512,success,200,True,,Tenable (synthetic-512),Baltimore City,seed,Medical Supplies,6,0,"101 n haven st., baltimore, md 21224, us - Li",21224,2026-08-10 22:57:51
+513,success,200,True,,JJ Innovative Materials (synthetic-513),Howard,early,Other,125,1681588,"6751 columbia gateway dr, columbia, md 21046",21046,2026-08-10 22:57:51
+514,success,200,True,,BTS (synthetic-514),Baltimore City,growth,Real Estate,1150,244068,"8112 ellen way, savage, md 20763",20763,2026-08-10 22:57:51
+515,success,200,True,,Secured Health (synthetic-515),Baltimore City,established,Venture Studio,6,0,"columbia, maryland, 21046 - Pb",21046,2026-08-10 22:59:21
+516,success,200,True,,Equitea Co. (synthetic-516),Baltimore City,growth,Real Estate Services (B2C),7,185730,"baltimore, maryland, 21224 - Pb",21224,2026-08-10 22:59:21
+517,success,200,True,,QuikReversal (synthetic-517),Anne Arundel,pre-seed,Travel & Tourism,30,0,"1393 progress way, eldersburg, md 21784",21784,2026-08-10 22:59:21
+518,success,200,True,,Aegeria Soft Tissue (synthetic-518),Baltimore City,established,Therapeutics,6,0,"555 s president st, baltimore, maryland 21202, us - Li",21202,2026-08-10 22:59:21
+519,success,200,True,,Provider Partner Health Plans (synthetic-519),Baltimore City,established,Defense & Space,1,578081,"baltimore, md 21217, us - Li",21217,2026-08-10 22:59:21
+520,success,200,True,,OrbiSharp Robotics (synthetic-520),Baltimore City,early,Nanotechnology,30,115500,"5311 st albans way baltimore md 21212, baltimore, md 21212",21212,2026-08-10 23:00:51
+521,success,200,True,,Sonoval (synthetic-521),Howard,early,Therapeutics,30,145405,"2036 e pratt st, baltimore, maryland 21231, us - Li",21231,2026-08-10 23:00:51
+522,success,200,True,,Ginger Cove (synthetic-522),Anne Arundel,established,Travel & Tourism,30,0,"1703 south clinton street, baltimore, md 21224",21224,2026-08-10 23:00:51
+523,success,200,True,,Switchbridge (synthetic-523),Howard,pre-seed,Medical Device,6,597697,"glen burnie, maryland, 21061 - Pb",21061,2026-08-10 23:00:51
+524,success,200,True,,Kydes Pharmaceuticals (synthetic-524),Baltimore City,early,Aerospace and Defence,6,26363,"801 w baltimore st, baltimore, maryland 21201, us - Li",21201,2026-08-10 23:00:51
+525,success,200,True,,Curuvar (synthetic-525),Baltimore City,seed,Other Healthcare Technology Systems,30,162037,"1215 e fort ave, suite 200, baltimore, maryland 21230, us - Li",21230,2026-08-10 23:02:21
+526,success,200,True,,Fetal Therapy Technologies (synthetic-526),Anne Arundel,growth,Quantum Computing,3,1744653,"180 admiral cochrane drive, annapolis, md 21401",21401,2026-08-10 23:02:21
+528,success,200,True,,Hex Performance (synthetic-528),Anne Arundel,pre-seed,Cybersecurity,30,422035,"903 pemberton road, baltimore, md 21212",21212,2026-08-10 23:02:21
+527,success,200,True,,Irazu Oncology (synthetic-527),Baltimore City,established,Strategic Management Services,125,0,"annapolis, maryland, 21401 - Pb",21401,2026-08-10 23:02:21
+529,success,200,True,,NeuroIntact (synthetic-529),Baltimore City,growth,Venture Studio,6,118633,"1910 towne centre boulevard,annapolis, md united states 21401 - direct",21401,2026-08-10 23:02:21
+530,success,200,True,,Cambium Carbon (synthetic-530),Baltimore City,seed,Cannabis,6,0,"baltimore, md 21231, us - Li",21231,2026-08-10 23:03:51
+532,success,200,True,,gSpin Technologies (synthetic-532),Anne Arundel,early,Cybersecurity,30,90274,"3700 koppers st, suite 530, baltimore, maryland 21227, us - Li",21227,2026-08-10 23:03:51
+531,success,200,True,,WBX Commerce (synthetic-531),Baltimore City,established,Real Estate,30,1169341,"70004 security boulevard suite 300, baltimore, md 21244",21244,2026-08-10 23:03:51
+533,success,200,True,,Cajou Creamery (synthetic-533),Baltimore City,established,MarComm,6,0,"1450 south rolling road, baltimore, md 21227, us - Li",21227,2026-08-10 23:03:51
+534,success,200,True,,Medisolv (synthetic-534),Baltimore City,seed,IT Consulting and Outsourcing,6,99331,"502 south sharp street, suite 2200, baltimore, md 21201",21201,2026-08-10 23:03:51
+535,success,200,True,,Potomac Photonics (synthetic-535),Baltimore City,seed,Education / EdTech,210,14687599,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 23:05:21
+536,success,200,True,,Pixilated (synthetic-536),Baltimore City,seed,HR Tech,5,204242,"71 old mill bottom rd n, annapolis, md 21409",21409,2026-08-10 23:05:21
+537,success,200,True,,MedRegen (synthetic-537),Baltimore City,early,Healthcare IT,30,1193149,"baltimore, md, 21218 - Li",21218,2026-08-10 23:05:21
+538,success,200,True,,Middle Class United Cooperative (synthetic-538),Baltimore City,growth,Telecommunications,30,148889,"1014 west 36th street, baltimore, md 21211",21211,2026-08-10 23:05:21
+539,success,200,True,,Glacier (synthetic-539),Baltimore City,pre-seed,Food & Beverage,30,0,"3600 clipper mill road, baltimore, md 21211",21211,2026-08-10 23:05:21
+540,success,200,True,,Chariot BioSciences (synthetic-540),Baltimore County,seed,Aerospace and Defence,251,136696,"6751 columbia gateway dr suite 300 columbia md 21046, columbia, md 21406",21046,2026-08-10 23:06:51
+541,success,200,True,,JuneBrain (synthetic-541),Baltimore City,early,AgTech,45,1668106,"8000 sunstone circle, pikesville, md 21208, us - Li",21208,2026-08-10 23:06:51
+542,success,200,True,,JuneBrain (synthetic-542),Baltimore County,seed,Retail,125,109188,"3700 koppers st, suite 530, baltimore, maryland 21227, us - Li",21227,2026-08-10 23:06:51
+543,success,200,True,,RFIDKNOW (synthetic-543),Baltimore City,early,Aerospace and Defence,6,158687,"411 n howard st, baltimore, md 21218",21218,2026-08-10 23:06:51
+544,success,200,True,,Oh Mama (synthetic-544),Baltimore City,established,Travel & Tourism,5,0,"7001 johnnycake rd., baltimore, md 21244",21244,2026-08-10 23:06:51
+546,success,200,True,,Cambium Carbon (synthetic-546),Anne Arundel,established,Other Commercial Services,6,1188851,"1700 w 41st st, baltimore, md 21211",21211,2026-08-10 23:08:21
+545,success,200,True,,Offbeast (YC W22) (synthetic-545),Anne Arundel,established,Real Estate Services (B2C),30,55573,"10 e north ave, suite 300, baltimore, md 21202, us - Li",21202,2026-08-10 23:08:21
+548,success,200,True,,Alcamena (synthetic-548),Baltimore County,growth,Real Estate,125,178574,"613 yorktown manor ct, annapolis, md 21409",21409,2026-08-10 23:08:21
+547,success,200,True,,Oxide Games (synthetic-547),Baltimore City,pre-seed,Network Management Software,51200,193040,"850 west baltimore street, baltimore, maryland 21201, us - Li",21201,2026-08-10 23:08:21
+549,success,200,True,,Advancement Strategy Consulting (synthetic-549),Howard,early,MarComm,6,440453,"1812 ashland ave, suite 100, g17, baltimore, maryland 21205, us - Li",21205,2026-08-10 23:08:21
+550,success,200,True,,Wave Engine (synthetic-550),Baltimore City,early,Consumer Tech,25,0,"300 e lombard st, suite 840, baltimore, maryland 21202, us - Li",21202,2026-08-10 23:09:51
+551,success,200,True,,SWCreatives (synthetic-551),Baltimore City,early,Diagnostic Equipment,6,262220,"101 w dickman st, suite 703, baltimore, maryland 21230, us - Li",21230,2026-08-10 23:09:51
+552,success,200,True,,MO MarTech (synthetic-552),Baltimore City,pre-seed,Construction / Engineering,6,58395,"7001 johnnycake rd., baltimore, md 21244",21244,2026-08-10 23:09:51
+553,success,200,True,,SharpRank (synthetic-553),Anne Arundel,growth,Advanced Manufacturing,6,8236530,"1215 east fort avenue, baltimore, md 21230",21230,2026-08-10 23:09:51
+554,success,200,True,,Contiem (synthetic-554),Baltimore City,seed,Multimedia and Design Software,6,1451985,"215 washington avenue, suite z, towson, md 21204, us - Li",21204,2026-08-10 23:09:51
+555,success,200,True,,Elixirgen Therapeutics (synthetic-555),Baltimore City,pre-seed,Education / EdTech,30,10054011,"180 west ostend street,baltimore, md united states 21230 - direct",21230,2026-08-10 23:11:21
+556,success,200,True,,Meaning (synthetic-556),Baltimore City,established,Hospitals and Health Care,6,233501,"columbia, maryland, 21046 - Pb",21046,2026-08-10 23:11:21
+557,success,200,True,,Seedling (synthetic-557),Howard,growth,Diagnostics,30,0,"1143 rock spring rd suite 115,bel air, md united states 21014 - direct",21014,2026-08-10 23:11:21
+558,success,200,True,,Outlook Company (synthetic-558),Baltimore City,early,Creative Technology,30,5990945,"49 old solomons island road annapolis, md 21401, annapolis, md 21401",21401,2026-08-10 23:11:21
+560,success,200,True,,Entinex (synthetic-560),Baltimore City,seed,Digital Health,6,122787,"1548 ellsworth ave, crofton, maryland 21114, us - Li",21114,2026-08-10 23:11:21
+559,success,200,True,,Contiem (synthetic-559),Anne Arundel,growth,IT Services and IT Consulting,6,0,"8600 foundry st, spinning building 217e, savage, maryland 20763, us - Li",20763,2026-08-10 23:12:51
+561,success,200,True,,"Hotlines, LLC (synthetic-561)",Baltimore County,established,Food & Beverage,30,1227642,"101 n haven st., baltimore, md 21224, us - Li",21224,2026-08-10 23:12:51
+562,success,200,True,,"Foreman (OBM, Inc.) (synthetic-562)",Baltimore City,growth,Venture Studio,6,86442,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 23:12:51
+564,success,200,True,,MachineSense (synthetic-564),Baltimore County,seed,Biotechnology Research,45,0,"1116 alexander avenue, catonsville, md 21228",21228,2026-08-10 23:12:51
+563,success,200,True,,Shield 7 Consulting (synthetic-563),Baltimore City,growth,Research Services,6,91363,"49 old solomons island road annapolis, md 21401, annapolis, md 21401",21401,2026-08-10 23:12:51
+565,success,200,True,,Nurse Lynx (synthetic-565),Baltimore City,early,MarComm,1150,378559,"6241 falls road, baltimore, md 21209",21209,2026-08-10 23:14:21
+566,success,200,True,,Oh Mama (synthetic-566),Baltimore County,pre-seed,Digital Health,175,0,"1200 south conkling street, baltimore, md 21224",21224,2026-08-10 23:14:21
+567,success,200,True,,For The Culture Games (synthetic-567),Baltimore City,seed,MarComm,30,1849683,"4 west aylesbury road, lutherville timonium, md 21093",21093,2026-08-10 23:14:21
+568,success,200,True,,Apkudo (synthetic-568),Baltimore City,early,IT Consulting and Outsourcing,30,0,"7207 verbena rd, baltimore, md 21209",21209,2026-08-10 23:14:21
+569,success,200,True,,SciGenesis LLC (synthetic-569),Baltimore City,established,Consulting,6,827435,"377 n tannery rd, westminster, maryland 21157, us - Li",21157,2026-08-10 23:14:21
+570,success,200,True,,Catalyte (synthetic-570),Baltimore City,early,Travel & Tourism,6,1937881,"university of maryland, biopark, 4mlk 801 w baltimore st., baltimore, md 21223",21223,2026-08-10 23:15:51
+572,success,200,True,,Frontline Gig (synthetic-572),Howard,growth,Venture Studio,2,177655,"6200 seaforth st, suite a, baltimore, maryland 21224, us - Li",21224,2026-08-10 23:15:51
+571,success,200,True,,Radiopharmaceutical Imaging and Dosimetry (synthetic-571),Howard,seed,IT Consulting and Outsourcing,6,10160,"6996 columbia gateway dr, columbia, maryland 21046, us - Li",21046,2026-08-10 23:15:51
+574,success,200,True,,"Vita Therapeutics, Inc. (synthetic-574)",Baltimore County,pre-seed,Medical Devices,201500,3358913,"12230 clarksville pike, suite k,clarksville, md united states 21029 - direct",21029,2026-08-10 23:15:51
+573,success,200,True,,Keffa Coffee (synthetic-573),Baltimore City,seed,Cannabis,4,0,"1910 towne centre boulevard,annapolis, md united states 21401 - direct",21401,2026-08-10 23:15:51
+575,success,200,True,,Live Green (synthetic-575),Baltimore County,established,Apparel,30,0,"baltimore, maryland, 21218 - Pb",21218,2026-08-10 23:17:21
+576,success,200,True,,Processa Pharmaceuticals (synthetic-576),Baltimore City,growth,Digital Health,2,0,"2288 blue water blvd, suite #329, odenton, md 21113, us - Li",21113,2026-08-10 23:17:21
+578,success,200,True,,Vista Research Group (synthetic-578),Baltimore City,established,Construction / Engineering,6,16476,"6751 columbia gateway dr suite 300 columbia md 21046, columbia, md 21406",21046,2026-08-10 23:17:21
+577,success,200,True,,Lieber Institute for Brain Development (synthetic-577),Baltimore City,early,Robotics,5,0,"6460 dobbin rd, suite a, columbia, md 21045",21045,2026-08-10 23:17:21
+580,success,200,True,,Tenable (synthetic-580),Harford,pre-seed,Aerospace and Defense,30,641603,"6200 seaforth st, baltimore, maryland 21224, us - Li",21224,2026-08-10 23:17:21
+579,success,200,True,,Link Labs (synthetic-579),Baltimore City,growth,Medical Supplies,210,0,"2601 north howard street, baltimore, md 21218",21218,2026-08-10 23:18:51
+581,success,200,True,,Bluestem Market (synthetic-581),Howard,seed,Biotechnology,30,343453,"1100 wicomico st, baltimore, maryland 21230, us - Li",21230,2026-08-10 23:18:51
+582,success,200,True,,Link Labs (synthetic-582),Baltimore City,established,AgTech,6,9463595,"7480 conowingo avenue bay 18,jessup, md united states 20794 - direct",20794,2026-08-10 23:18:51
+584,success,200,True,,ICmed (synthetic-584),Howard,growth,Healthcare Services,210,8757276,"2919 middlebridge court,crofton, md 21114, crofton, md 21114",21114,2026-08-10 23:18:51
+583,success,200,True,,Jovian Concepts (synthetic-583),Baltimore City,early,Telecommunications,251,29143,"201 milford mill rd, 202a, pikesville, maryland 21208, us - Li",21208,2026-08-10 23:18:51
+585,success,200,True,,Heisler Semiconductor LLC (synthetic-585),Baltimore City,established,Therapeutics,30,52389,"30 e padonia rd, timonium, md 21093",21093,2026-08-10 23:20:21
+586,success,200,True,,Verb8tm (synthetic-586),Baltimore City,pre-seed,Travel & Tourism,4,6730899,"300 w pratt st, suite 400, baltimore, maryland 21201, us - Li",21201,2026-08-10 23:20:21
+588,success,200,True,,Harbor Link (synthetic-588),Anne Arundel,early,Travel & Tourism,51200,51752,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 23:20:21
+587,success,200,True,,Uplift Geosystems (synthetic-587),Baltimore City,growth,Multimedia and Design Software,6,173719,"7230 lee deforest drive, columbia, md 21046",21046,2026-08-10 23:20:21
+590,success,200,True,,ReGeltec (synthetic-590),Baltimore City,established,Construction / Engineering,1150,156209,"215 washington avenue, suite z, towson, md 21204, us - Li",21204,2026-08-10 23:20:21
+589,success,200,True,,"CloudLeap Technologies, LLC (synthetic-589)",Baltimore City,growth,Autonomous Vehicles,5,1040756,"1100 wicomico st, baltimore, maryland 21230, us - Li",21230,2026-08-10 23:21:51
+592,success,200,True,,Airbolt (synthetic-592),Baltimore City,pre-seed,Quantum Computing,30,0,"750 union ave, suite e3, baltimore, md 21211",21211,2026-08-10 23:21:51
+591,success,200,True,,BDP EnviroTech (synthetic-591),Baltimore City,growth,MarComm,30,0,"6601 baltimore national pike, catonsvile, md 21228-3908",21228,2026-08-10 23:21:51
+594,success,200,True,,Wave Engine (synthetic-594),Baltimore City,growth,HR Tech,6,0,"4 west aylesbury road, lutherville timonium, md 21093",21093,2026-08-10 23:21:51
+593,success,200,True,,SprintR (synthetic-593),Howard,early,Web3,3,1615030,"baltimore, maryland 21230, us - Li",21230,2026-08-10 23:21:51
+596,success,200,True,,Purview (synthetic-596),Howard,established,Other,6,264174,"701 east pratt street, baltimore, md 21202",21202,2026-08-10 23:23:21
+595,success,200,True,,Good Idea Solar (synthetic-595),Baltimore City,established,Construction / Engineering,30,0,"baltimore, md 21217, us - Li",21217,2026-08-10 23:23:21
+597,success,200,True,,INFINITE FOCUS (synthetic-597),Baltimore City,seed,Medical Supplies,6,16617672,"1304 bayard street, baltimore, md 21230",21230,2026-08-10 23:23:21
+598,success,200,True,,Black Sands Entertainment (synthetic-598),Baltimore City,established,Software Development Applications,30,0,"8115 maple lawn boulevard,fulton, md united states 20759 - direct",20759,2026-08-10 23:23:21
+599,success,200,True,,Pet Connect Business (synthetic-599),Baltimore City,pre-seed,Retail,6,181733,"1450 s rolling road, halethorpe, md 21227-3863",21227,2026-08-10 23:23:21
+647,success,200,True,,Chariot BioSciences (synthetic-647),Baltimore City,growth,Real Estate,6,155025,"2920 o'donnell st, baltimore, md 21224",21224,2026-08-10 23:29:23
+646,success,200,True,,Hopr (synthetic-646),Anne Arundel,pre-seed,Medical Supplies,30,0,"30 e padonia rd, timonium, md 21093",21093,2026-08-10 23:29:23
+611,success,200,True,,GUDEA (synthetic-611),Baltimore City,growth,Biotechnology,30,113773,"250 west dickman st., baltimore, md 21230",21230,2026-08-10 23:29:23
+603,success,200,True,,Zuul IoT (synthetic-603),Baltimore City,early,Enterprise Technology,5,194902,"1100 wicomico street, 6th floor,baltimore, md united states 21230 - direct",21230,2026-08-10 23:29:23
+612,success,200,True,,OrbiSharp Robotics (synthetic-612),Baltimore City,early,Venture Studio,30,0,"801 cromwell park drive, suite 108, glen burnie, maryland 21061, us - Li",21061,2026-08-10 23:29:23
+608,success,200,True,,Chariot BioSciences (synthetic-608),Baltimore City,established,IT Consulting and Outsourcing,30,172376,"6030 day break circle, suite a150-342,clarksville, md united states 21029 - direct",21029,2026-08-10 23:30:53
+609,success,200,True,,Veina Vascular (synthetic-609),Baltimore City,established,Biotechnology Research,30,515675,"2401 w belvedere ave, bioincubator - lab 317, baltimore, maryland 21215, us - Li",21215,2026-08-10 23:30:53
+656,success,200,True,,Connexa Sports (synthetic-656),Baltimore City,growth,GovTech,125,18189540,"1548 ellsworth ave, crofton, maryland 21114, us - Li",21114,2026-08-10 23:30:53
+643,success,200,True,,Stansberry Research (synthetic-643),Baltimore City,seed,IT Consulting and Outsourcing,5,0,"6021 university boulevard, ellicott city, md 21043",21043,2026-08-10 23:30:53
+615,success,200,True,,Mindgrasp (synthetic-615),Howard,early,Diagnostics,6,185640,"16 willow avenue, towson, md 21286",21286,2026-08-10 23:30:53
+641,success,200,True,,NeuroIntact (synthetic-641),Baltimore City,pre-seed,Network Management Software,251,1507516,"3031 washington blvd, suite g, baltimore, maryland 21230, us - Li",21230,2026-08-10 23:32:23
+604,success,200,True,,SWCreatives (synthetic-604),Anne Arundel,seed,Consumer Tech,30,88183,"1450 south rolling road, baltimore, md 21227, us - Li",21227,2026-08-10 23:32:23
+651,success,200,True,,N2K (synthetic-651),Baltimore County,seed,AgTech,210,199299,"baltimore, maryland 21218, us - Li",21218,2026-08-10 23:32:23
+627,success,200,True,,DecisionPoint Technologies (synthetic-627),Howard,seed,Software Development,6,0,"1040 park ave, suite 200, baltimore, md 21201",21201,2026-08-10 23:32:23
+610,success,200,True,,Thermoreg (synthetic-610),Howard,growth,Consulting,6,0,"baltimore, maryland 21202, us - Li",21202,2026-08-10 23:32:23
+632,success,200,True,,QuoLab Technologies (synthetic-632),Baltimore City,early,Retail,5,0,"34 diamond crest ct, baltimore, md 21209",21209,2026-08-10 23:33:53
+645,success,200,True,,"Divaneering Lab, Inc (synthetic-645)",Baltimore City,seed,Robotics,30,1859799,"855 north wolfe street, baltimore, md 21205",21205,2026-08-10 23:33:53
+607,success,200,True,,A&G Pharmaceutical (synthetic-607),Howard,established,Multimedia and Design Software,3,511185,"221 east thomas avenue, baltimore, md 21225, us - Li",21225,2026-08-10 23:33:53
+625,success,200,True,,Zest Social Media Solutions (synthetic-625),Baltimore City,pre-seed,Entertainment & Recreation,6,115542,"1215 e fort ave suite 200 baltimore md 21230, baltimore, md 21230",21230,2026-08-10 23:33:53
+620,success,200,True,,SWCreatives (synthetic-620),Baltimore City,seed,Creative Technology,201500,0,"822 guilford avenue, baltimore, md 21202",21202,2026-08-10 23:33:53
+600,success,200,True,,The Cube Cowork (synthetic-600),Baltimore City,established,Network Management Software,30,18347208,"11501 pocomoke court, suite d, baltimore, md 21220, us - Li",21220,2026-08-10 23:35:23
+638,success,200,True,,Veina Vascular (synthetic-638),Baltimore City,pre-seed,Sporting Goods / Recreation,2,0,"6200 seaforth st, suite a, baltimore, maryland 21224, us - Li",21224,2026-08-10 23:35:23
+621,success,200,True,,Techslice (synthetic-621),Howard,pre-seed,Enterprise Technology,30,0,"11350 mccormick rd, bldg iii, suite 102, hunt valley, maryland 21031, us - Li",21031,2026-08-10 23:35:23
+660,success,200,True,,Zentail Inc (synthetic-660),Howard,pre-seed,IT Consulting and Outsourcing,5,0,"1100 wicomico street, 6th floor,baltimore, md united states 21230 - direct",21230,2026-08-10 23:35:23
+662,success,200,True,,The Lor Company (synthetic-662),Howard,growth,Gaming,10,0,"2631 housley road, annapolis, md 21401",21401,2026-08-10 23:35:23
+648,success,200,True,,HR Geckos (synthetic-648),Baltimore City,pre-seed,Cannabis,30,166587,"822 guilford ave, baltimore, md 21202",21202,2026-08-10 23:36:53
+618,success,200,True,,Zest Social Media Solutions (synthetic-618),Anne Arundel,established,Autonomous Vehicles,5,0,"baltimore, maryland 21202, us - Li",21202,2026-08-10 23:36:53
+630,success,200,True,,"EBO, Corp. (synthetic-630)",Baltimore County,growth,Fintech,30,0,"785 elkridge landing road, suite 300, linthicum heights, md 21090, us - Li",21090,2026-08-10 23:36:53
+605,success,200,True,,EliteGamingLIVE (synthetic-605),Baltimore City,seed,Other Commercial Services,6,576085,"3811 canterbury rd. #803, baltimore, md 21218, us - Li",21218,2026-08-10 23:36:53
+636,success,200,True,,Fantail Consulting and Technologies (synthetic-636),Baltimore County,early,Travel & Tourism,125,1834776,"1501 saint paul street, 118, baltimore, md 21202",21202,2026-08-10 23:36:53
+623,success,200,True,,A&G Pharmaceutical (synthetic-623),Baltimore City,growth,Medical Device,6,1007245,"750 md route 3 south, suite 19 gambrills, md 21054, gambrills, md 21054",21054,2026-08-10 23:38:23
+637,success,200,True,,Next In Line Inc (synthetic-637),Baltimore City,seed,Creative Technology,210,11193,"5520 research park drive, catonsville, md 21228",21228,2026-08-10 23:38:23
+617,success,200,True,,Azadi Health (synthetic-617),Howard,growth,Medical Supplies,6,1790073,"3550 buena vista ave, baltimore, md 21211",21211,2026-08-10 23:38:23
+640,success,200,True,,Wave Engine (synthetic-640),Baltimore City,seed,Medical Supplies,0,0,"954 ridgebrook rd, sparks glencoe, md 21152",21152,2026-08-10 23:38:23
+649,success,200,True,,Clarity Business Solutions (synthetic-649),Baltimore City,established,Real Estate Services (B2C),30,221051,"3704 north charles street, baltimore, md 21218",21218,2026-08-10 23:38:23
+606,success,200,True,,KnowSilo (synthetic-606),Howard,growth,Aerospace and Defense,6,1478502,"49 old solomons island road annapolis, md 21401, annapolis, md 21401",21401,2026-08-10 23:39:53
+633,success,200,True,,BrightWave (synthetic-633),Anne Arundel,seed,Personal Care,6,11888158,"701 e pratt st, baltimore, maryland 21202, us - Li",21202,2026-08-10 23:39:53
+624,success,200,True,,Root3 Labs (synthetic-624),Howard,early,Retail,6,164744,"10451 mill run circle, suite 400, owings mills, maryland 21117, us - Li",21117,2026-08-10 23:39:53
+601,success,200,True,,POWER UP (synthetic-601),Baltimore City,pre-seed,Semiconductors,5,119965,"6711-b moravia park drive, baltimore, md 21237, us - Li",21237,2026-08-10 23:39:53
+629,success,200,True,,NovusTex Corp (synthetic-629),Baltimore City,growth,Biotechnology Research,5,0,"10451 mill run circle, suite 400, owings mills, maryland 21117, us - Li",21117,2026-08-10 23:39:53
+657,success,200,True,,EvON Medics (synthetic-657),Anne Arundel,growth,Research Services,5,82276,"baltimore, maryland 21230, us - Li",21230,2026-08-10 23:41:23
+634,success,200,True,,Zuul IoT (synthetic-634),Baltimore City,early,Venture Studio,251,18514209,"4 west aylesbury road, lutherville timonium, md 21093",21093,2026-08-10 23:41:23
+613,success,200,True,,STEM City Baltimore (synthetic-613),Howard,early,Digital Health,6,137271,"7572 rain flower way, columbia, md 21046",21046,2026-08-10 23:41:23
+652,success,200,True,,Entinex (synthetic-652),Howard,established,Network Management Software,30,148449,"1800 s clinton st, baltimore, maryland 21224, us - Li",21224,2026-08-10 23:41:23
+653,success,200,True,,Untethered Voyages (synthetic-653),Baltimore City,established,Software Development,210,56337,"8600 lasalle road, #212, towson, maryland 21286, us - Li",21286,2026-08-10 23:41:23
+616,success,200,True,,Soles for Souls (synthetic-616),Howard,growth,Healthcare Services,2,187967,"baltimore, maryland, 21237 - Pb",21237,2026-08-10 23:43:56
+644,success,200,True,,Novel Microdevices (synthetic-644),Baltimore City,pre-seed,Quantum Computing,5,280682,"6411 beckley st., holabird business park, baltimore, md 21224, us - Li",21224,2026-08-10 23:43:56
+626,success,200,True,,Stacksdata (synthetic-626),Baltimore County,seed,Food & Beverage,6,1534058,"1100 wicomico st, baltimore, maryland 21230, us - Li",21230,2026-08-10 23:43:56
+655,success,200,True,,Government Freelance Exchange (GovFlex) (synthetic-655),Baltimore City,growth,Other,6,120019,"6810 deerpath road, suite 405, elkridge, md 21075",21075,2026-08-10 23:43:56
+659,success,200,True,,SchoolDuels (synthetic-659),Howard,pre-seed,Aerospace and Defense,6,107634,"785 elkridge landing rd, suite 300, linthicum heights, maryland 21090, us - Li",21090,2026-08-10 23:43:56
+664,success,200,True,,Connexa Sports (synthetic-664),Baltimore City,established,Aerospace and Defense,30,266912,"145 west ostend street, baltimore, md 21230",21230,2026-08-10 23:45:26
+622,success,200,True,,KleenUp (synthetic-622),Howard,early,Quantum Computing,5,205482,"323 w camden st, suite 600, baltimore, maryland 21201, us - Li",21201,2026-08-10 23:45:26
+619,success,200,True,,Hypermelt (synthetic-619),Baltimore City,growth,Real Estate,30,1123533,"1340 smith avenue, baltimore, md 21209",21209,2026-08-10 23:45:26
+628,success,200,True,,Era (synthetic-628),Howard,growth,Telecommunications,6,0,"2101 e. biddle street,baltimore, md united states 21213 - direct",21213,2026-08-10 23:45:26
+631,success,200,True,,Untethered Voyages (synthetic-631),Baltimore City,growth,Medical Supplies,10,1887039,"9176 red branch road, o,columbia, md united states 21045 - direct",21045,2026-08-10 23:45:26
+614,success,200,True,,Intralytix (synthetic-614),Baltimore City,established,Gaming,30,0,"855 n wolfe st., baltimore, md 21205",21205,2026-08-10 23:46:56
+658,success,200,True,,Sonoval (synthetic-658),Howard,early,Nanotechnology,210,181847,"1143 rock spring rd suite 115,bel air, md united states 21014 - direct",21014,2026-08-10 23:46:56
+663,success,200,False,,Patient Premier (synthetic-663),Baltimore City,established,Food & Beverage,30,0,"10451 mill run circle, suite 900, owings mills, maryland 21117, us - Li",21117,2026-08-10 23:46:56
+661,success,200,True,,Lifemark Reinsurance (synthetic-661),Baltimore County,early,Fintech,125,178752,"1100 wicomico st suite 323, baltimore, md 21230, baltimore, md 21230",21230,2026-08-10 23:46:56
+665,success,200,True,,Lieber Institute for Brain Development (synthetic-665),Baltimore City,seed,Personal Care,30,0,"785 elkridge landing rd, suite 300, linthicum heights, maryland 21090, us - Li",21090,2026-08-10 23:46:56
+650,success,200,True,,Hungry Harvest (synthetic-650),Baltimore City,pre-seed,Consulting,30,0,"1215 e fort ave, suite 104, baltimore, maryland 21230, us - Li",21230,2026-08-10 23:46:56
+602,success,200,True,,SocialToaster Inc (synthetic-602),Baltimore County,pre-seed,Financial Services,30,149693,"750 union ave, suite e3, baltimore, md 21211",21211,2026-08-10 23:46:56
+654,success,200,True,,Azumi (synthetic-654),Baltimore City,early,Digital Health,5,855801,"6518 meadowridge rd, suite 100, elkridge, maryland 21075, us - Li",21075,2026-08-10 23:46:56
+642,success,200,True,,Plant Sensory Systems (synthetic-642),Baltimore City,established,Venture Studio,6,1405469,"7230 lee deforest drive, columbia, md 21046",21046,2026-08-10 23:48:26
+639,success,200,True,,ReGeltec (synthetic-639),Howard,established,Cannabis,125,0,"6996 columbia gateway dr, columbia, maryland 21046, us - Li",21046,2026-08-10 23:48:26
+635,success,200,True,,Sparkypants (synthetic-635),Baltimore City,growth,Aerospace and Defence,6,0,"208 s pulaski st, baltimore, maryland 21223, us - Li",21223,2026-08-10 23:48:26
+667,success,200,True,,22Beacon (synthetic-667),Anne Arundel,early,HR Tech,6,1495273,"6751 columbia gateway drive, columbia, md 21046",21046,2026-08-10 23:48:26
+666,success,200,True,,SWCreatives (synthetic-666),Baltimore County,established,Therapeutics,210,0,"baltimore, md 21287, us - Li",21287,2026-08-10 23:48:26
+668,success,200,True,,Clarity Business Solutions (synthetic-668),Baltimore County,growth,Nanotechnology,30,150044,"1501 st. paul st., baltimore, md 21202, us - Li",21202,2026-08-10 23:49:56
+669,success,200,True,,Appellate (synthetic-669),Baltimore City,pre-seed,IT Consulting and Outsourcing,210,1127083,"8110 maple lawn blvd., suite 200, fulton, maryland 20759, us - Li",20759,2026-08-10 23:49:56
+670,success,200,True,,Intralytix (synthetic-670),Baltimore City,growth,Autonomous Vehicles,6,3601646,"1100 wicomico street, suite 700, baltimore, md 21230",21230,2026-08-10 23:49:56
+671,success,200,True,,Hispanicpreneurs (synthetic-671),Baltimore City,seed,Real Estate Services (B2C),210,384984,"250 w dickman st, second floor , baltimore, maryland 21230, us - Li",21230,2026-08-10 23:49:56
+672,success,200,True,,R3 Score Technologies (synthetic-672),Baltimore County,seed,Climate Tech,350,2525203,"annapolis, maryland, 21403 - Pb",21403,2026-08-10 23:49:56
+673,success,200,True,,Century Engineering (synthetic-673),Howard,seed,Environmental Services (B2B),6,0,"215 washington avenue, suite z, towson, md 21204, us - Li",21204,2026-08-10 23:51:26
+674,success,200,True,,IsItGood (synthetic-674),Baltimore City,established,Digital Health,11,11146582,"1 north haven street suite 3, baltimore, md 21224",21224,2026-08-10 23:51:26
+675,success,200,True,,FLOHOM (synthetic-675),Baltimore City,early,Consumer Tech,5,62116,"109 belfast road, timonium, md 21093",21093,2026-08-10 23:51:26
+677,success,200,True,,Gliknik (synthetic-677),Baltimore County,growth,Autonomous Vehicles,30,809432,"101 w dickman st, baltimore, maryland 21230, us - Li",21230,2026-08-10 23:51:26
+676,success,200,True,,LifeStraw (synthetic-676),Baltimore City,seed,Energy,125,0,"3273 pine orchard ln, ellicott city, maryland 21042, us - Li",21042,2026-08-10 23:51:26
+678,success,200,True,,BondTrue (synthetic-678),Howard,growth,Food & Beverage,5,540614,"5520 research park drive suite 100, baltimore, md 21228, baltimore, md 21228",21228,2026-08-10 23:52:56
+679,success,200,True,,GUDEA (synthetic-679),Baltimore City,seed,Cannabis,2,1151520,"7134 columbia gateway drive, columbia, md 21046",21046,2026-08-10 23:52:56
+680,success,200,True,,Sonavi Labs (synthetic-680),Baltimore City,growth,Consulting,75,1619956,"8115 maple lawn boulevard,fulton, md united states 20759 - direct",20759,2026-08-10 23:52:56
+681,success,200,True,,Common Curriculum (synthetic-681),Baltimore City,early,Real Estate,175,0,"1100 wicomico street, suite 1m, baltimore, md 21230",21230,2026-08-10 23:52:56
+682,success,200,True,,IsItGood (synthetic-682),Carroll,established,Personal Care,6,189952,"25 west fayette street, baltimore, md 21201",21201,2026-08-10 23:52:56
+683,success,200,True,,Keffa Coffee (synthetic-683),Baltimore City,pre-seed,IT Consulting and Outsourcing,30,0,"columbia, maryland, 21044 - Pb",21044,2026-08-10 23:54:26
+685,success,200,True,,Arena Analytics (synthetic-685),Baltimore City,growth,Hospitals and Health Care,210,118139,"8840 stanford blvd, suite 4450, columbia, md 21045",21045,2026-08-10 23:54:26
+684,success,200,True,,Secured Health (synthetic-684),Howard,early,Network Management Software,210,1024451,"145 west ostend street, baltimore, md 21230",21230,2026-08-10 23:54:26
+686,success,200,True,,Enveil (synthetic-686),Baltimore City,pre-seed,Network Management Software,5,53794,"115 west st, ste 301, annapolis, maryland 21401, us - Li",21401,2026-08-10 23:54:26
+687,success,200,True,,Corrie Health (synthetic-687),Baltimore City,early,Venture Studio,18,1779855,"706 giddings ave, annapolis, maryland (md) 21401, us - Li",21401,2026-08-10 23:54:26
+688,success,200,True,,Sommos (synthetic-688),Baltimore City,established,Other,125,207008,"1954 greenspring dr, timonium, md 21093, us - Li",21093,2026-08-10 23:55:56
+689,success,200,True,,Snag-A-Slip (synthetic-689),Baltimore City,seed,Consulting,30,17006530,"glen burnie, maryland, 21061 - Pb",21061,2026-08-10 23:55:56
+690,success,200,True,,MedRegen (synthetic-690),Baltimore City,established,Network Management Software,6,1740694,"10710 gilroy rd, hunt valley, md 21031",21031,2026-08-10 23:55:56
+691,success,200,True,,BondTrue (synthetic-691),Anne Arundel,seed,Diagnostics,229,20387,"10921 pump house road, annapolis, md 20701",20701,2026-08-10 23:55:56
+692,success,200,True,,Hypermelt (synthetic-692),Baltimore County,growth,Real Estate Services (B2C),6,100157,"2036 e pratt st, baltimore, maryland 21231, us - Li",21231,2026-08-10 23:55:56
+693,success,200,True,,CourseArc (synthetic-693),Baltimore City,growth,Consulting,30,1328767,"6711 iron ore 317 elkridge md 21075, elkridge, md 21075",21075,2026-08-10 23:57:26
+695,success,200,True,,Porter (synthetic-695),Baltimore City,early,Consumer Tech,6,95680,"6940 columbia gateway dr, suite 120, columbia, maryland 21046, us - Li",21046,2026-08-10 23:57:26
+694,success,200,True,,CyDeploy (synthetic-694),Anne Arundel,seed,Energy,30,0,"3701 a, southwestern blvd, baltimore, md 21229",21229,2026-08-10 23:57:26
+697,success,200,True,,Minnowtech Inc. (synthetic-697),Baltimore City,established,Other Healthcare Technology Systems,6,0,"101 north haven street, suite 301, baltimore, maryland 21224, us - Li",21224,2026-08-10 23:57:26
+696,success,200,True,,Enveil (synthetic-696),Howard,seed,Travel & Tourism,6,0,"615 n wolfe st, baltimore, maryland 21287, us - Li",21287,2026-08-10 23:57:26
+698,success,200,True,,iBallistix (synthetic-698),Baltimore City,seed,Healthcare Services,350,496036,"5520 research park drive, suite 100, baltimore, md 21228",21228,2026-08-10 23:58:56
+699,success,200,True,,MAS Alliance (synthetic-699),Howard,early,IT Services and IT Consulting,6,19929,"1200 east patapsco avenue, baltimore, md 21225",21225,2026-08-10 23:58:56
+700,success,200,True,,EcoMap Technologies (synthetic-700),Baltimore City,pre-seed,Real Estate Services (B2C),30,199306,"7117 millbury court elkridge md 21075, elkridge, md 21075",21075,2026-08-10 23:58:56
+701,success,200,True,,SphereHub (synthetic-701),Baltimore City,established,Other Commercial Services,6,238382,"1200 east patapsco avenue, baltimore, md 21225",21225,2026-08-10 23:58:56
+703,success,200,True,,LTN Global Communications (synthetic-703),Baltimore City,growth,Network Management Software,30,171114,"baltimore, md 21287, us - Li",21287,2026-08-10 23:58:56
+702,success,200,True,,OrbiSharp Robotics (synthetic-702),Baltimore City,early,MarComm,30,1751900,"3001 rosekemp ave, baltimore, md 21214",21214,2026-08-11 00:00:26
+704,success,200,True,,AbsoluteCARE (synthetic-704),Baltimore City,early,Cannabis,5,0,"1501 saint paul street, 118, baltimore, md 21202",21202,2026-08-11 00:00:26
+706,success,200,True,,"Foreman (OBM, Inc.) (synthetic-706)",Baltimore City,seed,Semiconductors,210,0,"301 w. 29th street, baltimore, md 21202",21202,2026-08-11 00:00:26
+705,success,200,False,,Slick (synthetic-705),Anne Arundel,pre-seed,Semiconductors,30,60047,"2288 blue water blvd, suite #329, odenton, md 21113, us - Li",21113,2026-08-11 00:00:26
+708,success,200,True,,The Cube Cowork (synthetic-708),Baltimore City,pre-seed,Creative Technology,4,888893,"1304 bayard street, baltimore, md 21230",21230,2026-08-11 00:00:26
+707,success,200,True,,Hex Performance (synthetic-707),Baltimore City,growth,Environmental Services (B2B),30,0,"401 east pratt street, #2245, baltimore, maryland 21202, us - Li",21202,2026-08-11 00:00:26
+710,success,200,True,,SecuLore Solutions (synthetic-710),Baltimore City,seed,Hospitals and Health Care,14,0,"6750 alexander bell dr, suite 420, columbia, maryland 21046, us - Li",21046,2026-08-11 00:00:26
+709,success,200,True,,Aidar Health (synthetic-709),Howard,established,Software Development Applications,6,918242,"1501 st. paul street, baltimore, md 21202",21202,2026-08-11 00:00:26
+712,success,200,True,,A&G Pharmaceutical (synthetic-712),Baltimore County,established,Supply Chain & Logistics,30,148184,"222 severn ave, annapolis, md 21403, us - Li",21403,2026-08-11 00:00:26

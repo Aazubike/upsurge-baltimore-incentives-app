@@ -24,7 +24,10 @@ from pathlib import Path
 
 DATA_PATH = Path(__file__).parent.parent / "data" / "Maryland_Qualifying_OZ_Census_Tracts.xlsx"
 GEOCODER_URL = "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress"
-GEOCODER_TIMEOUT_SECONDS = 6
+GEOCODER_TIMEOUT_SECONDS = 3  # lowered from 6 -- this is a fail-safe timeout
+                              # (timeout => treated as "not eligible" anyway),
+                              # so a lower cap just tightens the worst case
+                              # without changing behavior on success.
 
 _eligible_tracts = None
 _geocode_cache = {}  # {normalized_address: tract_or_None} -- avoids re-geocoding

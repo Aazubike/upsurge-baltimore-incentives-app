@@ -173,6 +173,33 @@ def opportunity_zone_note(row, oz_eligible: bool, oz_tract):
     )
 
 
+def opportunity_zone_could_apply(answers: dict) -> bool:
+    """
+    Cheap local pre-check run BEFORE paying for the Census geocoder network
+    call: is there even an Opportunity-Zone-named program that this profile
+    would otherwise pass (county/stage/mwbe/employee/industry), ignoring the
+    OZ gate itself? Only 2 of 117 programs are OZ-named, so for most
+    submissions the answer is "no" and the ~6s geocode round trip (which
+    only ever feeds those 2 programs) can be skipped entirely -- the caller
+    can treat oz_eligible as False without ever calling the Census API.
+    """
+    df = get_incentives()
+    oz_rows = df[df.apply(_is_named_opportunity_zone_program, axis=1)]
+    if oz_rows.empty:
+        return False
+    mask = oz_rows.apply(
+        lambda row: (
+            _county_ok(row, answers.get("county"))
+            and _stage_ok(row, answers.get("stage"))
+            and _mwbe_ok(row, answers.get("mwbe_groups", []))
+            and _employee_ok(row, answers.get("employee_count"))
+            and _industry_ok(row, answers.get("industry"))
+        ),
+        axis=1,
+    )
+    return bool(mask.any())
+
+
 def filter_eligible(answers: dict) -> pd.DataFrame:
     """
     Returns the shortlist of programs that pass every parseable hard gate.

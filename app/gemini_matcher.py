@@ -35,6 +35,7 @@ from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 
 from app.rules_engine import locality_tier, enterprise_zone_note, opportunity_zone_note
 
@@ -42,7 +43,10 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 
 MODEL_NAME = "gemini-3.1-flash-lite"
 MAX_RETRIES = 2
-BATCH_SIZE = 20  # covers most real shortlists in a single wave of parallel calls
+BATCH_SIZE = 8  # smaller batches = less output per call = each parallel batch
+                # finishes faster (generation time scales with output length).
+                # With MAX_PARALLEL_BATCHES=10 there's plenty of headroom to run
+                # more, smaller batches concurrently instead of fewer, larger ones.
 MAX_PARALLEL_BATCHES = 10  # raised from 5 now that credit exhaustion (not burst
                            # concurrency) looks like the real cause of the earlier
                            # 429s -- Tier 1 RPM/TPM usage never actually got close
@@ -194,7 +198,24 @@ def _call_batch(answers: dict, batch_df: pd.DataFrame):
         last_error = None
         for attempt in range(MAX_RETRIES + 1):
             try:
-                response = client.models.generate_content(model=MODEL_NAME, contents=prompt)
+                response = client.models.generate_content(
+                    model=MODEL_NAME,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        # Constrains generation straight to JSON tokens instead of
+                        # letting the model spend output tokens on markdown fences /
+                        # prose framing that we were just stripping afterward anyway.
+                        # This is the single biggest latency win here, since
+                        # generation time scales with output length.
+                        response_mime_type="application/json",
+                        # "low" is Google's own recommendation for high-throughput,
+                        # simple-instruction-following structured output. Pinned
+                        # explicitly rather than relying on the model's current
+                        # ("minimal") default so a future default change can't
+                        # silently reintroduce latency here.
+                        thinking_config=types.ThinkingConfig(thinking_level="low"),
+                    ),
+                )
                 raw_text = response.text.strip()
                 break
             except Exception as e:

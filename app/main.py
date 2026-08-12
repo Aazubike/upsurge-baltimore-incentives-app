@@ -9,7 +9,7 @@ from app.data_loader import (
     load_all, get_incentives, search_companies, get_company_by_name,
     suggest_stage_from_rounds, get_industry_options, parse_employee_count,
 )
-from app.rules_engine import filter_eligible
+from app.rules_engine import filter_eligible, opportunity_zone_could_apply
 from app.gemini_matcher import rank_shortlist
 from app.opportunity_zones import check_opportunity_zone
 from app.sheets_logger import log_submission, update_feedback
@@ -180,8 +180,22 @@ def match_results(
     # program), since it's a network call. Same "no address = not eligible"
     # rule as Enterprise Zones: no evidence, so no unverifiable claim shown.
     # This one DOES have to finish before we can filter programs, so it stays
-    # on the main path -- but it only runs if an address was actually given.
-    oz_eligible, oz_tract = check_opportunity_zone(cleaned_address)
+    # on the main path -- but it only runs if an address was actually given
+    # AND an OZ-named program is even in play for this profile. Only 2 of
+    # 117 programs care about the result, so skipping the ~6s(now 3s) Census
+    # API round trip for every submission where neither could apply anyway
+    # is a straightforward latency win with no behavior change.
+    precheck_answers = {
+        "county": county,
+        "stage": stage,
+        "employee_count": cleaned_employee_count,
+        "industry": industry,
+        "mwbe_groups": [g for g in mwbe_groups if g != "none"],
+    }
+    if cleaned_address and opportunity_zone_could_apply(precheck_answers):
+        oz_eligible, oz_tract = check_opportunity_zone(cleaned_address)
+    else:
+        oz_eligible, oz_tract = False, None
 
     answers = {
         "county": county,
