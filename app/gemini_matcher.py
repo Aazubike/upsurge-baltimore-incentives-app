@@ -52,6 +52,21 @@ MAX_PARALLEL_BATCHES = 10  # raised from 5 now that credit exhaustion (not burst
                            # 429s -- Tier 1 RPM/TPM usage never actually got close
                            # to its ceiling, so there's real headroom here. Still
                            # well under the 25 that caused problems originally.
+MAX_OUTPUT_TOKENS = 2048  # per-batch cap. Generation time scales with output
+                          # length, so this is a hard ceiling on how long any
+                          # single batch (and therefore the whole request,
+                          # since we wait on the slowest one) can run.
+
+# TEMPORARY speed lever for the 8/13 presentation: the per-criterion
+# "breakdown" (6 dimensions x status+note, per program) is by far the
+# biggest chunk of output tokens per batch. Setting FAST_MODE=1 in the
+# environment drops that field from the prompt/response entirely, which
+# cuts typical batch output size roughly in half and is the single
+# biggest lever we have on latency without touching parallelism. The UI
+# already degrades gracefully with no breakdown (see results.html), so
+# this is safe to flip on/off with no code changes -- just unset it once
+# the breakdown detail is worth the extra seconds again.
+FAST_MODE = os.environ.get("FAST_MODE", "0") == "1"
 SAFETY_NET_MAX_CANDIDATES = 300  # not a normal operating limit -- just prevents a pathological
                                   # worst-case query (e.g. an almost-unrestricted profile matching
                                   # hundreds of statewide programs) from generating a runaway bill.
@@ -70,7 +85,10 @@ def _make_cache_key(answers: dict, shortlist_df: pd.DataFrame) -> str:
         for k, v in sorted(answers.items())
     }
     program_names = tuple(sorted(shortlist_df["Program Name"].tolist()))
-    raw = json.dumps({"answers": normalized_answers, "programs": program_names}, sort_keys=True, default=str)
+    raw = json.dumps(
+        {"answers": normalized_answers, "programs": program_names, "fast_mode": FAST_MODE},
+        sort_keys=True, default=str,
+    )
     return hashlib.sha256(raw.encode()).hexdigest()
 
 _client = None
@@ -122,7 +140,18 @@ def _build_prompt(answers: dict, shortlist_df: pd.DataFrame) -> str:
             "needs_manual_review": bool(row.get("Needs_Manual_Review")),
         })
 
-    return f"""You are ranking Maryland business incentive programs for a specific company.
+    breakdown_rule = (
+        "Do not include a \"breakdown\" field in this response -- it is disabled for speed."
+        if FAST_MODE else
+        'For EVERY scored program, return a "breakdown" object covering all 6 rubric '
+        'dimensions (location, stage, size, industry, mwbe, overall). Each dimension '
+        'needs a "status" of exactly one of: "match", "partial", "no_data", "unmet". '
+        'Each needs a "note": 2-4 words max, terse tag style, not a sentence '
+        '(e.g. "County match", "Not specified", "Tech services fit" -- not '
+        '"Baltimore City, exact match for this program").'
+    )
+
+    base_prompt = f"""You are ranking Maryland business incentive programs for a specific company.
 These programs already passed a hard eligibility filter on county, business stage,
 and industry exclusions -- do not re-reject a program for those reasons alone.
 
@@ -150,12 +179,7 @@ CRITICAL RULES:
 3. Never invent a requirement that isn't stated in the data.
 4. If needs_manual_review is true, treat the free text as authoritative but
    flag genuine ambiguity in the "flag" field.
-5. For EVERY scored program, return a "breakdown" object covering all 6 rubric
-   dimensions (location, stage, size, industry, mwbe, overall). Each dimension
-   needs a "status" of exactly one of: "match", "partial", "no_data", "unmet".
-   Each needs a "note": 2-4 words max, terse tag style, not a sentence
-   (e.g. "County match", "Not specified", "Tech services fit" -- not
-   "Baltimore City, exact match for this program").
+5. {breakdown_rule}
 6. CRITICAL -- MWBE ANTI-HALLUCINATION RULE: mwbe_flag text almost never names
    a specific race, ethnicity, or gender (it usually just says generic terms
    like "MWBE", "veteran", "disadvantaged", "SEDI"). NEVER state a specific
@@ -167,25 +191,42 @@ CRITICAL RULES:
 
 Candidate programs (already passed hard filters):
 {json.dumps(programs, indent=2)}
+"""
 
-Return ONLY a JSON array, no markdown fences, no commentary. Each element:
-{{
+    if FAST_MODE:
+        # Smaller per-program payload: no breakdown field at all. This is the
+        # temporary low-latency prompt variant (see FAST_MODE above).
+        base_prompt += """Return ONLY a JSON array, no markdown fences, no commentary. Each element:
+{
+  "program_name": "<exact name from input>",
+  "eligibility": "<'eligible' or 'likely_ineligible'>",
+  "fit_score": <integer 1-100, or null if likely_ineligible>,
+  "reasoning": "<one plain-English sentence, under 25 words>",
+  "flag": "<short note if needs_manual_review or a real eligibility concern, else null>"
+}
+
+Order the array by fit_score descending (nulls last)."""
+    else:
+        base_prompt += """Return ONLY a JSON array, no markdown fences, no commentary. Each element:
+{
   "program_name": "<exact name from input>",
   "eligibility": "<'eligible' or 'likely_ineligible'>",
   "fit_score": <integer 1-100, or null if likely_ineligible>,
   "reasoning": "<one plain-English sentence, under 25 words>",
   "flag": "<short note if needs_manual_review or a real eligibility concern, else null>",
-  "breakdown": {{
-    "location": {{"status": "match|partial|no_data|unmet", "note": "<short note>"}},
-    "stage": {{"status": "match|partial|no_data|unmet", "note": "<short note>"}},
-    "size": {{"status": "match|partial|no_data|unmet", "note": "<short note>"}},
-    "industry": {{"status": "match|partial|no_data|unmet", "note": "<short note>"}},
-    "mwbe": {{"status": "match|partial|no_data|unmet", "note": "<short note>"}},
-    "overall": {{"status": "match|partial|no_data|unmet", "note": "<short note>"}}
-  }}
-}}
+  "breakdown": {
+    "location": {"status": "match|partial|no_data|unmet", "note": "<short note>"},
+    "stage": {"status": "match|partial|no_data|unmet", "note": "<short note>"},
+    "size": {"status": "match|partial|no_data|unmet", "note": "<short note>"},
+    "industry": {"status": "match|partial|no_data|unmet", "note": "<short note>"},
+    "mwbe": {"status": "match|partial|no_data|unmet", "note": "<short note>"},
+    "overall": {"status": "match|partial|no_data|unmet", "note": "<short note>"}
+  }
+}
 
 Order the array by fit_score descending (nulls last)."""
+
+    return base_prompt
 
 
 def _call_batch(answers: dict, batch_df: pd.DataFrame):
@@ -214,6 +255,7 @@ def _call_batch(answers: dict, batch_df: pd.DataFrame):
                         # ("minimal") default so a future default change can't
                         # silently reintroduce latency here.
                         thinking_config=types.ThinkingConfig(thinking_level="low"),
+                        max_output_tokens=MAX_OUTPUT_TOKENS,
                     ),
                 )
                 raw_text = response.text.strip()
@@ -233,9 +275,29 @@ def _call_batch(answers: dict, batch_df: pd.DataFrame):
             if raw_text.lower().startswith("json"):
                 raw_text = raw_text[4:]
         raw_text = re.sub(r",(\s*[}\]])", r"\1", raw_text)  # strip trailing commas before } or ]
-        return json.loads(raw_text), None
+
+        try:
+            return json.loads(raw_text), None
+        except json.JSONDecodeError as e:
+            # Gemini sometimes emits a complete, valid JSON array/object and then
+            # keeps going (an extra blank line, a stray repeated part, etc.) --
+            # that surfaces as "Extra data" at the offset where the real payload
+            # already ended. Rather than discarding a perfectly good batch result
+            # over trailing junk, decode just the first valid JSON value and
+            # ignore whatever comes after it.
+            if e.msg == "Extra data":
+                try:
+                    salvaged, _ = json.JSONDecoder().raw_decode(raw_text)
+                    return salvaged, None
+                except json.JSONDecodeError:
+                    pass
+            raise
     except Exception as e:
-        return None, str(e)
+        # Keep the real exception in server logs for debugging, but never
+        # forward raw parser/SDK internals (file offsets, stack-trace-style
+        # text) to the UI -- that's what was leaking as the red error message.
+        print(f"[gemini_matcher] batch failed: {e!r}")
+        return None, "temporary scoring error"
 
 
 def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame):
