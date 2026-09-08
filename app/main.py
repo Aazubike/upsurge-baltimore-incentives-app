@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request, Form, BackgroundTasks
+import threading
+from fastapi import FastAPI, Request, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
@@ -20,6 +21,21 @@ templates = Jinja2Templates(directory="templates")
 
 COUNTIES = ["Baltimore City", "Baltimore County", "Anne Arundel", "Harford", "Howard", "Carroll", "Cecil"]
 STAGES = ["pre-seed", "seed", "early", "growth", "established"]
+
+# In-memory job store for the background matching pipeline. Keyed by job_id.
+# Each entry: {"status": "running"|"done"|"error", "message": str,
+#              "completed": int, "total": int, "context": dict|None}
+# Simple by design for current scale -- jobs accumulate in memory for the
+# life of the process, which is fine at pilot volume. Worth adding a TTL
+# cleanup pass later if this runs for a long time between restarts.
+_jobs = {}
+_jobs_lock = threading.Lock()
+
+
+def _update_job(job_id: str, **kwargs):
+    with _jobs_lock:
+        if job_id in _jobs:
+            _jobs[job_id].update(kwargs)
 
 
 @app.on_event("startup")
@@ -146,14 +162,123 @@ def match_new(request: Request, name: str = ""):
         "prefilled_name": name,
     })
 
+
 @app.get("/match/results")
 def match_results_get_redirect():
     return RedirectResponse("/")
 
+
+def _run_matching_job(
+    job_id: str,
+    company_name: str,
+    county: str,
+    stage: str,
+    industry: str,
+    cleaned_employee_count,
+    cleaned_annual_revenue,
+    cleaned_mwbe_groups: list,
+    cleaned_zip,
+    cleaned_address,
+):
+    """Runs the full matching pipeline on a background thread, updating the
+    job's status/message/progress as it goes so the loading page has
+    something real to poll. On success, the finished template context is
+    stashed on the job for /match/results/{job_id} to render."""
+    try:
+        precheck_answers = {
+            "county": county,
+            "stage": stage,
+            "employee_count": cleaned_employee_count,
+            "industry": industry,
+            "mwbe_groups": cleaned_mwbe_groups,
+        }
+        if cleaned_address and opportunity_zone_could_apply(precheck_answers):
+            _update_job(job_id, message="Checking opportunity zone eligibility...")
+            oz_eligible, oz_tract = check_opportunity_zone(cleaned_address)
+        else:
+            oz_eligible, oz_tract = False, None
+
+        answers = {
+            "county": county,
+            "stage": stage,
+            "employee_count": cleaned_employee_count,
+            "annual_revenue": cleaned_annual_revenue,
+            "industry": industry,
+            "mwbe_groups": cleaned_mwbe_groups,
+            "zip_code": cleaned_zip,
+            "street_address": cleaned_address,
+            "oz_eligible": oz_eligible,
+            "oz_tract": oz_tract,
+        }
+
+        _update_job(job_id, message="Filtering eligible programs...")
+        shortlist_df = filter_eligible(answers)
+
+        def on_progress(event: str, **kwargs):
+            if event == "total":
+                total = kwargs["total"]
+                _update_job(job_id, total=total, message=f"Scoring programs... 0 of {total} checked")
+            elif event == "progress":
+                with _jobs_lock:
+                    job = _jobs.get(job_id)
+                    if job is None:
+                        return
+                    job["completed"] = min(job["completed"] + kwargs["delta"], job["total"] or job["completed"] + kwargs["delta"])
+                    job["message"] = f"Scoring programs... {job['completed']} of {job['total']} checked"
+
+        _update_job(job_id, message="Scoring programs against eligibility rubric...")
+        ranked_shortlist, dropped_count, gemini_error = rank_shortlist(
+            answers, shortlist_df, progress_callback=on_progress
+        )
+
+        _update_job(job_id, message="Finalizing results...")
+
+        is_known_company = get_company_by_name(company_name) is not None
+        submission_id = str(uuid4())
+        log_submission(
+            submission_id=submission_id,
+            flow_type="portfolio" if is_known_company else "intake",
+            company_name=company_name,
+            region=county,
+            stage=stage,
+            employee_count=cleaned_employee_count,
+            annual_revenue=cleaned_annual_revenue,
+            industry=industry,
+            ownership="|".join(cleaned_mwbe_groups) if cleaned_mwbe_groups else "",
+            zip_code=cleaned_zip or "",
+            street_address=cleaned_address or "",
+            oz_eligible=oz_eligible,
+            oz_tract=oz_tract or "",
+            matched_programs=[p["Program Name"] for p in ranked_shortlist],
+            match_scores=[p.get("fit_score") for p in ranked_shortlist],
+        )
+
+        context = {
+            "company_name": company_name,
+            "shortlist": ranked_shortlist,
+            "total_programs": len(get_incentives()),
+            "total_eligible": len(shortlist_df),
+            "dropped_count": dropped_count,
+            "gemini_enabled": gemini_error is None,
+            "gemini_error": gemini_error,
+            "submission_id": submission_id,
+        }
+        with _jobs_lock:
+            job = _jobs.get(job_id)
+            if job is not None:
+                job["status"] = "done"
+                job["context"] = context
+    except Exception as e:
+        print(f"[match job {job_id}] failed: {e!r}")
+        with _jobs_lock:
+            job = _jobs.get(job_id)
+            if job is not None:
+                job["status"] = "error"
+                job["message"] = "Something went wrong while matching. Please try again."
+
+
 @app.post("/match/results")
 def match_results(
-    request: Request,
-    background_tasks: BackgroundTasks,
     company_name: str = Form(...),
     county: str = Form(...),
     stage: str = Form(...),
@@ -175,76 +300,64 @@ def match_results(
     cleaned_address = street_address.strip() if street_address else None
     cleaned_employee_count = to_int_or_none(employee_count)
     cleaned_annual_revenue = to_int_or_none(annual_revenue)
+    cleaned_mwbe_groups = [g for g in mwbe_groups if g != "none"]
+    cleaned_zip = zip_code.strip() if zip_code else None
 
-    # Opportunity Zone check -- ONE geocode call per submission (not per
-    # program), since it's a network call. Same "no address = not eligible"
-    # rule as Enterprise Zones: no evidence, so no unverifiable claim shown.
-    # This one DOES have to finish before we can filter programs, so it stays
-    # on the main path -- but it only runs if an address was actually given
-    # AND an OZ-named program is even in play for this profile. Only 2 of
-    # 117 programs care about the result, so skipping the ~6s(now 3s) Census
-    # API round trip for every submission where neither could apply anyway
-    # is a straightforward latency win with no behavior change.
-    precheck_answers = {
-        "county": county,
-        "stage": stage,
-        "employee_count": cleaned_employee_count,
-        "industry": industry,
-        "mwbe_groups": [g for g in mwbe_groups if g != "none"],
-    }
-    if cleaned_address and opportunity_zone_could_apply(precheck_answers):
-        oz_eligible, oz_tract = check_opportunity_zone(cleaned_address)
-    else:
-        oz_eligible, oz_tract = False, None
+    job_id = str(uuid4())
+    with _jobs_lock:
+        _jobs[job_id] = {
+            "status": "running",
+            "message": "Starting...",
+            "completed": 0,
+            "total": 0,
+            "context": None,
+        }
 
-    answers = {
-        "county": county,
-        "stage": stage,
-        "employee_count": cleaned_employee_count,
-        "annual_revenue": cleaned_annual_revenue,
-        "industry": industry,
-        "mwbe_groups": [g for g in mwbe_groups if g != "none"],
-        "zip_code": zip_code.strip() if zip_code else None,  # used for real Enterprise Zone matching (see rules_engine._enterprise_zone_ok)
-        "street_address": cleaned_address,  # used for Opportunity Zone geocoding, and now also logged in full
-        "oz_eligible": oz_eligible,  # used for real Opportunity Zone matching (see rules_engine._opportunity_zone_ok)
-        "oz_tract": oz_tract,
-    }
-    shortlist_df = filter_eligible(answers)
-    ranked_shortlist, dropped_count, gemini_error = rank_shortlist(answers, shortlist_df)
-
-    # Google Sheets logging -- generate the id instantly (no network), then
-    # schedule the actual Sheets write as a BACKGROUND task so it runs AFTER
-    # the results page has already been sent back. The person never waits
-    # on Google Sheets to see their results.
-    is_known_company = get_company_by_name(company_name) is not None
-    submission_id = str(uuid4())
-    background_tasks.add_task(
-        log_submission,
-        submission_id=submission_id,
-        flow_type="portfolio" if is_known_company else "intake",
-        company_name=company_name,
-        region=county,
-        stage=stage,
-        employee_count=cleaned_employee_count,
-        annual_revenue=cleaned_annual_revenue,
-        industry=industry,
-        ownership="|".join(answers["mwbe_groups"]) if answers["mwbe_groups"] else "",
-        zip_code=answers["zip_code"] or "",
-        street_address=answers["street_address"] or "",
-        oz_eligible=oz_eligible,
-        oz_tract=oz_tract or "",
-        matched_programs=[p["Program Name"] for p in ranked_shortlist],
-        match_scores=[p.get("fit_score") for p in ranked_shortlist],
+    thread = threading.Thread(
+        target=_run_matching_job,
+        args=(
+            job_id, company_name, county, stage, industry,
+            cleaned_employee_count, cleaned_annual_revenue,
+            cleaned_mwbe_groups, cleaned_zip, cleaned_address,
+        ),
+        daemon=True,
     )
+    thread.start()
 
-    return templates.TemplateResponse("results.html", {
-        "request": request,
-        "company_name": company_name,
-        "shortlist": ranked_shortlist,
-        "total_programs": len(get_incentives()),
-        "total_eligible": len(shortlist_df),
-        "dropped_count": dropped_count,
-        "gemini_enabled": gemini_error is None,
-        "gemini_error": gemini_error,
-        "submission_id": submission_id,
-    })
+    # 303 so the browser does a GET on the loading page instead of
+    # re-submitting the form.
+    return RedirectResponse(f"/match/loading/{job_id}", status_code=303)
+
+
+@app.get("/match/loading/{job_id}")
+def match_loading(request: Request, job_id: str):
+    with _jobs_lock:
+        job = _jobs.get(job_id)
+    if job is None:
+        return RedirectResponse("/")
+    return templates.TemplateResponse("loading.html", {"request": request, "job_id": job_id})
+
+
+@app.get("/api/match/status/{job_id}")
+def match_status(job_id: str):
+    with _jobs_lock:
+        job = _jobs.get(job_id)
+    if job is None:
+        return {"status": "not_found"}
+    return {
+        "status": job["status"],
+        "message": job["message"],
+        "completed": job["completed"],
+        "total": job["total"],
+    }
+
+
+@app.get("/match/results/{job_id}")
+def match_results_view(request: Request, job_id: str):
+    with _jobs_lock:
+        job = _jobs.get(job_id)
+    if job is None or job["status"] != "done" or job["context"] is None:
+        return RedirectResponse("/")
+    context = dict(job["context"])
+    context["request"] = request
+    return templates.TemplateResponse("results.html", context)

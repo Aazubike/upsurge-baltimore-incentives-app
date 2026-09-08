@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finding your matches — UpSurge Baltimore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .loading-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+      text-align: center;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loading-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.5rem;
+    }
+
+    .loading-h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      color: var(--white);
+    }
+
+    .loading-message {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--off-white);
+      margin-bottom: 1.5rem;
+      min-height: 1.3em;
+    }
+
+    .loading-message.is-error {
+      color: var(--red);
+    }
+
+    .loading-bar-track {
+      display: flex;
+      gap: 4px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .loading-segment {
+      flex: 1;
+      height: 22px;
+      background: var(--surface-2);
+      border: 1px solid var(--hairline);
+      border-radius: 2px;
+      transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .loading-segment.filled {
+      background: var(--red);
+      border-color: var(--red);
+      box-shadow: 0 0 8px rgba(237,29,37,0.6), 0 0 16px rgba(237,29,37,0.3);
+    }
+
+    .loading-segment.active {
+      background: var(--red);
+      border-color: var(--red);
+      animation: segmentPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes segmentPulse {
+      0%, 100% {
+        box-shadow: 0 0 8px rgba(237,29,37,0.5), 0 0 16px rgba(237,29,37,0.25);
+        opacity: 0.75;
+      }
+      50% {
+        box-shadow: 0 0 14px rgba(237,29,37,0.9), 0 0 28px rgba(237,29,37,0.5);
+        opacity: 1;
+      }
+    }
+
+    .loading-pct {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--gray-dim);
+      margin-top: 0.9rem;
+    }
+
+    .loading-error-actions {
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .loading-error-actions.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
+    <span class="mark">Matching in progress</span>
+  </header>
+
+  <section class="loading-wrap">
+    <div class="loading-eyebrow">Working</div>
+    <h1 class="loading-h1">Finding your matches</h1>
+
+    <div class="loading-message" id="loading-message">Starting...</div>
+
+    <div class="loading-bar-track" id="loading-bar-track">
+      {% for i in range(24) %}
+      <div class="loading-segment"></div>
+      {% endfor %}
+    </div>
+
+    <div class="loading-pct" id="loading-pct">0%</div>
+
+    <div class="loading-error-actions" id="loading-error-actions">
+      <a href="/" class="flow-alt-link">&larr; Start over</a>
+    </div>
+  </section>
+
+  <script>
+    (function() {
+      const jobId = {{ job_id | tojson }};
+      const segments = document.querySelectorAll('.loading-segment');
+      const totalSegments = segments.length;
+      const messageEl = document.getElementById('loading-message');
+      const pctEl = document.getElementById('loading-pct');
+      const errorActions = document.getElementById('loading-error-actions');
+
+      function renderBar(pct) {
+        const filled = Math.round((pct / 100) * totalSegments);
+        segments.forEach((seg, i) => {
+          seg.classList.remove('filled', 'active');
+          if (i < filled) {
+            seg.classList.add('filled');
+          } else if (i === filled && pct < 100) {
+            seg.classList.add('active');
+          }
+        });
+        pctEl.textContent = pct + '%';
+      }
+
+      async function poll() {
+        try {
+          const res = await fetch('/api/match/status/' + jobId);
+          const data = await res.json();
+
+          if (data.status === 'done') {
+            renderBar(100);
+            messageEl.textContent = 'Done. Loading your results...';
+            window.location.href = '/match/results/' + jobId;
+            return;
+          }
+
+          if (data.status === 'error') {
+            messageEl.textContent = data.message || 'Something went wrong.';
+            messageEl.classList.add('is-error');
+            errorActions.classList.add('show');
+            return;
+          }
+
+          if (data.status === 'not_found') {
+            window.location.href = '/';
+            return;
+          }
+
+          messageEl.textContent = data.message || 'Working...';
+          const pct = data.total > 0 ? Math.min(100, Math.round((data.completed / data.total) * 100)) : 0;
+          renderBar(pct);
+          setTimeout(poll, 900);
+        } catch (e) {
+          setTimeout(poll, 1500);
+        }
+      }
+
+      poll();
+    })();
+  </script>
+
+</body>
+</html>

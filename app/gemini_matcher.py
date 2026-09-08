@@ -29,6 +29,7 @@ import os
 import json
 import re
 import time
+import random
 import hashlib
 import pandas as pd
 from pathlib import Path
@@ -42,44 +43,34 @@ from app.rules_engine import locality_tier, enterprise_zone_note, opportunity_zo
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 MODEL_NAME = "gemini-3.1-flash-lite"
-MAX_RETRIES = 2
-BATCH_SIZE = 8  # smaller batches = less output per call = each parallel batch
-                # finishes faster (generation time scales with output length).
-                # With MAX_PARALLEL_BATCHES=10 there's plenty of headroom to run
-                # more, smaller batches concurrently instead of fewer, larger ones.
-MAX_PARALLEL_BATCHES = 10  # raised from 5 now that credit exhaustion (not burst
-                           # concurrency) looks like the real cause of the earlier
-                           # 429s -- Tier 1 RPM/TPM usage never actually got close
-                           # to its ceiling, so there's real headroom here. Still
-                           # well under the 25 that caused problems originally.
-MAX_OUTPUT_TOKENS = 2048  # per-batch cap. Generation time scales with output
-                          # length, so this is a hard ceiling on how long any
-                          # single batch (and therefore the whole request,
-                          # since we wait on the slowest one) can run.
+MAX_RETRIES = 3
+RETRYABLE_MARKERS = (
+    "503", "UNAVAILABLE",
+    "429", "RESOURCE_EXHAUSTED",
+    "DEADLINE_EXCEEDED", "timeout", "Timeout",
+    "500", "INTERNAL",
+)
+BATCH_SIZE = 8
+MAX_PARALLEL_BATCHES = 10
+MAX_OUTPUT_TOKENS = 2048
 
-# TEMPORARY speed lever for the 8/13 presentation: the per-criterion
-# "breakdown" (6 dimensions x status+note, per program) is by far the
-# biggest chunk of output tokens per batch. Setting FAST_MODE=1 in the
-# environment drops that field from the prompt/response entirely, which
-# cuts typical batch output size roughly in half and is the single
-# biggest lever we have on latency without touching parallelism. The UI
-# already degrades gracefully with no breakdown (see results.html), so
-# this is safe to flip on/off with no code changes -- just unset it once
-# the breakdown detail is worth the extra seconds again.
+# OUTER retry layer, separate from the per-call retries inside _call_batch.
+# A batch that exhausts its internal retries gets retried again in a fresh
+# round, up to OUTER_MAX_ROUNDS times, with a pause between rounds so a
+# rate limit or transient outage has time to clear. Correctness over speed:
+# only after every round is exhausted do we surface an error for whatever's
+# still failing.
+OUTER_MAX_ROUNDS = 5
+OUTER_ROUND_PAUSE_SECONDS = 5
+
 FAST_MODE = os.environ.get("FAST_MODE", "0") == "1"
-SAFETY_NET_MAX_CANDIDATES = 300  # not a normal operating limit -- just prevents a pathological
-                                  # worst-case query (e.g. an almost-unrestricted profile matching
-                                  # hundreds of statewide programs) from generating a runaway bill.
-                                  # Under normal use, everything eligible gets scored, no fixed cap.
+SAFETY_NET_MAX_CANDIDATES = 300
 
-CACHE_TTL_SECONDS = 600  # identical resubmissions within 10 min skip Gemini entirely
-_result_cache = {}  # {cache_key: (merged, dropped_count, error_message, timestamp)}
+CACHE_TTL_SECONDS = 600
+_result_cache = {}
 
 
 def _make_cache_key(answers: dict, shortlist_df: pd.DataFrame) -> str:
-    """Stable key from the answers + exact set of candidate program names --
-    if either changes (new answers, or the underlying data changes), it's a
-    fresh key and won't hit a stale cached result."""
     normalized_answers = {
         k: (tuple(sorted(v)) if isinstance(v, list) else v)
         for k, v in sorted(answers.items())
@@ -194,8 +185,6 @@ Candidate programs (already passed hard filters):
 """
 
     if FAST_MODE:
-        # Smaller per-program payload: no breakdown field at all. This is the
-        # temporary low-latency prompt variant (see FAST_MODE above).
         base_prompt += """Return ONLY a JSON array, no markdown fences, no commentary. Each element:
 {
   "program_name": "<exact name from input>",
@@ -243,17 +232,7 @@ def _call_batch(answers: dict, batch_df: pd.DataFrame):
                     model=MODEL_NAME,
                     contents=prompt,
                     config=types.GenerateContentConfig(
-                        # Constrains generation straight to JSON tokens instead of
-                        # letting the model spend output tokens on markdown fences /
-                        # prose framing that we were just stripping afterward anyway.
-                        # This is the single biggest latency win here, since
-                        # generation time scales with output length.
                         response_mime_type="application/json",
-                        # "low" is Google's own recommendation for high-throughput,
-                        # simple-instruction-following structured output. Pinned
-                        # explicitly rather than relying on the model's current
-                        # ("minimal") default so a future default change can't
-                        # silently reintroduce latency here.
                         thinking_config=types.ThinkingConfig(thinking_level="low"),
                         max_output_tokens=MAX_OUTPUT_TOKENS,
                     ),
@@ -262,10 +241,11 @@ def _call_batch(answers: dict, batch_df: pd.DataFrame):
                 break
             except Exception as e:
                 last_error = e
-                if "503" in str(e) or "UNAVAILABLE" in str(e):
-                    if attempt < MAX_RETRIES:
-                        time.sleep(2 * (attempt + 1))
-                        continue
+                is_retryable = any(marker in str(e) for marker in RETRYABLE_MARKERS)
+                if is_retryable and attempt < MAX_RETRIES:
+                    delay = (2 ** attempt) + random.uniform(0, 1)
+                    time.sleep(delay)
+                    continue
                 raise
         if raw_text is None:
             raise last_error
@@ -274,17 +254,11 @@ def _call_batch(answers: dict, batch_df: pd.DataFrame):
             raw_text = raw_text.strip("`")
             if raw_text.lower().startswith("json"):
                 raw_text = raw_text[4:]
-        raw_text = re.sub(r",(\s*[}\]])", r"\1", raw_text)  # strip trailing commas before } or ]
+        raw_text = re.sub(r",(\s*[}\]])", r"\1", raw_text)
 
         try:
             return json.loads(raw_text), None
         except json.JSONDecodeError as e:
-            # Gemini sometimes emits a complete, valid JSON array/object and then
-            # keeps going (an extra blank line, a stray repeated part, etc.) --
-            # that surfaces as "Extra data" at the offset where the real payload
-            # already ended. Rather than discarding a perfectly good batch result
-            # over trailing junk, decode just the first valid JSON value and
-            # ignore whatever comes after it.
             if e.msg == "Extra data":
                 try:
                     salvaged, _ = json.JSONDecoder().raw_decode(raw_text)
@@ -293,25 +267,60 @@ def _call_batch(answers: dict, batch_df: pd.DataFrame):
                     pass
             raise
     except Exception as e:
-        # Keep the real exception in server logs for debugging, but never
-        # forward raw parser/SDK internals (file offsets, stack-trace-style
-        # text) to the UI -- that's what was leaking as the red error message.
         print(f"[gemini_matcher] batch failed: {e!r}")
         return None, "temporary scoring error"
 
 
-def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame):
+def _run_batches(answers: dict, batches: list[pd.DataFrame], progress_callback=None):
+    """
+    Fires the given batches concurrently. Returns (rankings, failed_batches,
+    error_reasons): failed_batches is the subset of the input batch DataFrames
+    that came back with an error, so the caller can retry just those.
+
+    progress_callback, if given, is called as progress_callback("progress",
+    delta=N) each time a batch of N programs finishes SUCCESSFULLY -- failed
+    batches don't count toward progress yet, since they may still succeed on
+    a later retry round.
+    """
+    rankings = []
+    failed_batches = []
+    error_reasons = []
+
+    with ThreadPoolExecutor(max_workers=min(MAX_PARALLEL_BATCHES, len(batches))) as executor:
+        future_to_batch = {executor.submit(_call_batch, answers, batch): batch for batch in batches}
+        for future in as_completed(future_to_batch):
+            batch = future_to_batch[future]
+            batch_rankings, error = future.result()
+            if error:
+                failed_batches.append(batch)
+                error_reasons.append(error)
+            else:
+                rankings.extend(batch_rankings)
+                if progress_callback:
+                    progress_callback("progress", delta=len(batch))
+
+    return rankings, failed_batches, error_reasons
+
+
+def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame, progress_callback=None):
     """
     Returns (ranked_records, dropped_count, error_message).
-    Each record includes: fit_score, reasoning, flag, eligibility, breakdown
-    (dict of 6 rubric dimensions each with status + note), and is_low_score
-    (True if fit_score <= LOW_SCORE_THRESHOLD, used to hide it behind a
-    "show less likely matches" toggle in the UI).
 
-    Candidates are split into small batches and sent to Gemini CONCURRENTLY
-    (not one at a time) -- this is the main latency win, since generation
-    time scales with output size and running N batches in parallel takes
-    roughly as long as the single slowest batch, not the sum of all of them.
+    progress_callback, if given, is called with:
+      progress_callback("total", total=N)      -- once, right after capping,
+                                                    with the real candidate count
+      progress_callback("progress", delta=N)   -- each time N more programs
+                                                    finish scoring (success or,
+                                                    at the very end, permanent
+                                                    failure after all retry
+                                                    rounds are exhausted)
+    This lets the caller (main.py) show real "X of Y checked" progress
+    instead of a fake or indeterminate bar.
+
+    Batches that still fail after their internal retries are retried again
+    in a fresh round (see OUTER_MAX_ROUNDS) instead of being given up on --
+    correctness wins over speed here: a slow, fully-scored result beats a
+    fast one with programs silently missing.
     """
     if shortlist_df.empty:
         return [], 0, None
@@ -319,26 +328,39 @@ def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame):
     cache_key = _make_cache_key(answers, shortlist_df)
     cached = _result_cache.get(cache_key)
     if cached and (time.time() - cached[3]) < CACHE_TTL_SECONDS:
+        if progress_callback:
+            progress_callback("total", total=len(cached[0]))
+            progress_callback("progress", delta=len(cached[0]))
         return cached[0], cached[1], cached[2]
 
     capped_df, dropped_count = _cap_candidates(shortlist_df)
 
-    batches = [capped_df.iloc[i:i + BATCH_SIZE] for i in range(0, len(capped_df), BATCH_SIZE)]
+    if progress_callback:
+        progress_callback("total", total=len(capped_df))
+
+    remaining_batches = [capped_df.iloc[i:i + BATCH_SIZE] for i in range(0, len(capped_df), BATCH_SIZE)]
 
     all_rankings = []
-    batch_errors = []
-    failed_program_names = set()
+    last_error_reason = None
 
-    with ThreadPoolExecutor(max_workers=min(MAX_PARALLEL_BATCHES, len(batches))) as executor:
-        future_to_batch = {executor.submit(_call_batch, answers, batch): batch for batch in batches}
-        for future in as_completed(future_to_batch):
-            batch = future_to_batch[future]
-            rankings, error = future.result()
-            if error:
-                batch_errors.append(error)
-                failed_program_names.update(batch["Program Name"].tolist())
-            else:
-                all_rankings.extend(rankings)
+    for round_num in range(OUTER_MAX_ROUNDS):
+        if not remaining_batches:
+            break
+        if round_num > 0:
+            time.sleep(min(OUTER_ROUND_PAUSE_SECONDS * round_num, 20))
+        rankings, remaining_batches, error_reasons = _run_batches(
+            answers, remaining_batches, progress_callback=progress_callback
+        )
+        all_rankings.extend(rankings)
+        if error_reasons:
+            last_error_reason = error_reasons[0]
+
+    # Whatever's still failing after every round is permanently given up on --
+    # count those programs toward progress now so the bar still reaches 100%
+    # instead of stalling short of it.
+    if remaining_batches and progress_callback:
+        leftover = sum(len(b) for b in remaining_batches)
+        progress_callback("progress", delta=leftover)
 
     rank_by_name = {r["program_name"]: r for r in all_rankings}
     merged = []
@@ -365,10 +387,6 @@ def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame):
 
         merged.append(record)
 
-    # HARD CUTOFF: anything scoring below 70% (or unscored due to an error)
-    # is dropped entirely here -- never passed to the template, never shown
-    # behind a toggle. The "likely_ineligible" (verification-needed) bucket
-    # is kept regardless, since that's a different category (not a low score).
     merged = [r for r in merged if r.get("eligibility") == "likely_ineligible" or r.get("match_tier") in ("match", "possible")]
 
     def sort_key(r):
@@ -380,11 +398,12 @@ def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame):
         r.pop("_tier", None)
 
     error_message = None
-    if batch_errors:
+    if remaining_batches:
         error_message = (
-            f"Some programs couldn't be scored due to a temporary error "
-            f"({batch_errors[0]}). Try again in a moment for full coverage."
+            f"Some programs couldn't be scored after several attempts "
+            f"({last_error_reason}). Try again in a moment for full coverage."
         )
 
     _result_cache[cache_key] = (merged, dropped_count, error_message, time.time())
     return merged, dropped_count, error_message
+
