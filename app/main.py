@@ -3,6 +3,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
+from pydantic import BaseModel
 from typing import List, Optional
 from uuid import uuid4
 import pandas as pd
@@ -25,9 +26,6 @@ STAGES = ["pre-seed", "seed", "early", "growth", "established"]
 # In-memory job store for the background matching pipeline. Keyed by job_id.
 # Each entry: {"status": "running"|"done"|"error", "message": str,
 #              "completed": int, "total": int, "context": dict|None}
-# Simple by design for current scale -- jobs accumulate in memory for the
-# life of the process, which is fine at pilot volume. Worth adding a TTL
-# cleanup pass later if this runs for a long time between restarts.
 _jobs = {}
 _jobs_lock = threading.Lock()
 
@@ -324,8 +322,6 @@ def match_results(
     )
     thread.start()
 
-    # 303 so the browser does a GET on the loading page instead of
-    # re-submitting the form.
     return RedirectResponse(f"/match/loading/{job_id}", status_code=303)
 
 
@@ -361,3 +357,25 @@ def match_results_view(request: Request, job_id: str):
     context = dict(job["context"])
     context["request"] = request
     return templates.TemplateResponse("results.html", context)
+
+
+class FeedbackPayload(BaseModel):
+    submission_id: str
+    thumbs: str = ""
+    comment: str = ""
+
+
+@app.post("/feedback")
+def submit_feedback(payload: FeedbackPayload):
+    """
+    Fire-and-forget: runs the Sheets update on a background thread so the
+    button click feels instant instead of waiting on a network round trip.
+    """
+    def _run():
+        try:
+            update_feedback(payload.submission_id, thumbs=payload.thumbs, comment=payload.comment)
+        except Exception as e:
+            print(f"[feedback] failed to log: {e!r}")
+
+    threading.Thread(target=_run, daemon=True).start()
+    return {"status": "ok"}

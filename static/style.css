@@ -948,3 +948,112 @@ select:focus, input:focus { border-color: var(--red); }
   .rubric-row { grid-template-columns: 1fr; gap: 0.4rem; }
   .rubric-pct { text-align: left; }
 }
+/* ---------- Feedback widget ---------- */
+.feedback-widget {
+  margin-top: 3rem;
+  padding: 1.75rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+
+.feedback-question {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 1rem;
+}
+
+.feedback-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.feedback-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  background: var(--surface-2);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+
+.feedback-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--gray);
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.15s ease;
+}
+
+.feedback-btn:hover {
+  border-color: var(--red);
+  transform: translateY(-1px);
+}
+
+.feedback-btn:hover svg { stroke: var(--red); }
+
+.feedback-btn.selected {
+  background: rgba(237,29,37,0.12);
+  border-color: var(--red);
+}
+
+.feedback-btn.selected svg { stroke: var(--red); }
+
+.feedback-comment-wrap {
+  margin-top: 1.25rem;
+  display: none;
+}
+
+.feedback-comment-wrap.show { display: block; }
+
+.feedback-comment-wrap textarea {
+  width: 100%;
+  min-height: 80px;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 6px;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.feedback-comment-wrap textarea:focus { border-color: var(--red); }
+
+.feedback-submit-btn {
+  margin-top: 0.75rem;
+  background: var(--red);
+  color: var(--white);
+  border: none;
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.feedback-submit-btn:hover { background: #ff3038; }
+
+.feedback-thanks {
+  font-size: 0.9rem;
+  color: var(--gray);
+  display: none;
+}
+
+.feedback-thanks.show { display: block; }
