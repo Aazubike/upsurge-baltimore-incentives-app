@@ -67,6 +67,11 @@ def how_it_works(request: Request):
     return templates.TemplateResponse("how_it_works.html", {"request": request})
 
 
+@app.get("/privacy")
+def privacy(request: Request):
+    return templates.TemplateResponse("privacy.html", {"request": request})
+
+
 def _company_prefill_data(company: dict) -> dict:
     """Shared prefill logic used by both the JSON API (for the single-page
     flow) and the old confirm page template."""
