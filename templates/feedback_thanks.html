@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanks — UpSurge Baltimore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .thanks-wrap { max-width: 480px; margin: 5rem auto 0; padding: 0 2rem; text-align: center; }
+    .thanks-wrap .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1rem;
+    }
+    .thanks-wrap h1 {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .thanks-wrap p { color: var(--gray); }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
+  </header>
+  <div class="thanks-wrap">
+    <div class="eyebrow">Feedback</div>
+    <h1>Thanks for the feedback</h1>
+    <p>This helps us make the matches better.</p>
+    {% if job_id %}
+    <a href="/match/results/{{ job_id }}" class="flow-alt-link">&larr; Back to your results</a>
+    {% else %}
+    <a href="/" class="flow-alt-link">&larr; Back to home</a>
+    {% endif %}
+  </div>
+</body>
+</html>

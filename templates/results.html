@@ -7,6 +7,75 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .rate-popup {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: #1a1a1a;
+      color: #fff;
+      border-radius: 10px;
+      padding: 0.85rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+      transition: transform 0.25s ease;
+      z-index: 100;
+      max-width: 90vw;
+    }
+    .rate-popup.show { transform: translateX(-50%) translateY(0); }
+    .rate-popup-text { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
+    .rate-popup button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0.2rem 0.4rem;
+      line-height: 1;
+      color: inherit;
+    }
+    .rate-popup .rate-close { opacity: 0.6; font-size: 1rem; }
+    .results-feedback-cta {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      font-size: 0.95rem;
+    }
+    .quick-rating-question { margin-bottom: 0.6rem; }
+    .quick-rating-buttons { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .quick-rating-btn {
+      border: 1px solid rgba(0,0,0,0.2);
+      background: #fff;
+      border-radius: 999px;
+      padding: 0.45rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .quick-rating-btn.selected { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .quick-rating-thanks a { margin-left: 0.35rem; }
+    .result-card.card-visited { opacity: 0.6; transition: opacity 0.3s ease; }
+    .applied-badge {
+      display: inline-block;
+      background: #1a7f37;
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+      font-weight: 500;
+    }
+    .rate-popup .rate-yes, .rate-popup .rate-no {
+      background: #fff;
+      color: #1a1a1a;
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+  </style>
 </head>
 <body>
 
@@ -103,7 +172,7 @@
           <span><span class="ml">Award</span> {{ min_award if min_ok else 'N/A' }} &ndash; {{ max_award if max_ok else 'N/A' }}</span>
           {% endif %}
           {% if link and link == link and link is string and link.startswith('http') %}
-          <a href="{{ link }}" target="_blank" rel="noopener" class="program-link">Apply / learn more &#8599;</a>
+          <a href="/go?submission_id={{ submission_id }}&program={{ program['Program Name'] | urlencode }}&url={{ link | urlencode }}" target="_blank" rel="noopener" class="program-link" data-program="{{ program['Program Name'] }}">Apply / learn more &#8599;</a>
           {% endif %}
         </div>
       </div>
@@ -214,7 +283,138 @@
 
     <a href="/" class="flow-alt-link">&larr; Start over</a>
     <a href="/how-it-works" class="flow-alt-link" style="margin-left: 1.5rem;">How ranking works &#8599;</a>
+
+    <div class="results-feedback-cta" id="results-feedback-cta">
+      <div class="quick-rating-question">How were these results?</div>
+      <div class="quick-rating-buttons" id="quick-rating-buttons">
+        <button type="button" class="quick-rating-btn" data-rating="1">Not great</button>
+        <button type="button" class="quick-rating-btn" data-rating="2">OK</button>
+        <button type="button" class="quick-rating-btn" data-rating="3">Very good</button>
+      </div>
+      <div class="quick-rating-thanks" id="quick-rating-thanks" style="display:none;">
+        Thanks! <a href="/feedback/survey/{{ submission_id }}?job_id={{ job_id }}">Have more to share?</a>
+      </div>
+    </div>
+
+    <script>
+      (function() {
+        var buttons = document.querySelectorAll('.quick-rating-btn');
+        var buttonsWrap = document.getElementById('quick-rating-buttons');
+        var thanks = document.getElementById('quick-rating-thanks');
+        var submissionId = {{ submission_id | tojson }};
+
+        buttons.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            buttons.forEach(function(b) { b.classList.remove('selected'); });
+            btn.classList.add('selected');
+            fetch('/feedback/relevance', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ submission_id: submissionId, relevance_rating: parseInt(btn.getAttribute('data-rating'), 10) })
+            }).catch(function() {});
+            buttonsWrap.style.display = 'none';
+            thanks.style.display = 'block';
+          });
+        });
+      })();
+    </script>
   </section>
+
+  <div class="rate-popup" id="rate-popup">
+    <span class="rate-popup-text" id="rate-popup-text"></span>
+    <button type="button" class="rate-yes" id="rate-yes">Yes</button>
+    <button type="button" class="rate-no" id="rate-no">Not yet</button>
+    <button type="button" class="rate-close" id="rate-close" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <script>
+    (function() {
+      var popup = document.getElementById('rate-popup');
+      var textEl = document.getElementById('rate-popup-text');
+      var yesBtn = document.getElementById('rate-yes');
+      var noBtn = document.getElementById('rate-no');
+      var closeBtn = document.getElementById('rate-close');
+      var currentProgram = null;
+      var currentCard = null;
+      var submissionId = {{ submission_id | tojson }};
+      var hideTimer = null;
+
+      var clickedKey = 'iq_clicked_' + submissionId;
+      var appliedKey = 'iq_applied_' + submissionId;
+
+      function getSet(key) {
+        try { return new Set(JSON.parse(localStorage.getItem(key) || '[]')); }
+        catch (e) { return new Set(); }
+      }
+      function saveSet(key, set) {
+        try { localStorage.setItem(key, JSON.stringify(Array.from(set))); }
+        catch (e) {}
+      }
+
+      var clickedSet = getSet(clickedKey);
+      var appliedSet = getSet(appliedKey);
+
+      function markApplied(card, programName) {
+        card.classList.add('card-visited');
+        if (!card.querySelector('.applied-badge')) {
+          var badge = document.createElement('span');
+          badge.className = 'applied-badge';
+          badge.textContent = 'Applied';
+          var head = card.querySelector('.result-card-head');
+          if (head) head.appendChild(badge);
+        }
+      }
+
+      // Restore dim/applied state from earlier in this browser session
+      document.querySelectorAll('.program-link').forEach(function(link) {
+        var name = link.getAttribute('data-program');
+        var card = link.closest('.result-card');
+        if (!card) return;
+        if (clickedSet.has(name)) card.classList.add('card-visited');
+        if (appliedSet.has(name)) markApplied(card, name);
+      });
+
+      function send(thumbs) {
+        if (!currentProgram) return;
+        fetch('/feedback/program', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ submission_id: submissionId, program_name: currentProgram, thumbs: thumbs })
+        }).catch(function() {});
+      }
+
+      document.querySelectorAll('.program-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+          var name = link.getAttribute('data-program');
+          var card = link.closest('.result-card');
+          currentProgram = name;
+          currentCard = card;
+
+          if (card) card.classList.add('card-visited');
+          clickedSet.add(name);
+          saveSet(clickedKey, clickedSet);
+
+          textEl.textContent = 'Did you apply to ' + name + '?';
+          popup.classList.add('show');
+          if (hideTimer) clearTimeout(hideTimer);
+          hideTimer = setTimeout(function() { popup.classList.remove('show'); }, 12000);
+        });
+      });
+
+      yesBtn.addEventListener('click', function() {
+        send('applied');
+        if (currentCard) markApplied(currentCard, currentProgram);
+        appliedSet.add(currentProgram);
+        saveSet(appliedKey, appliedSet);
+        popup.classList.remove('show');
+      });
+      noBtn.addEventListener('click', function() {
+        send('not_applied');
+        popup.classList.remove('show');
+      });
+      closeBtn.addEventListener('click', function() { popup.classList.remove('show'); });
+    })();
+  </script>
 
 </body>
 </html>

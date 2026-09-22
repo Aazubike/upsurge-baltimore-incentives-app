@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submissions — Internal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .dash-wrap { max-width: 1250px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+    .dash-wrap .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1rem;
+    }
+    .dash-wrap h1 {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .dash-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .dash-table th, .dash-table td {
+      text-align: left;
+      padding: 0.7rem 0.9rem;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .dash-table th {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      color: var(--gray-dim);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .dash-table th.sortable { cursor: pointer; user-select: none; }
+    .dash-table th.sortable:hover { color: var(--off-white); }
+    .dash-table th.sortable .arrow { display: inline-block; width: 0.9em; opacity: 0.6; }
+    .dash-table tr:last-child td { border-bottom: none; }
+    .dash-table tbody tr { cursor: pointer; }
+    .dash-table tbody tr:hover { background: var(--surface-2); }
+    .dash-table td a { color: var(--white); text-decoration: none; }
+    .dash-table td a:hover { color: var(--red); }
+    .tier-count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--off-white); }
+    .empty-note { color: var(--gray-dim); padding: 2rem 0; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
+  </header>
+
+  <div class="dash-wrap">
+    <div class="eyebrow">Internal</div>
+    <h1>Recent submissions</h1>
+
+    {% if submissions %}
+    <table class="dash-table" id="submissions-table">
+      <thead>
+        <tr>
+          <th class="sortable" data-key="date" data-type="text">Date <span class="arrow"></span></th>
+          <th class="sortable" data-key="company" data-type="text">Company <span class="arrow"></span></th>
+          <th class="sortable" data-key="stage" data-type="text">Stage <span class="arrow"></span></th>
+          <th class="sortable" data-key="industry" data-type="text">Industry <span class="arrow"></span></th>
+          <th>Flow</th>
+          <th>Region</th>
+          <th>Matches (90+/80&ndash;89/75&ndash;79)</th>
+          <th class="sortable" data-key="clicks" data-type="num">Clicks <span class="arrow"></span></th>
+          <th class="sortable" data-key="applied" data-type="num">Applied resp. <span class="arrow"></span></th>
+          <th class="sortable" data-key="rating" data-type="num">Rating <span class="arrow"></span></th>
+          <th>Found needed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in submissions %}
+        <tr onclick="window.location.href='/internal/submissions/{{ s.submission_id }}'"
+            data-date="{{ s.created_at.isoformat() if s.created_at else '' }}"
+            data-company="{{ (s.company_name or '') | lower }}"
+            data-stage="{{ (s.stage or '') | lower }}"
+            data-industry="{{ (s.industry or '') | lower }}"
+            data-clicks="{{ s.click_count }}"
+            data-applied="{{ s.feedback_count }}"
+            data-rating="{{ s.relevance_rating if s.relevance_rating else -1 }}">
+          <td>{{ s.created_at.strftime('%b %-d, %Y %-I:%M %p') if s.created_at else '' }}</td>
+          <td><a href="/internal/submissions/{{ s.submission_id }}">{{ s.company_name or '(unnamed)' }}</a></td>
+          <td>{{ s.stage or '&mdash;' }}</td>
+          <td>{{ s.industry or '&mdash;' }}</td>
+          <td>{{ s.flow_type }}</td>
+          <td>{{ s.region }}</td>
+          <td class="tier-count">
+            {{ (s.tier_90_plus.split('|') | length) if s.tier_90_plus else 0 }} /
+            {{ (s.tier_80_89.split('|') | length) if s.tier_80_89 else 0 }} /
+            {{ (s.tier_75_79.split('|') | length) if s.tier_75_79 else 0 }}
+          </td>
+          <td>{{ s.click_count }}</td>
+          <td>{{ s.feedback_count }}</td>
+          <td>{{ s.relevance_rating if s.relevance_rating else '&mdash;' }}</td>
+          <td>{{ s.found_what_needed or '&mdash;' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-note">No submissions yet.</p>
+    {% endif %}
+  </div>
+
+  <script>
+    (function() {
+      var table = document.getElementById('submissions-table');
+      if (!table) return;
+      var tbody = table.querySelector('tbody');
+      var headers = table.querySelectorAll('th.sortable');
+      var currentKey = null;
+      var currentDir = 1;
+
+      function clearArrows() {
+        headers.forEach(function(h) { h.querySelector('.arrow').textContent = ''; });
+      }
+
+      headers.forEach(function(header) {
+        header.addEventListener('click', function() {
+          var key = header.getAttribute('data-key');
+          var type = header.getAttribute('data-type');
+          if (currentKey === key) {
+            currentDir = -currentDir;
+          } else {
+            currentKey = key;
+            currentDir = 1;
+          }
+          clearArrows();
+          header.querySelector('.arrow').textContent = currentDir === 1 ? '\u2191' : '\u2193';
+
+          var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+          rows.sort(function(a, b) {
+            var av = a.getAttribute('data-' + key);
+            var bv = b.getAttribute('data-' + key);
+            if (type === 'num') {
+              av = parseFloat(av); bv = parseFloat(bv);
+              return (av - bv) * currentDir;
+            }
+            if (av < bv) return -1 * currentDir;
+            if (av > bv) return 1 * currentDir;
+            return 0;
+          });
+          rows.forEach(function(row) { tbody.appendChild(row); });
+        });
+      });
+
+      // Row click navigates, but clicking the company link itself
+      // shouldn't double-trigger (both fire the same destination anyway,
+      // so no special handling needed there).
+    })();
+  </script>
+
+</body>
+</html>

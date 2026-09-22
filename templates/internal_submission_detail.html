@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ s.company_name }} — Internal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .dash-wrap { max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+    .dash-wrap .back { display: inline-block; margin-bottom: 1.5rem; color: var(--gray); text-decoration: none; font-size: 0.88rem; }
+    .dash-wrap .back:hover { color: var(--white); }
+    .dash-wrap h1 {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 1.75rem;
+    }
+    .detail-card {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 1.1rem;
+      font-size: 0.88rem;
+    }
+    .detail-grid .k {
+      font-family: var(--font-mono);
+      color: var(--gray-dim);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .detail-grid .v { margin-top: 0.25rem; color: var(--off-white); }
+    h2.section-h {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin: 2.25rem 0 0.9rem;
+    }
+    .dash-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .dash-table th, .dash-table td { text-align: left; padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--hairline); }
+    .dash-table th {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      color: var(--gray-dim);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+    }
+    .dash-table tr:last-child td { border-bottom: none; }
+    .empty-note { color: var(--gray-dim); font-size: 0.88rem; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
+  </header>
+
+  <div class="dash-wrap">
+    <a href="/internal/submissions" class="back">&larr; All submissions</a>
+    <h1>{{ s.company_name or '(unnamed)' }}</h1>
+
+    <div class="detail-card">
+      <div class="detail-grid">
+        <div><div class="k">Submitted</div><div class="v">{{ s.created_at.strftime('%b %-d, %Y %-I:%M %p') if s.created_at else '' }}</div></div>
+        <div><div class="k">Flow</div><div class="v">{{ s.flow_type }}</div></div>
+        <div><div class="k">Region</div><div class="v">{{ s.region }}</div></div>
+        <div><div class="k">Stage</div><div class="v">{{ s.stage }}</div></div>
+        <div><div class="k">Employees</div><div class="v">{{ s.employee_count }}</div></div>
+        <div><div class="k">Annual revenue</div><div class="v">{{ s.annual_revenue }}</div></div>
+        <div><div class="k">Industry</div><div class="v">{{ s.industry }}</div></div>
+        <div><div class="k">Ownership</div><div class="v">{{ s.ownership or '&mdash;' }}</div></div>
+        <div><div class="k">ZIP</div><div class="v">{{ s.zip_code or '&mdash;' }}</div></div>
+        <div><div class="k">Opportunity Zone</div><div class="v">{{ 'Yes' if s.oz_eligible else 'No' }}</div></div>
+      </div>
+    </div>
+
+    <h2 class="section-h">Survey response</h2>
+    {% if s.survey %}
+    <div class="detail-card">
+      <div class="detail-grid">
+        <div><div class="k">Relevance rating</div><div class="v">{{ s.survey.relevance_rating if s.survey.relevance_rating else '&mdash;' }} / 3</div></div>
+        <div><div class="k">Overall read</div><div class="v">{{ s.survey.found_what_needed or '&mdash;' }}</div></div>
+      </div>
+      {% if s.survey.improve_notes %}
+      <div style="margin-top:1.1rem;"><div class="k">Could improve</div><div class="v">{{ s.survey.improve_notes }}</div></div>
+      {% endif %}
+      {% if s.survey.missing_data_notes %}
+      <div style="margin-top:1.1rem;"><div class="k">Missing / other category</div><div class="v">{{ s.survey.missing_data_notes }}</div></div>
+      {% endif %}
+    </div>
+    {% else %}
+    <p class="empty-note">No survey response yet.</p>
+    {% endif %}
+
+    <h2 class="section-h">Outbound clicks ({{ s.clicks | length }})</h2>
+    {% if s.clicks %}
+    <table class="dash-table">
+      <thead><tr><th>Program</th><th>Clicked at</th></tr></thead>
+      <tbody>
+        {% for c in s.clicks %}
+        <tr><td>{{ c.program_name }}</td><td>{{ c.clicked_at.strftime('%b %-d, %Y %-I:%M %p') if c.clicked_at else '' }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-note">No outbound clicks yet.</p>
+    {% endif %}
+
+    <h2 class="section-h">Applied? ({{ s.program_feedback | length }})</h2>
+    {% if s.program_feedback %}
+    <table class="dash-table">
+      <thead><tr><th>Program</th><th>Response</th><th>At</th></tr></thead>
+      <tbody>
+        {% for pf in s.program_feedback %}
+        <tr><td>{{ pf.program_name }}</td><td>{{ 'Applied' if pf.thumbs == 'applied' else 'Not yet' }}</td><td>{{ pf.created_at.strftime('%b %-d, %Y %-I:%M %p') if pf.created_at else '' }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-note">No responses yet.</p>
+    {% endif %}
+
+    <h2 class="section-h">Full results ({{ s.full_results | length }})</h2>
+    {% if s.full_results %}
+    <table class="dash-table">
+      <thead><tr><th>Program</th><th>Score</th><th>Eligibility</th><th>Tier</th><th>Reasoning</th></tr></thead>
+      <tbody>
+        {% for r in s.full_results %}
+        <tr>
+          <td>{{ r.program_name }}</td>
+          <td>{{ r.fit_score if r.fit_score is not none else '&mdash;' }}</td>
+          <td>{{ r.eligibility }}</td>
+          <td>{{ r.match_tier }}</td>
+          <td>{{ r.reasoning }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-note">No results stored.</p>
+    {% endif %}
+  </div>
+
+</body>
+</html>

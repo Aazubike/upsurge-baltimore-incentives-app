@@ -1,5 +1,8 @@
+import os
+import secrets
 import threading
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, HTTPException, Depends
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
@@ -14,7 +17,10 @@ from app.data_loader import (
 from app.rules_engine import filter_eligible, opportunity_zone_could_apply
 from app.gemini_matcher import rank_shortlist
 from app.opportunity_zones import check_opportunity_zone
-from app.submission_logger import log_submission, update_feedback
+from app.submission_logger import (
+    log_submission, update_feedback, log_link_click, log_program_feedback,
+    save_feedback_response, get_recent_submissions, get_submission_detail,
+)
 
 app = FastAPI(title="Baltimore Incentives Matching Tool")
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -28,6 +34,21 @@ STAGES = ["pre-seed", "seed", "early", "growth", "established"]
 #              "completed": int, "total": int, "context": dict|None}
 _jobs = {}
 _jobs_lock = threading.Lock()
+
+security = HTTPBasic()
+
+
+def _check_dashboard_auth(credentials: HTTPBasicCredentials = Depends(security)):
+    """Simple shared-password gate for /internal pages. Not per-user login,
+    just enough to keep match data off the open internet."""
+    correct_password = os.environ.get("DASHBOARD_PASSWORD", "")
+    if not correct_password or not secrets.compare_digest(credentials.password, correct_password):
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return True
 
 
 def _update_job(job_id: str, **kwargs):
@@ -244,6 +265,17 @@ def _run_matching_job(
         # already finished scoring. Worst case, this match just doesn't get
         # logged, the user still gets their results either way.
         try:
+            full_results = [
+                {
+                    "program_name": p.get("Program Name"),
+                    "fit_score": p.get("fit_score"),
+                    "eligibility": p.get("eligibility"),
+                    "reasoning": p.get("reasoning"),
+                    "flag": p.get("flag"),
+                    "match_tier": p.get("match_tier"),
+                }
+                for p in ranked_shortlist
+            ]
             log_submission(
                 submission_id=submission_id,
                 flow_type="portfolio" if is_known_company else "intake",
@@ -260,6 +292,7 @@ def _run_matching_job(
                 oz_tract=oz_tract or "",
                 matched_programs=[p["Program Name"] for p in ranked_shortlist],
                 match_scores=[p.get("fit_score") for p in ranked_shortlist],
+                full_results=full_results,
             )
         except Exception as e:
             print(f"[match job {job_id}] submission logging failed (non-fatal): {e!r}")
@@ -273,6 +306,7 @@ def _run_matching_job(
             "gemini_enabled": gemini_error is None,
             "gemini_error": gemini_error,
             "submission_id": submission_id,
+            "job_id": job_id,
         }
         with _jobs_lock:
             job = _jobs.get(job_id)
@@ -392,3 +426,116 @@ def submit_feedback(payload: FeedbackPayload):
 
     threading.Thread(target=_run, daemon=True).start()
     return {"status": "ok"}
+
+
+@app.get("/go")
+def go_redirect(submission_id: str, program: str, url: str):
+    """Every outbound 'Apply / learn more' link routes through here first:
+    logs the click, then sends the person on to the real destination.
+    Logging failures never block the redirect itself."""
+    try:
+        log_link_click(submission_id, program)
+    except Exception as e:
+        print(f"[click tracking] failed to log: {e!r}")
+    return RedirectResponse(url, status_code=302)
+
+
+class ProgramFeedbackPayload(BaseModel):
+    submission_id: str
+    program_name: str
+    thumbs: str
+
+
+@app.post("/feedback/program")
+def submit_program_feedback(payload: ProgramFeedbackPayload):
+    """Target of the 'Did you apply?' popup that appears after an outbound click.
+    thumbs is 'applied' or 'not_applied'."""
+    def _run():
+        try:
+            log_program_feedback(payload.submission_id, payload.program_name, payload.thumbs)
+        except Exception as e:
+            print(f"[program feedback] failed to log: {e!r}")
+
+    threading.Thread(target=_run, daemon=True).start()
+    return {"status": "ok"}
+
+
+class RelevancePayload(BaseModel):
+    submission_id: str
+    relevance_rating: int
+
+
+@app.post("/feedback/relevance")
+def submit_relevance_rating(payload: RelevancePayload):
+    """Target of the 3-button quick rating (not great / OK / very good) on
+    the results page itself, saved instantly without needing the fuller
+    survey. save_feedback_response only touches this field, so a later
+    fuller-survey submission won't overwrite it."""
+    def _run():
+        try:
+            save_feedback_response(payload.submission_id, relevance_rating=payload.relevance_rating)
+        except Exception as e:
+            print(f"[relevance feedback] failed to log: {e!r}")
+
+    threading.Thread(target=_run, daemon=True).start()
+    return {"status": "ok"}
+
+
+@app.get("/feedback/survey/{submission_id}")
+def feedback_survey_form(request: Request, submission_id: str, job_id: str = ""):
+    return templates.TemplateResponse("feedback_survey.html", {
+        "request": request,
+        "submission_id": submission_id,
+        "job_id": job_id,
+    })
+
+
+@app.post("/feedback/survey/{submission_id}")
+def feedback_survey_submit(
+    submission_id: str,
+    relevance_rating: Optional[str] = Form(None),
+    found_what_needed: Optional[str] = Form(None),
+    improve_notes: Optional[str] = Form(None),
+    missing_data_notes: Optional[str] = Form(None),
+    job_id: Optional[str] = Form(""),
+):
+    try:
+        save_feedback_response(
+            submission_id,
+            relevance_rating=int(relevance_rating) if relevance_rating else None,
+            found_what_needed=found_what_needed or "",
+            improve_notes=improve_notes or "",
+            missing_data_notes=missing_data_notes or "",
+        )
+    except Exception as e:
+        print(f"[survey] failed to save: {e!r}")
+    suffix = f"?job_id={job_id}" if job_id else ""
+    return RedirectResponse(f"/feedback/thanks{suffix}", status_code=303)
+
+
+@app.get("/feedback/thanks")
+def feedback_thanks(request: Request, job_id: str = ""):
+    return templates.TemplateResponse("feedback_thanks.html", {
+        "request": request,
+        "job_id": job_id,
+    })
+
+
+@app.get("/internal/submissions")
+def internal_submissions(request: Request, authorized: bool = Depends(_check_dashboard_auth)):
+    submissions = get_recent_submissions(limit=100)
+    return templates.TemplateResponse("internal_submissions.html", {
+        "request": request,
+        "submissions": submissions,
+    })
+
+
+@app.get("/internal/submissions/{submission_id}")
+def internal_submission_detail(request: Request, submission_id: str, authorized: bool = Depends(_check_dashboard_auth)):
+    detail = get_submission_detail(submission_id)
+    if detail is None:
+        return RedirectResponse("/internal/submissions")
+    return templates.TemplateResponse("internal_submission_detail.html", {
+        "request": request,
+        "s": detail,
+    })
