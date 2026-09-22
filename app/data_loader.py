@@ -28,9 +28,44 @@ def _extract_zip_from_address(address) -> str | None:
     return matches[0] if matches else None
 
 
+CATEGORY_KEYWORDS = {
+    "Tax": ["tax"],
+    "Grants": ["grant"],
+    "Loans": ["loan", "line of credit"],
+    "Workforce / Training": ["training"],
+    "Equity / Venture Capital": ["venture capital", "equity"],
+    "Property / Development": [
+        "property development", "property acquisition",
+        "real estate development", "waterfront development",
+    ],
+    "Technical Assistance": ["technical assistance", "tech transfer", "technical support"],
+}
+
+
+def _classify_categories(row) -> list[str]:
+    """
+    Tags each program with one or more clean, human-facing categories for
+    the results page filter, based on keyword matches across Instrument
+    Type, Incentive Purpose, and Incentive Area. These source columns are
+    inconsistent -- two different data sources use different formats and
+    casing -- so this normalizes them into a small fixed set rather than
+    filtering on the raw values directly. A program can land in more than
+    one category (many combine grant + loan + tax credit, for example).
+    """
+    haystack = " ".join(
+        str(row.get(col, "") or "")
+        for col in ("Instrument Type", "Incentive Purpose", "Incentive Area")
+    ).lower()
+    return [
+        category for category, keywords in CATEGORY_KEYWORDS.items()
+        if any(kw in haystack for kw in keywords)
+    ]
+
+
 def load_all():
     global _incentives_df, _companies_df, _rounds_df
     _incentives_df = pd.read_excel(DATA_DIR / "Incentives_Master_Combined.xlsx")
+    _incentives_df["Categories"] = _incentives_df.apply(_classify_categories, axis=1)
 
     # This export has a title block before the real header row (row 12, 0-indexed).
     companies = pd.read_excel(DATA_DIR / "Known_Companies_v2.xlsx", header=12)

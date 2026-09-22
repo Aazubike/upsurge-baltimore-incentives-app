@@ -75,6 +75,91 @@
       font-size: 0.85rem;
       font-weight: 500;
     }
+    .category-filter-wrap { display: flex; justify-content: flex-end; position: relative; margin: 1.25rem 0 1.5rem; }
+    .category-filter-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--hairline);
+      background: var(--surface);
+      color: var(--off-white);
+      border-radius: 8px;
+      padding: 0.55rem 1rem;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+    .category-filter-btn:hover { border-color: var(--gray-dim); }
+    .category-filter-btn .chevron { color: var(--gray-dim); font-size: 0.75rem; transition: transform 0.15s ease; }
+    .category-filter-btn.open .chevron { transform: rotate(180deg); }
+    .category-filter-count {
+      background: var(--red);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 0.05rem 0.5rem;
+    }
+    .category-filter-dropdown {
+      display: none;
+      flex-direction: column;
+      gap: 0.15rem;
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 8px;
+      padding: 0.5rem;
+      min-width: 240px;
+      z-index: 50;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .category-filter-dropdown.open { display: flex; }
+    .category-filter-option {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.88rem;
+      color: var(--off-white);
+      padding: 0.45rem 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .category-filter-option:hover { background: var(--surface-2); }
+    .category-filter-option input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      border: 1.5px solid var(--gray-dim);
+      border-radius: 4px;
+      background: var(--bg);
+      cursor: pointer;
+      position: relative;
+    }
+    .category-filter-option input[type="checkbox"]:checked { background: var(--red); border-color: var(--red); }
+    .category-filter-option input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 0px;
+      width: 5px;
+      height: 9px;
+      border: solid var(--white);
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    .category-filter-clear {
+      margin-top: 0.3rem;
+      padding-top: 0.45rem;
+      border-top: 1px solid var(--hairline);
+      font-size: 0.8rem;
+      color: var(--gray-dim);
+      cursor: pointer;
+      text-align: center;
+    }
+    .category-filter-clear:hover { color: var(--off-white); }
   </style>
 </head>
 <body>
@@ -126,7 +211,7 @@
 
     {% macro program_card(program) %}
       {% set link = program.get('Registration / Program Link') %}
-      <div class="result-card">
+      <div class="result-card" data-categories="{{ (program.get('Categories') or []) | join(',') }}">
         <div class="result-card-head">
           <h3>{{ program['Program Name'] }}</h3>
           {% if program.get('Acronym') and program['Acronym'] == program['Acronym'] %}<span class="acronym">{{ program['Acronym'] }}</span>{% endif %}
@@ -181,6 +266,25 @@
     {% set match_baltimore = match_list | selectattr('Norm_Counties', 'ne', 'ALL') | list %}
     {% set match_statewide = match_list | selectattr('Norm_Counties', 'equalto', 'ALL') | list %}
 
+    {% if shortlist %}
+    <div class="category-filter-wrap">
+      <button type="button" class="category-filter-btn" id="category-filter-btn">
+        Filter by type
+        <span class="category-filter-count" id="category-filter-count" style="display:none;"></span>
+        <span class="chevron">&#9662;</span>
+      </button>
+      <div class="category-filter-dropdown" id="category-filter-dropdown">
+        {% for cat in ['Tax', 'Grants', 'Loans', 'Workforce / Training', 'Equity / Venture Capital', 'Property / Development', 'Technical Assistance'] %}
+        <label class="category-filter-option">
+          <input type="checkbox" data-category="{{ cat }}">
+          {{ cat }}
+        </label>
+        {% endfor %}
+        <div class="category-filter-clear" id="category-filter-clear">Clear filters</div>
+      </div>
+    </div>
+    {% endif %}
+
     {% if possible_list %}
     <div class="pagination-controls" id="top-pagination">
       <button type="button" onclick="goToPage(-1)" id="page-prev">&#8249; Previous</button>
@@ -231,42 +335,77 @@
       <span id="page-label-bottom">Page 1 of {{ ((possible_list|length - 1) // 12) + 2 }}</span>
       <button type="button" onclick="goToPage(1)" id="page-next-bottom">Next &#8250;</button>
     </div>
+    {% endif %}
 
     <script>
       (function() {
-        var currentPage = 1;
-        var possiblePageCount = {{ ((possible_list|length - 1) // 12) + 1 }};
+        var possibleCount = {{ possible_list|length if possible_list else 0 }};
+        var possiblePageCount = possibleCount > 0 ? (Math.floor((possibleCount - 1) / 12) + 1) : 0;
         var totalPages = 1 + possiblePageCount;
+        var currentPage = 1;
+        var selectedCategories = [];
+
+        var matchSection = document.getElementById('match-section');
+        var possibleSection = document.getElementById('possible-section');
+
+        function cardMatchesFilter(card) {
+          if (!card || selectedCategories.length === 0) return true;
+          var cats = (card.getAttribute('data-categories') || '').split(',');
+          return selectedCategories.some(function(sel) { return cats.indexOf(sel) !== -1; });
+        }
 
         function render() {
-          var matchSection = document.getElementById('match-section');
-          var possibleSection = document.getElementById('possible-section');
+          var filtering = selectedCategories.length > 0;
 
-          if (currentPage === 1) {
-            matchSection.style.display = '';
-            possibleSection.style.display = 'none';
-          } else {
-            matchSection.style.display = 'none';
-            possibleSection.style.display = '';
-            var possiblePageIndex = currentPage - 2;
-            document.querySelectorAll('#possible-list .paginated-card').forEach(function(card) {
-              card.style.display = (parseInt(card.getAttribute('data-page')) === possiblePageIndex) ? '' : 'none';
+          if (matchSection) {
+            matchSection.querySelectorAll('.result-card').forEach(function(card) {
+              card.style.display = cardMatchesFilter(card) ? '' : 'none';
             });
           }
 
-          var labelText = 'Page ' + currentPage + ' of ' + totalPages;
-          ['page-label', 'page-label-bottom'].forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.textContent = labelText;
-          });
-          ['page-prev', 'page-prev-bottom'].forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.style.visibility = (currentPage === 1) ? 'hidden' : 'visible';
-          });
-          ['page-next', 'page-next-bottom'].forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.style.visibility = (currentPage === totalPages) ? 'hidden' : 'visible';
-          });
+          if (possibleCount > 0) {
+            var pagCtrls = document.querySelectorAll('.pagination-controls');
+
+            if (filtering) {
+              // A category filter is active: show every matching card from
+              // both sections at once and ignore the normal 12-per-page
+              // bucketing, since splitting an already-narrowed set into
+              // pages would just mean lots of near-empty pages.
+              if (matchSection) matchSection.style.display = '';
+              if (possibleSection) possibleSection.style.display = '';
+              document.querySelectorAll('#possible-list .paginated-card').forEach(function(card) {
+                card.style.display = cardMatchesFilter(card.querySelector('.result-card')) ? '' : 'none';
+              });
+              pagCtrls.forEach(function(el) { el.style.display = 'none'; });
+            } else {
+              pagCtrls.forEach(function(el) { el.style.display = ''; });
+              if (currentPage === 1) {
+                if (matchSection) matchSection.style.display = '';
+                if (possibleSection) possibleSection.style.display = 'none';
+              } else {
+                if (matchSection) matchSection.style.display = 'none';
+                if (possibleSection) possibleSection.style.display = '';
+                var possiblePageIndex = currentPage - 2;
+                document.querySelectorAll('#possible-list .paginated-card').forEach(function(card) {
+                  card.style.display = (parseInt(card.getAttribute('data-page')) === possiblePageIndex) ? '' : 'none';
+                });
+              }
+
+              var labelText = 'Page ' + currentPage + ' of ' + totalPages;
+              ['page-label', 'page-label-bottom'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.textContent = labelText;
+              });
+              ['page-prev', 'page-prev-bottom'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.style.visibility = (currentPage === 1) ? 'hidden' : 'visible';
+              });
+              ['page-next', 'page-next-bottom'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.style.visibility = (currentPage === totalPages) ? 'hidden' : 'visible';
+              });
+            }
+          }
 
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -276,10 +415,63 @@
           render();
         };
 
+        var filterBtn = document.getElementById('category-filter-btn');
+        var filterDropdown = document.getElementById('category-filter-dropdown');
+        var filterCount = document.getElementById('category-filter-count');
+        var filterClear = document.getElementById('category-filter-clear');
+
+        function updateFilterButton() {
+          if (selectedCategories.length > 0) {
+            filterCount.textContent = selectedCategories.length;
+            filterCount.style.display = '';
+          } else {
+            filterCount.style.display = 'none';
+          }
+        }
+
+        if (filterBtn && filterDropdown) {
+          filterBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var isOpen = filterDropdown.classList.toggle('open');
+            filterBtn.classList.toggle('open', isOpen);
+          });
+
+          document.addEventListener('click', function(e) {
+            if (!filterDropdown.contains(e.target) && e.target !== filterBtn) {
+              filterDropdown.classList.remove('open');
+              filterBtn.classList.remove('open');
+            }
+          });
+
+          filterDropdown.querySelectorAll('input[type="checkbox"]').forEach(function(box) {
+            box.addEventListener('change', function() {
+              var cat = box.getAttribute('data-category');
+              var idx = selectedCategories.indexOf(cat);
+              if (box.checked && idx === -1) {
+                selectedCategories.push(cat);
+              } else if (!box.checked && idx !== -1) {
+                selectedCategories.splice(idx, 1);
+              }
+              updateFilterButton();
+              currentPage = 1;
+              render();
+            });
+          });
+
+          if (filterClear) {
+            filterClear.addEventListener('click', function() {
+              selectedCategories = [];
+              filterDropdown.querySelectorAll('input[type="checkbox"]').forEach(function(box) { box.checked = false; });
+              updateFilterButton();
+              currentPage = 1;
+              render();
+            });
+          }
+        }
+
         render();
       })();
     </script>
-    {% endif %}
 
     <a href="/" class="flow-alt-link">&larr; Start over</a>
     <a href="/how-it-works" class="flow-alt-link" style="margin-left: 1.5rem;">How ranking works &#8599;</a>
