@@ -24,13 +24,18 @@ ANTI-HALLUCINATION RULE: if a REQUIRED criterion is clearly stated in the
 program's data and clearly NOT met by the company's profile, Gemini must
 mark that program "likely_ineligible" with a specific reason instead of
 inventing a fit percentage.
+
+PERSISTENT CACHE: before any program is sent to Gemini, we check the
+Postgres-backed cache in match_cache.py. A program is only re-scored if
+either the company's relevant answers changed or that program's own data
+changed since it was last cached. This is what keeps Gemini credit usage
+down on repeat runs. See match_cache.py for the details.
 """
 import os
 import json
 import re
 import time
 import random
-import hashlib
 import pandas as pd
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -39,6 +44,7 @@ from google import genai
 from google.genai import types
 
 from app.rules_engine import locality_tier, enterprise_zone_note, opportunity_zone_note
+from app import match_cache
 
 load_dotenv(Path(__file__).parent.parent / ".env")
 
@@ -52,7 +58,7 @@ RETRYABLE_MARKERS = (
 )
 BATCH_SIZE = 8
 MAX_PARALLEL_BATCHES = 10
-MAX_OUTPUT_TOKENS = 2048
+MAX_OUTPUT_TOKENS = 4096
 
 # OUTER retry layer, separate from the per-call retries inside _call_batch.
 # A batch that exhausts its internal retries gets retried again in a fresh
@@ -66,21 +72,23 @@ OUTER_ROUND_PAUSE_SECONDS = 5
 FAST_MODE = os.environ.get("FAST_MODE", "0") == "1"
 SAFETY_NET_MAX_CANDIDATES = 300
 
-CACHE_TTL_SECONDS = 600
-_result_cache = {}
+# Cache lookups can fail (network hiccup, Supabase briefly unavailable).
+# When that happens we log it and fall back to treating everything as a
+# cache miss for that run, rather than blowing up the whole match.
+def _safe_get_cached(company_hash, program_names):
+    try:
+        return match_cache.get_cached_results(company_hash, program_names)
+    except Exception as e:
+        print(f"[gemini_matcher] cache lookup failed, continuing without cache: {e!r}")
+        return {}
 
 
-def _make_cache_key(answers: dict, shortlist_df: pd.DataFrame) -> str:
-    normalized_answers = {
-        k: (tuple(sorted(v)) if isinstance(v, list) else v)
-        for k, v in sorted(answers.items())
-    }
-    program_names = tuple(sorted(shortlist_df["Program Name"].tolist()))
-    raw = json.dumps(
-        {"answers": normalized_answers, "programs": program_names, "fast_mode": FAST_MODE},
-        sort_keys=True, default=str,
-    )
-    return hashlib.sha256(raw.encode()).hexdigest()
+def _safe_save(company_hash, results, program_hashes):
+    try:
+        match_cache.save_results(company_hash, results, program_hashes)
+    except Exception as e:
+        print(f"[gemini_matcher] cache save failed (non-fatal): {e!r}")
+
 
 _client = None
 
@@ -271,7 +279,7 @@ def _call_batch(answers: dict, batch_df: pd.DataFrame):
         return None, "temporary scoring error"
 
 
-def _run_batches(answers: dict, batches: list[pd.DataFrame], progress_callback=None):
+def _run_batches(answers: dict, batches: list, progress_callback=None):
     """
     Fires the given batches concurrently. Returns (rankings, failed_batches,
     error_reasons): failed_batches is the subset of the input batch DataFrames
@@ -321,26 +329,58 @@ def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame, progress_callback=
     in a fresh round (see OUTER_MAX_ROUNDS) instead of being given up on --
     correctness wins over speed here: a slow, fully-scored result beats a
     fast one with programs silently missing.
+
+    CACHING: before anything is sent to Gemini, each program in the
+    shortlist is checked against the persistent cache (match_cache.py).
+    Only cache misses go to Gemini; hits are reused as-is. New results are
+    saved back to the cache once Gemini returns them.
     """
     if shortlist_df.empty:
         return [], 0, None
-
-    cache_key = _make_cache_key(answers, shortlist_df)
-    cached = _result_cache.get(cache_key)
-    if cached and (time.time() - cached[3]) < CACHE_TTL_SECONDS:
-        if progress_callback:
-            progress_callback("total", total=len(cached[0]))
-            progress_callback("progress", delta=len(cached[0]))
-        return cached[0], cached[1], cached[2]
 
     capped_df, dropped_count = _cap_candidates(shortlist_df)
 
     if progress_callback:
         progress_callback("total", total=len(capped_df))
 
-    remaining_batches = [capped_df.iloc[i:i + BATCH_SIZE] for i in range(0, len(capped_df), BATCH_SIZE)]
+    company_hash = match_cache.make_company_hash(answers)
 
-    all_rankings = []
+    # Compute each candidate program's current data hash, and split into
+    # cache hits (reuse) vs misses (need to ask Gemini).
+    program_hashes = {}
+    row_by_name = {}
+    for _, row in capped_df.iterrows():
+        name = row.get("Program Name")
+        row_dict = row.to_dict()
+        program_hashes[name] = match_cache.make_program_hash(row_dict)
+        row_by_name[name] = row_dict
+
+    all_names = list(row_by_name.keys())
+    cached = _safe_get_cached(company_hash, all_names)
+
+    cache_hit_results = []
+    miss_names = []
+    for name in all_names:
+        hit = cached.get(name)
+        if hit and hit.get("program_hash") == program_hashes.get(name):
+            cache_hit_results.append({
+                "program_name": name,
+                "fit_score": hit.get("fit_score"),
+                "reasoning": hit.get("reasoning"),
+                "flag": hit.get("flag"),
+                "eligibility": hit.get("eligibility"),
+                "breakdown": hit.get("breakdown") or {},
+            })
+        else:
+            miss_names.append(name)
+
+    if progress_callback and cache_hit_results:
+        progress_callback("progress", delta=len(cache_hit_results))
+
+    miss_df = capped_df[capped_df["Program Name"].isin(miss_names)]
+    remaining_batches = [miss_df.iloc[i:i + BATCH_SIZE] for i in range(0, len(miss_df), BATCH_SIZE)]
+
+    all_rankings = list(cache_hit_results)
     last_error_reason = None
 
     for round_num in range(OUTER_MAX_ROUNDS):
@@ -352,6 +392,8 @@ def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame, progress_callback=
             answers, remaining_batches, progress_callback=progress_callback
         )
         all_rankings.extend(rankings)
+        if rankings:
+            _safe_save(company_hash, rankings, program_hashes)
         if error_reasons:
             last_error_reason = error_reasons[0]
 
@@ -404,6 +446,4 @@ def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame, progress_callback=
             f"({last_error_reason}). Try again in a moment for full coverage."
         )
 
-    _result_cache[cache_key] = (merged, dropped_count, error_message, time.time())
     return merged, dropped_count, error_message
-

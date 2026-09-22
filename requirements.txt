@@ -10,3 +10,4 @@ python-multipart==0.0.12
 gspread
 google-auth
 requests
+psycopg2-binary

@@ -14,7 +14,7 @@ from app.data_loader import (
 from app.rules_engine import filter_eligible, opportunity_zone_could_apply
 from app.gemini_matcher import rank_shortlist
 from app.opportunity_zones import check_opportunity_zone
-from app.sheets_logger import log_submission, update_feedback
+from app.submission_logger import log_submission, update_feedback
 
 app = FastAPI(title="Baltimore Incentives Matching Tool")
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -238,23 +238,31 @@ def _run_matching_job(
 
         is_known_company = get_company_by_name(company_name) is not None
         submission_id = str(uuid4())
-        log_submission(
-            submission_id=submission_id,
-            flow_type="portfolio" if is_known_company else "intake",
-            company_name=company_name,
-            region=county,
-            stage=stage,
-            employee_count=cleaned_employee_count,
-            annual_revenue=cleaned_annual_revenue,
-            industry=industry,
-            ownership="|".join(cleaned_mwbe_groups) if cleaned_mwbe_groups else "",
-            zip_code=cleaned_zip or "",
-            street_address=cleaned_address or "",
-            oz_eligible=oz_eligible,
-            oz_tract=oz_tract or "",
-            matched_programs=[p["Program Name"] for p in ranked_shortlist],
-            match_scores=[p.get("fit_score") for p in ranked_shortlist],
-        )
+
+        # Logging is isolated in its own try/except: a submission-log failure
+        # (e.g. a database hiccup) should never discard results that Gemini
+        # already finished scoring. Worst case, this match just doesn't get
+        # logged, the user still gets their results either way.
+        try:
+            log_submission(
+                submission_id=submission_id,
+                flow_type="portfolio" if is_known_company else "intake",
+                company_name=company_name,
+                region=county,
+                stage=stage,
+                employee_count=cleaned_employee_count,
+                annual_revenue=cleaned_annual_revenue,
+                industry=industry,
+                ownership="|".join(cleaned_mwbe_groups) if cleaned_mwbe_groups else "",
+                zip_code=cleaned_zip or "",
+                street_address=cleaned_address or "",
+                oz_eligible=oz_eligible,
+                oz_tract=oz_tract or "",
+                matched_programs=[p["Program Name"] for p in ranked_shortlist],
+                match_scores=[p.get("fit_score") for p in ranked_shortlist],
+            )
+        except Exception as e:
+            print(f"[match job {job_id}] submission logging failed (non-fatal): {e!r}")
 
         context = {
             "company_name": company_name,
@@ -373,7 +381,7 @@ class FeedbackPayload(BaseModel):
 @app.post("/feedback")
 def submit_feedback(payload: FeedbackPayload):
     """
-    Fire-and-forget: runs the Sheets update on a background thread so the
+    Fire-and-forget: runs the feedback update on a background thread so the
     button click feels instant instead of waiting on a network round trip.
     """
     def _run():
