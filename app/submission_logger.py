@@ -58,13 +58,19 @@ def log_submission(
     matched_programs: list = None,
     match_scores: list = None,
     full_results: list = None,
+    wants_contact: bool = False,
+    contact_email: str = "",
+    contact_phone: str = "",
 ) -> None:
     """
     Writes one row to match_submissions: every intake answer, the tiered
     summary, and (in full_results) the complete result for every scored
-    program -- name, score, eligibility, reasoning, flag. Called from a
-    background task in main.py, wrapped in a try/except there so a logging
-    failure never takes down the actual match results a user is waiting on.
+    program -- name, score, eligibility, reasoning, flag. wants_contact,
+    contact_email, and contact_phone capture whether the person asked to be
+    connected with someone who can help identify incentives faster. Called
+    from a background task in main.py, wrapped in a try/except there so a
+    logging failure never takes down the actual match results a user is
+    waiting on.
     """
     tier_90_plus, tier_80_89, tier_75_79 = _bucket_matches(matched_programs, match_scores)
 
@@ -77,8 +83,9 @@ def log_submission(
                 (submission_id, created_at, flow_type, company_name, region,
                  stage, employee_count, annual_revenue, industry, ownership,
                  zip_code, street_address, oz_eligible, oz_tract,
-                 tier_90_plus, tier_80_89, tier_75_79, full_results)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                 tier_90_plus, tier_80_89, tier_75_79, full_results,
+                 wants_contact, contact_email, contact_phone)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 submission_id,
@@ -99,6 +106,9 @@ def log_submission(
                 "|".join(tier_80_89),
                 "|".join(tier_75_79),
                 json.dumps(full_results or []),
+                wants_contact,
+                contact_email,
+                contact_phone,
             ),
         )
         conn.commit()
@@ -215,6 +225,7 @@ def get_recent_submissions(limit: int = 50) -> list:
                 s.submission_id, s.created_at, s.company_name, s.flow_type,
                 s.region, s.stage, s.industry,
                 s.tier_90_plus, s.tier_80_89, s.tier_75_79,
+                s.wants_contact, s.contact_email, s.contact_phone,
                 (SELECT COUNT(*) FROM link_clicks c WHERE c.submission_id = s.submission_id) AS click_count,
                 (SELECT COUNT(*) FROM program_feedback pf WHERE pf.submission_id = s.submission_id) AS feedback_count,
                 fr.relevance_rating, fr.found_what_needed

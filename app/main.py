@@ -203,6 +203,9 @@ def _run_matching_job(
     cleaned_mwbe_groups: list,
     cleaned_zip,
     cleaned_address,
+    wants_contact: bool = False,
+    contact_email: str = "",
+    contact_phone: str = "",
 ):
     """Runs the full matching pipeline on a background thread, updating the
     job's status/message/progress as it goes so the loading page has
@@ -293,6 +296,9 @@ def _run_matching_job(
                 matched_programs=[p["Program Name"] for p in ranked_shortlist],
                 match_scores=[p.get("fit_score") for p in ranked_shortlist],
                 full_results=full_results,
+                wants_contact=wants_contact,
+                contact_email=contact_email,
+                contact_phone=contact_phone,
             )
         except Exception as e:
             print(f"[match job {job_id}] submission logging failed (non-fatal): {e!r}")
@@ -333,6 +339,9 @@ def match_results(
     mwbe_groups: List[str] = Form([]),
     zip_code: Optional[str] = Form(None),
     street_address: Optional[str] = Form(None),
+    wants_contact: Optional[str] = Form(None),
+    contact_email: Optional[str] = Form(None),
+    contact_phone: Optional[str] = Form(None),
 ):
     def to_int_or_none(val):
         if val is None or val.strip() == "":
@@ -347,6 +356,9 @@ def match_results(
     cleaned_annual_revenue = to_int_or_none(annual_revenue)
     cleaned_mwbe_groups = [g for g in mwbe_groups if g != "none"]
     cleaned_zip = zip_code.strip() if zip_code else None
+    cleaned_wants_contact = wants_contact == "yes"
+    cleaned_contact_email = contact_email.strip() if contact_email else ""
+    cleaned_contact_phone = contact_phone.strip() if contact_phone else ""
 
     job_id = str(uuid4())
     with _jobs_lock:
@@ -364,6 +376,7 @@ def match_results(
             job_id, company_name, county, stage, industry,
             cleaned_employee_count, cleaned_annual_revenue,
             cleaned_mwbe_groups, cleaned_zip, cleaned_address,
+            cleaned_wants_contact, cleaned_contact_email, cleaned_contact_phone,
         ),
         daemon=True,
     )

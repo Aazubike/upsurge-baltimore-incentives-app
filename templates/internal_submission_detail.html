@@ -93,6 +93,16 @@
       </div>
     </div>
 
+    {% if s.wants_contact %}
+    <div class="detail-card" style="border-color: var(--red);">
+      <div class="k" style="color: var(--red); margin-bottom: 0.75rem;">Wants to be connected with someone</div>
+      <div class="detail-grid">
+        <div><div class="k">Email</div><div class="v">{{ s.contact_email or '&mdash;' }}</div></div>
+        <div><div class="k">Phone</div><div class="v">{{ s.contact_phone or '&mdash;' }}</div></div>
+      </div>
+    </div>
+    {% endif %}
+
     <h2 class="section-h">Survey response</h2>
     {% if s.survey %}
     <div class="detail-card">

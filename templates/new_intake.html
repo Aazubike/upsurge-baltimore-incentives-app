@@ -86,10 +86,42 @@
         </div>
       </div>
 
+      <div class="field-group field-card">
+        <label class="field-label info">Personalized help <span class="src">optional</span></label>
+        <div class="checkbox-group">
+          <label class="checkbox-option">
+            <input type="checkbox" name="wants_contact" value="yes" id="wants-contact-checkbox">
+            Connect me with someone who can help identify incentives or speed up this process
+          </label>
+        </div>
+        <div id="contact-fields" style="display:none; margin-top: 1rem;">
+          <div class="field-group" style="margin-bottom: 0.85rem;">
+            <label class="field-label new">Email</label>
+            <input type="email" name="contact_email" id="contact-email-input" placeholder="you@company.com">
+          </div>
+          <div class="field-group">
+            <label class="field-label info">Phone <span class="src">optional</span></label>
+            <input type="text" name="contact_phone" placeholder="e.g. (410) 555-0100">
+          </div>
+        </div>
+      </div>
+
       <button type="submit" class="submit-btn">See my matches <span class="arrow">&#8599;</span></button>
       <p class="flow-alt" style="text-align: center; margin-top: 0.75rem;">By submitting, you agree to our <a href="/privacy">Privacy &amp; Confidentiality Policy</a>.</p>
     </form>
   </section>
+
+  <script>
+    (function() {
+      var checkbox = document.getElementById('wants-contact-checkbox');
+      var fields = document.getElementById('contact-fields');
+      var emailInput = document.getElementById('contact-email-input');
+      checkbox.addEventListener('change', function() {
+        fields.style.display = checkbox.checked ? 'block' : 'none';
+        emailInput.required = checkbox.checked;
+      });
+    })();
+  </script>
 
 </body>
 </html>

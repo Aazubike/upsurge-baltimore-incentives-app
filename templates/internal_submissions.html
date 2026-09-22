@@ -56,6 +56,15 @@
     .dash-table td a { color: var(--white); text-decoration: none; }
     .dash-table td a:hover { color: var(--red); }
     .tier-count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--off-white); }
+    .contact-badge {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+    }
     .empty-note { color: var(--gray-dim); padding: 2rem 0; }
   </style>
 </head>
@@ -84,6 +93,7 @@
           <th class="sortable" data-key="applied" data-type="num">Applied resp. <span class="arrow"></span></th>
           <th class="sortable" data-key="rating" data-type="num">Rating <span class="arrow"></span></th>
           <th>Found needed</th>
+          <th class="sortable" data-key="contact" data-type="num">Wants contact <span class="arrow"></span></th>
         </tr>
       </thead>
       <tbody>
@@ -95,7 +105,8 @@
             data-industry="{{ (s.industry or '') | lower }}"
             data-clicks="{{ s.click_count }}"
             data-applied="{{ s.feedback_count }}"
-            data-rating="{{ s.relevance_rating if s.relevance_rating else -1 }}">
+            data-rating="{{ s.relevance_rating if s.relevance_rating else -1 }}"
+            data-contact="{{ 1 if s.wants_contact else 0 }}">
           <td>{{ s.created_at.strftime('%b %-d, %Y %-I:%M %p') if s.created_at else '' }}</td>
           <td><a href="/internal/submissions/{{ s.submission_id }}">{{ s.company_name or '(unnamed)' }}</a></td>
           <td>{{ s.stage or '&mdash;' }}</td>
@@ -111,6 +122,7 @@
           <td>{{ s.feedback_count }}</td>
           <td>{{ s.relevance_rating if s.relevance_rating else '&mdash;' }}</td>
           <td>{{ s.found_what_needed or '&mdash;' }}</td>
+          <td>{% if s.wants_contact %}<span class="contact-badge">Yes</span>{% else %}&mdash;{% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>
