@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Submissions — Internal</title>
+  <title>Submissions | Internal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
@@ -66,6 +66,94 @@
       border-radius: 999px;
     }
     .empty-note { color: var(--gray-dim); padding: 2rem 0; }
+
+    /* Filter bar */
+    .dash-filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .dash-field { display: flex; flex-direction: column; gap: 0.3rem; }
+    .dash-field label, .dash-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gray-dim);
+    }
+    .dash-field input, .dash-field select {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 4px;
+      color: var(--off-white);
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 0.45rem 0.6rem;
+      color-scheme: dark;
+    }
+    .dash-field input[type="search"] { width: 14rem; }
+    .dash-check {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.85rem; color: var(--off-white); padding-bottom: 0.45rem;
+    }
+    .dash-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--off-white);
+      background: transparent;
+      border: 1px solid var(--hairline);
+      border-radius: 4px;
+      padding: 0.5rem 0.8rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .dash-btn:hover { border-color: var(--gray-dim); }
+    .dash-btn.primary { border-color: var(--red); color: var(--red); }
+    .dash-quick { display: flex; gap: 0.4rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .dash-quick .dash-btn.active { border-color: var(--red); color: var(--red); }
+    .dash-toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; flex-wrap: wrap; margin-bottom: 0.9rem;
+    }
+    .dash-count { font-family: var(--font-mono); font-size: 0.75rem; color: var(--gray-dim); }
+    .dash-exports { display: flex; gap: 0.4rem; }
+    .dash-table tr.group-row { cursor: default; }
+    .dash-table tr.group-row:hover { background: transparent; }
+    .dash-table tr.group-row td {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--red);
+      background: var(--surface-2);
+      padding: 0.55rem 0.9rem;
+    }
+    .dash-table tr.group-row .group-count { color: var(--gray-dim); margin-left: 0.5rem; }
+    .print-only { display: none; }
+
+    /* Save as PDF: clean black-on-white version of the filtered list */
+    @media print {
+      @page { size: landscape; margin: 0.5in; }
+      body { background: #fff !important; color: #000 !important; }
+      .site-header, .dash-filters, .dash-quick, .dash-exports, .dash-table th .arrow { display: none !important; }
+      .print-only { display: block; font-size: 9pt; color: #333; margin-bottom: 0.6rem; }
+      .dash-wrap { max-width: none; padding: 0; }
+      .dash-wrap .eyebrow { color: #000; }
+      .dash-wrap h1 { color: #000; margin-bottom: 0.3rem; font-size: 16pt; }
+      .dash-count { color: #333; }
+      .dash-table { background: #fff; border: 1px solid #999; font-size: 8pt; }
+      .dash-table th, .dash-table td { color: #000 !important; border-bottom: 1px solid #ccc; padding: 0.3rem 0.4rem; }
+      .dash-table td a { color: #000 !important; }
+      .dash-table tr { page-break-inside: avoid; }
+      .dash-table tr.group-row td { background: #eee !important; color: #000 !important; }
+      .contact-badge { background: none; color: #000; padding: 0; font-weight: 600; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
   </style>
 </head>
 <body>
@@ -76,7 +164,62 @@
 
   <div class="dash-wrap">
     <div class="eyebrow">Internal</div>
-    <h1>Recent submissions</h1>
+    <h1>Submissions</h1>
+
+    <form class="dash-filters" method="get" action="/internal/submissions">
+      <div class="dash-field">
+        <label for="f-q">Company</label>
+        <input type="search" id="f-q" name="q" value="{{ filters.q }}" placeholder="Search by name">
+      </div>
+      <div class="dash-field">
+        <label for="f-from">From</label>
+        <input type="date" id="f-from" name="date_from" value="{{ filters.date_from.isoformat() if filters.date_from else '' }}">
+      </div>
+      <div class="dash-field">
+        <label for="f-to">To</label>
+        <input type="date" id="f-to" name="date_to" value="{{ filters.date_to.isoformat() if filters.date_to else '' }}">
+      </div>
+      <div class="dash-field">
+        <label for="f-flow">Flow</label>
+        <select id="f-flow" name="flow">
+          <option value="" {% if not filters.flow_type %}selected{% endif %}>All</option>
+          <option value="portfolio" {% if filters.flow_type == 'portfolio' %}selected{% endif %}>Known company</option>
+          <option value="intake" {% if filters.flow_type == 'intake' %}selected{% endif %}>New company</option>
+        </select>
+      </div>
+      <label class="dash-check">
+        <input type="checkbox" name="group" value="day" {% if group_by_day %}checked{% endif %}>
+        Group by day
+      </label>
+      <button type="submit" class="dash-btn primary">Apply</button>
+      <a href="/internal/submissions" class="dash-btn">Clear</a>
+    </form>
+
+    <div class="dash-quick">
+      <span class="dash-label">Quick range</span>
+      {% for key, label in [('today', 'Today'), ('week', 'This week'), ('month', 'This month')] %}
+      <a class="dash-btn {% if active_range == key %}active{% endif %}"
+         href="/internal/submissions?range={{ key }}{% if filters.q %}&q={{ filters.q | urlencode }}{% endif %}{% if filters.flow_type %}&flow={{ filters.flow_type }}{% endif %}{% if group_by_day %}&group=day{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="dash-toolbar">
+      <div class="dash-count">
+        {{ submissions | length }} submission{{ '' if submissions | length == 1 else 's' }}
+        {% if filters.date_from or filters.date_to %}
+          &middot; {{ filters.date_from.strftime('%b %-d, %Y') if filters.date_from else 'start' }}
+          to {{ filters.date_to.strftime('%b %-d, %Y') if filters.date_to else 'today' }}
+        {% endif %}
+        {% if filters.q %}&middot; matching "{{ filters.q }}"{% endif %}
+      </div>
+      {% if submissions %}
+      <div class="dash-exports">
+        <a class="dash-btn" href="/internal/submissions/export.csv{% if query_string %}?{{ query_string }}{% endif %}">Download CSV</a>
+        <button type="button" class="dash-btn" onclick="window.print()">Save as PDF</button>
+      </div>
+      {% endif %}
+    </div>
+    <p class="print-only">IncentiveIQ submissions export &middot; Times shown in Baltimore time.</p>
 
     {% if submissions %}
     <table class="dash-table" id="submissions-table">
@@ -97,7 +240,13 @@
         </tr>
       </thead>
       <tbody>
+        {% set ns = namespace(day=None) %}
         {% for s in submissions %}
+        {% if group_by_day and s.day != ns.day %}
+          {% set ns.day = s.day %}
+          {% set day_count = submissions | selectattr('day', 'equalto', s.day) | list | length %}
+          <tr class="group-row"><td colspan="12">{{ s.day.strftime('%A, %b %-d, %Y') if s.day else 'No date' }}<span class="group-count">{{ day_count }} submission{{ '' if day_count == 1 else 's' }}</span></td></tr>
+        {% endif %}
         <tr onclick="window.location.href='/internal/submissions/{{ s.submission_id }}'"
             data-date="{{ s.created_at.isoformat() if s.created_at else '' }}"
             data-company="{{ (s.company_name or '') | lower }}"
@@ -107,7 +256,7 @@
             data-applied="{{ s.feedback_count }}"
             data-rating="{{ s.relevance_rating if s.relevance_rating else -1 }}"
             data-contact="{{ 1 if s.wants_contact else 0 }}">
-          <td>{{ s.created_at.strftime('%b %-d, %Y %-I:%M %p') if s.created_at else '' }}</td>
+          <td>{{ s.created_at | eastern }}</td>
           <td><a href="/internal/submissions/{{ s.submission_id }}">{{ s.company_name or '(unnamed)' }}</a></td>
           <td>{{ s.stage or '&mdash;' }}</td>
           <td>{{ s.industry or '&mdash;' }}</td>
@@ -128,7 +277,7 @@
       </tbody>
     </table>
     {% else %}
-    <p class="empty-note">No submissions yet.</p>
+    <p class="empty-note">{% if filters.q or filters.date_from or filters.date_to or filters.flow_type %}No submissions match these filters.{% else %}No submissions yet.{% endif %}</p>
     {% endif %}
   </div>
 
@@ -158,6 +307,9 @@
           clearArrows();
           header.querySelector('.arrow').textContent = currentDir === 1 ? '\u2191' : '\u2193';
 
+          // Sorting a grouped list would scramble the day headers, so
+          // clicking a column header switches back to a flat list.
+          tbody.querySelectorAll('tr.group-row').forEach(function(g) { g.remove(); });
           var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
           rows.sort(function(a, b) {
             var av = a.getAttribute('data-' + key);

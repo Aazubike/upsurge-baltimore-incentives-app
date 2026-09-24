@@ -1,11 +1,14 @@
+import csv
+import io
 import os
 import secrets
 import threading
+from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, Request, Form, HTTPException, Depends
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, Response
 from pydantic import BaseModel
 from typing import List, Optional
 from uuid import uuid4
@@ -23,11 +26,13 @@ from app.enterprise_zones import check_enterprise_zone_address
 from app.submission_logger import (
     log_submission, update_feedback, log_link_click, log_program_feedback,
     save_feedback_response, get_recent_submissions, get_submission_detail,
+    search_submissions, to_eastern, format_eastern,
 )
 
 app = FastAPI(title="Baltimore Incentives Matching Tool")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+templates.env.filters["eastern"] = format_eastern
 
 COUNTIES = ["Baltimore City", "Baltimore County", "Anne Arundel", "Harford", "Howard", "Carroll", "Cecil"]
 STAGES = ["pre-seed", "seed", "early", "growth", "established"]
@@ -550,13 +555,118 @@ def feedback_thanks(request: Request, job_id: str = ""):
     })
 
 
+def _parse_date(value: str):
+    """'2026-09-24' -> date, or None if blank/invalid."""
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value.strip(), "%Y-%m-%d").date()
+    except ValueError:
+        return None
+
+
+def _dashboard_filters(q: str, date_from: str, date_to: str, flow: str, range_: str):
+    """
+    Turns the dashboard's query-string values into search arguments.
+    range_ is a quick option (today / week / month) that sets the dates for
+    you; picking one overrides any typed-in dates. Days are Baltimore time.
+    """
+    today = to_eastern(datetime.now(timezone.utc)).date()
+    start, end = _parse_date(date_from), _parse_date(date_to)
+    if range_ == "today":
+        start, end = today, today
+    elif range_ == "week":
+        start, end = today - timedelta(days=today.weekday()), today
+    elif range_ == "month":
+        start, end = today.replace(day=1), today
+    flow = flow if flow in ("portfolio", "intake") else ""
+    return {
+        "q": (q or "").strip(),
+        "date_from": start,
+        "date_to": end,
+        "flow_type": flow,
+    }
+
+
 @app.get("/internal/submissions")
-def internal_submissions(request: Request, authorized: bool = Depends(_check_dashboard_auth)):
-    submissions = get_recent_submissions(limit=100)
+def internal_submissions(
+    request: Request,
+    q: str = "",
+    date_from: str = "",
+    date_to: str = "",
+    flow: str = "",
+    range: str = "",
+    group: str = "",
+    authorized: bool = Depends(_check_dashboard_auth),
+):
+    filters = _dashboard_filters(q, date_from, date_to, flow, range)
+    submissions = search_submissions(**filters)
     return templates.TemplateResponse("internal_submissions.html", {
         "request": request,
         "submissions": submissions,
+        "filters": filters,
+        "active_range": range if range in ("today", "week", "month") else "",
+        "group_by_day": group == "day",
+        "query_string": str(request.url.query),
     })
+
+
+def _tier_count(value) -> int:
+    return len(value.split("|")) if value else 0
+
+
+@app.get("/internal/submissions/export.csv")
+def internal_submissions_csv(
+    q: str = "",
+    date_from: str = "",
+    date_to: str = "",
+    flow: str = "",
+    range: str = "",
+    authorized: bool = Depends(_check_dashboard_auth),
+):
+    """Downloads the currently filtered submissions as a CSV (opens in Excel).
+    Must stay above the /internal/submissions/{submission_id} route, or
+    'export.csv' would be treated as a submission id."""
+    filters = _dashboard_filters(q, date_from, date_to, flow, range)
+    rows = search_submissions(**filters)
+
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow([
+        "Date (Baltimore time)", "Company", "Flow", "Region", "Stage", "Industry",
+        "Employees", "Annual revenue", "Ownership", "ZIP", "Street address",
+        "Opportunity Zone", "OZ tract",
+        "Matches 90+ (count)", "Matches 80-89 (count)", "Matches 75-79 (count)",
+        "Matches 90+", "Matches 80-89", "Matches 75-79",
+        "Clicks", "Applied responses", "Rating (1-3)", "Found what needed",
+        "Wants contact", "Contact email", "Contact phone", "Submission ID",
+    ])
+    for r in rows:
+        local = r.get("created_local")
+        writer.writerow([
+            local.strftime("%Y-%m-%d %I:%M %p") if local else "",
+            r.get("company_name") or "", r.get("flow_type") or "", r.get("region") or "",
+            r.get("stage") or "", r.get("industry") or "",
+            r.get("employee_count") or "", r.get("annual_revenue") or "",
+            r.get("ownership") or "", r.get("zip_code") or "", r.get("street_address") or "",
+            "Yes" if r.get("oz_eligible") else "No", r.get("oz_tract") or "",
+            _tier_count(r.get("tier_90_plus")), _tier_count(r.get("tier_80_89")), _tier_count(r.get("tier_75_79")),
+            (r.get("tier_90_plus") or "").replace("|", "; "),
+            (r.get("tier_80_89") or "").replace("|", "; "),
+            (r.get("tier_75_79") or "").replace("|", "; "),
+            r.get("click_count") or 0, r.get("feedback_count") or 0,
+            r.get("relevance_rating") or "", r.get("found_what_needed") or "",
+            "Yes" if r.get("wants_contact") else "No",
+            r.get("contact_email") or "", r.get("contact_phone") or "",
+            r.get("submission_id") or "",
+        ])
+
+    filename = f"incentiveiq_submissions_{to_eastern(datetime.now(timezone.utc)).strftime('%Y-%m-%d')}.csv"
+    return Response(
+        content=buffer.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @app.get("/internal/submissions/{submission_id}")

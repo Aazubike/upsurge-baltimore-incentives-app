@@ -12,6 +12,31 @@ import psycopg2
 import psycopg2.extras
 
 
+try:
+    from zoneinfo import ZoneInfo
+    EASTERN = ZoneInfo("America/New_York")
+except Exception:  # time zone data missing on the server: fall back to UTC
+    print("[submission_logger] America/New_York time zone unavailable, using UTC")
+    EASTERN = timezone.utc
+
+
+def to_eastern(dt):
+    """Timestamps are stored in UTC. Converts one to Baltimore local time
+    for display and for grouping/filtering by day. A timestamp with no
+    time zone attached is treated as UTC."""
+    if dt is None:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(EASTERN)
+
+
+def format_eastern(dt, fmt="%b %-d, %Y %-I:%M %p"):
+    """Jinja filter: formats a stored UTC timestamp in Baltimore local time."""
+    local = to_eastern(dt)
+    return local.strftime(fmt) if local else ""
+
+
 def _get_connection():
     database_url = os.environ.get("DATABASE_URL")
     if not database_url:
@@ -239,6 +264,69 @@ def get_recent_submissions(limit: int = 50) -> list:
         return [dict(row) for row in cur.fetchall()]
     finally:
         conn.close()
+
+
+def search_submissions(q: str = "", date_from=None, date_to=None, flow_type: str = "", limit: int = 5000) -> list:
+    """
+    Powers the filtered dashboard list and the CSV export. Every argument is
+    optional:
+      q          -- part of a company name (case-insensitive)
+      date_from  -- a date; only submissions on or after this day
+      date_to    -- a date; only submissions on or before this day
+      flow_type  -- "portfolio" (known company) or "intake" (new company)
+    Days are Baltimore local time, not UTC, so a match submitted at 9pm
+    counts as that day. Newest first. Each row also gets "created_local"
+    (the local timestamp) and "day" (the local date) for grouping.
+    """
+    where, params = [], []
+    if q:
+        where.append("s.company_name ILIKE %s")
+        params.append(f"%{q}%")
+    if flow_type:
+        where.append("s.flow_type = %s")
+        params.append(flow_type)
+    where_sql = ("WHERE " + " AND ".join(where)) if where else ""
+    params.append(limit)
+
+    conn = _get_connection()
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(
+            f"""
+            SELECT
+                s.submission_id, s.created_at, s.company_name, s.flow_type,
+                s.region, s.stage, s.industry, s.employee_count, s.annual_revenue,
+                s.ownership, s.zip_code, s.street_address, s.oz_eligible, s.oz_tract,
+                s.tier_90_plus, s.tier_80_89, s.tier_75_79,
+                s.wants_contact, s.contact_email, s.contact_phone,
+                (SELECT COUNT(*) FROM link_clicks c WHERE c.submission_id = s.submission_id) AS click_count,
+                (SELECT COUNT(*) FROM program_feedback pf WHERE pf.submission_id = s.submission_id) AS feedback_count,
+                fr.relevance_rating, fr.found_what_needed
+            FROM match_submissions s
+            LEFT JOIN feedback_responses fr ON fr.submission_id = s.submission_id
+            {where_sql}
+            ORDER BY s.created_at DESC
+            LIMIT %s
+            """,
+            params,
+        )
+        rows = [dict(row) for row in cur.fetchall()]
+    finally:
+        conn.close()
+
+    # Day filtering happens here rather than in SQL so it uses Baltimore
+    # local days regardless of how the database stores the timestamp.
+    results = []
+    for row in rows:
+        local = to_eastern(row.get("created_at"))
+        row["created_local"] = local
+        row["day"] = local.date() if local else None
+        if date_from and (row["day"] is None or row["day"] < date_from):
+            continue
+        if date_to and (row["day"] is None or row["day"] > date_to):
+            continue
+        results.append(row)
+    return results
 
 
 def get_submission_detail(submission_id: str) -> dict:

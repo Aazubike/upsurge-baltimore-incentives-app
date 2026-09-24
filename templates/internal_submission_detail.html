@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ s.company_name }} — Internal</title>
+  <title>{{ s.company_name }} | Internal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
@@ -66,6 +66,33 @@
     }
     .dash-table tr:last-child td { border-bottom: none; }
     .empty-note { color: var(--gray-dim); font-size: 0.88rem; }
+    .detail-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .detail-top .back { margin-bottom: 0; }
+    .dash-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--off-white);
+      background: transparent;
+      border: 1px solid var(--hairline);
+      border-radius: 4px;
+      padding: 0.45rem 0.8rem;
+      cursor: pointer;
+    }
+    .dash-btn:hover { border-color: var(--gray-dim); }
+    @media print {
+      @page { margin: 0.6in; }
+      body { background: #fff !important; color: #000 !important; }
+      .site-header, .detail-top { display: none !important; }
+      .dash-wrap { max-width: none; padding: 0; }
+      .dash-wrap h1, h2.section-h, .detail-grid .v, .dash-table td { color: #000 !important; }
+      .detail-grid .k, .dash-table th { color: #444 !important; }
+      .detail-card, .dash-table { background: #fff !important; border: 1px solid #999 !important; }
+      .dash-table th, .dash-table td { border-bottom: 1px solid #ccc; font-size: 8.5pt; }
+      .detail-card, .dash-table tr { page-break-inside: avoid; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
   </style>
 </head>
 <body>
@@ -75,12 +102,15 @@
   </header>
 
   <div class="dash-wrap">
-    <a href="/internal/submissions" class="back">&larr; All submissions</a>
+    <div class="detail-top">
+      <a href="/internal/submissions" class="back">&larr; All submissions</a>
+      <button type="button" class="dash-btn" onclick="window.print()">Save as PDF</button>
+    </div>
     <h1>{{ s.company_name or '(unnamed)' }}</h1>
 
     <div class="detail-card">
       <div class="detail-grid">
-        <div><div class="k">Submitted</div><div class="v">{{ s.created_at.strftime('%b %-d, %Y %-I:%M %p') if s.created_at else '' }}</div></div>
+        <div><div class="k">Submitted</div><div class="v">{{ s.created_at | eastern }}</div></div>
         <div><div class="k">Flow</div><div class="v">{{ s.flow_type }}</div></div>
         <div><div class="k">Region</div><div class="v">{{ s.region }}</div></div>
         <div><div class="k">Stage</div><div class="v">{{ s.stage }}</div></div>
@@ -127,7 +157,7 @@
       <thead><tr><th>Program</th><th>Clicked at</th></tr></thead>
       <tbody>
         {% for c in s.clicks %}
-        <tr><td>{{ c.program_name }}</td><td>{{ c.clicked_at.strftime('%b %-d, %Y %-I:%M %p') if c.clicked_at else '' }}</td></tr>
+        <tr><td>{{ c.program_name }}</td><td>{{ c.clicked_at | eastern }}</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -141,7 +171,7 @@
       <thead><tr><th>Program</th><th>Response</th><th>At</th></tr></thead>
       <tbody>
         {% for pf in s.program_feedback %}
-        <tr><td>{{ pf.program_name }}</td><td>{{ 'Applied' if pf.thumbs == 'applied' else 'Not yet' }}</td><td>{{ pf.created_at.strftime('%b %-d, %Y %-I:%M %p') if pf.created_at else '' }}</td></tr>
+        <tr><td>{{ pf.program_name }}</td><td>{{ 'Applied' if pf.thumbs == 'applied' else 'Not yet' }}</td><td>{{ pf.created_at | eastern }}</td></tr>
         {% endfor %}
       </tbody>
     </table>
