@@ -3,7 +3,7 @@ Stage 1 of the matching pipeline: deterministic rules-based filter.
 
 This runs BEFORE Gemini touches anything. It uses only the structured
 Norm_* columns built during data cleaning. Gemini never re-decides a hard
-eligibility gate here — it only reasons over whatever survives this filter,
+eligibility gate here. It only reasons over whatever survives this filter,
 per the schematic. Anything the normalization couldn't parse cleanly
 (Needs_Manual_Review == True) is never hard-excluded by this filter; it's
 passed through and left for Gemini to reason about using the raw text.
@@ -16,7 +16,8 @@ Answers dict shape:
     "annual_revenue": 450000,                    # dollars, or None if unknown/declined
     "industry": "Enterprise Technology",         # free text, matched loosely against exclusions
     "mwbe_groups": ["women-owned"],              # list, possibly empty
-    "zip_code": "21201",                         # optional, used for Enterprise Zone matching
+    "zip_code": "21201",                         # optional, ZIP-level Enterprise Zone fallback
+    "ez_result": {...},                          # optional, from enterprise_zones.check_enterprise_zone_address()
     "oz_eligible": True,                         # optional, from opportunity_zones.check_opportunity_zone()
     "oz_tract": "24001000800",                   # optional, the matched census tract
 }
@@ -108,37 +109,88 @@ def _is_named_enterprise_zone_program(row) -> bool:
     return isinstance(name, str) and "enterprise zone" in name.lower()
 
 
-def _enterprise_zone_ok(row, zip_code) -> bool:
+def _ez_address_conclusive(ez_result) -> bool:
+    """True if the address-level check gave a real yes or no answer."""
+    return bool(ez_result) and ez_result.get("status") in ("in_zone", "not_in_zone")
+
+
+def _enterprise_zone_ok(row, zip_code, ez_result=None) -> bool:
     """
-    Hard exclude Enterprise Zone programs unless we have a zip code AND it
-    genuinely matches a real designated zone. No zip = no evidence = excluded
-    (we don't show unverifiable claims). Zip matches = let it through to be
-    scored normally, with a caveat note attached (see enterprise_zone_note).
+    Hard exclude Enterprise Zone programs unless there's real evidence the
+    business is in a designated zone. Checked in this order:
+
+      1. Address-level (exact boundary check against the State's official
+         zone map). If it gave a conclusive answer, that answer wins:
+         inside an active zone = through, outside every zone = excluded,
+         even if the ZIP code overlaps a zone.
+      2. ZIP-level fallback, used only when the address check wasn't run or
+         wasn't conclusive (no street address, address didn't geocode, or
+         the State's map service didn't respond). Zip matches = through,
+         with a caveat note. No zip = no evidence = excluded.
     """
     if not _is_named_enterprise_zone_program(row):
         return True
+    if _ez_address_conclusive(ez_result):
+        return ez_result["status"] == "in_zone"
     if not zip_code:
         return False
     return zip_has_enterprise_zone(zip_code)
 
 
-def enterprise_zone_note(row, zip_code):
+def enterprise_zone_note(row, zip_code, ez_result=None):
     """
-    For programs that passed _enterprise_zone_ok (so a zip match is already
-    confirmed), returns a specific caveat naming the actual zone(s) -- since
-    zones are defined by exact site acreage, not the whole zip code. Returns
-    None for anything that isn't an Enterprise Zone program.
+    For programs that passed _enterprise_zone_ok, returns a note naming the
+    actual zone(s) and saying how the match was made, so the person knows
+    how much to trust it. Returns None for anything that isn't an
+    Enterprise Zone program.
     """
-    if not _is_named_enterprise_zone_program(row) or not zip_code:
+    if not _is_named_enterprise_zone_program(row):
+        return None
+
+    if _ez_address_conclusive(ez_result) and ez_result["status"] == "in_zone":
+        active = [z for z in ez_result.get("zones", []) if not z.get("expired")]
+        zone_list = ", ".join(z["name"] for z in active if z.get("name"))
+        note = f"Address verified in the {zone_list}"
+        focus = [f["name"] for f in ez_result.get("focus_areas", []) if f.get("name")]
+        if focus:
+            note += f" and the {', '.join(focus)} Focus Area"
+        return note
+
+    if not zip_code:
         return None
     zones = zone_names_for_zip(zip_code)
     if not zones:
         return None
     zone_list = ", ".join(zones)
     return (
-        f"Your ZIP code ({zip_code}) includes: {zone_list}. Zones are defined by exact site "
-        f"acreage, not the whole ZIP code -- confirm your address falls inside the boundary."
+        f"Your ZIP code ({zip_code}) includes: {zone_list}. This match is based on ZIP code "
+        f"only. Zones are defined by exact site boundaries, not the whole ZIP code, so "
+        f"confirm your address falls inside the zone."
     )
+
+
+def enterprise_zone_could_apply(answers: dict) -> bool:
+    """
+    Cheap local pre-check run BEFORE paying for the address-level network
+    calls (Census geocoder + State zone map): is there an Enterprise-Zone-named
+    program this profile would otherwise pass, ignoring the zone gate itself?
+    Mirrors opportunity_zone_could_apply.
+    """
+    df = get_incentives()
+    ez_rows = df[df.apply(_is_named_enterprise_zone_program, axis=1)]
+    if ez_rows.empty:
+        return False
+    mask = ez_rows.apply(
+        lambda row: (
+            _county_ok(row, answers.get("county"))
+            and _stage_ok(row, answers.get("stage"))
+            and _mwbe_ok(row, answers.get("mwbe_groups", []))
+            and _employee_ok(row, answers.get("employee_count"))
+            and _industry_ok(row, answers.get("industry"))
+        ),
+        axis=1,
+    )
+    return bool(mask.any())
 
 
 def _is_named_opportunity_zone_program(row) -> bool:
@@ -167,10 +219,7 @@ def opportunity_zone_note(row, oz_eligible: bool, oz_tract):
     """
     if not _is_named_opportunity_zone_program(row) or not oz_eligible or not oz_tract:
         return None
-    return (
-        f"Your address matched census tract {oz_tract}, a designated Qualified "
-        f"Opportunity Zone."
-    )
+    return f"Address verified in Opportunity Zone tract {oz_tract}"
 
 
 def opportunity_zone_could_apply(answers: dict) -> bool:
@@ -208,6 +257,7 @@ def filter_eligible(answers: dict) -> pd.DataFrame:
     df = get_incentives()
     zip_code = answers.get("zip_code")
     oz_eligible = answers.get("oz_eligible", False)
+    ez_result = answers.get("ez_result")
 
     keep_mask = df.apply(
         lambda row: (
@@ -216,7 +266,7 @@ def filter_eligible(answers: dict) -> pd.DataFrame:
             and _mwbe_ok(row, answers.get("mwbe_groups", []))
             and _employee_ok(row, answers.get("employee_count"))
             and _industry_ok(row, answers.get("industry"))
-            and _enterprise_zone_ok(row, zip_code)
+            and _enterprise_zone_ok(row, zip_code, ez_result)
             and _opportunity_zone_ok(row, oz_eligible)
         ),
         axis=1,

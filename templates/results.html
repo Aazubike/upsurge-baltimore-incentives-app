@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your matches — UpSurge Baltimore</title>
+  <title>Your matches | UpSurge Baltimore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
@@ -38,23 +38,45 @@
     }
     .rate-popup .rate-close { opacity: 0.6; font-size: 1rem; }
     .results-feedback-cta {
-      margin-top: 2.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(0,0,0,0.1);
-      font-size: 0.95rem;
+      margin-top: 3rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--surface-2);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
-    .quick-rating-question { margin-bottom: 0.6rem; }
-    .quick-rating-buttons { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .quick-rating-question {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gray-dim);
+    }
+    .quick-rating-buttons { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .quick-rating-btn {
-      border: 1px solid rgba(0,0,0,0.2);
-      background: #fff;
-      border-radius: 999px;
-      padding: 0.45rem 1rem;
-      font-size: 0.9rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--off-white);
+      background: transparent;
+      border: 1px solid var(--surface-2);
+      border-radius: 4px;
+      padding: 0.35rem 0.75rem;
       cursor: pointer;
+      transition: border-color 0.15s ease, color 0.15s ease;
     }
-    .quick-rating-btn.selected { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-    .quick-rating-thanks a { margin-left: 0.35rem; }
+    .quick-rating-btn:hover { border-color: var(--gray-dim); }
+    .quick-rating-btn.selected { border-color: var(--red); color: var(--red); }
+    .quick-rating-thanks {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--gray-dim);
+    }
+    .quick-rating-thanks a { margin-left: 0.35rem; color: var(--off-white); }
     .result-card.card-visited { opacity: 0.6; transition: opacity 0.3s ease; }
     .applied-badge {
       display: inline-block;
@@ -160,6 +182,54 @@
       text-align: center;
     }
     .category-filter-clear:hover { color: var(--off-white); }
+    .category-filter-section {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gray-dim);
+      padding: 0.6rem 0.75rem 0.25rem;
+      border-top: 1px solid var(--surface-2);
+      margin-top: 0.35rem;
+    }
+    .verified-badge {
+      display: inline-block;
+      background: #1a7f37;
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: default;
+    }
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gray-dim);
+    }
+    .pagination-controls button {
+      font-family: inherit;
+      font-size: inherit;
+      text-transform: inherit;
+      letter-spacing: inherit;
+      color: var(--off-white);
+      background: transparent;
+      border: 1px solid var(--surface-2);
+      border-radius: 4px;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+    .pagination-controls button:hover { border-color: var(--gray-dim); }
   </style>
 </head>
 <body>
@@ -190,7 +260,7 @@
     {% else %}
     <h1 class="flow-h1">No matches found</h1>
     <p class="flow-sub">
-      This usually means the criteria were narrow — try adjusting your answers.
+      This usually means the criteria were narrow. Try adjusting your answers.
       {% if gemini_error %}<span class="notice">{{ gemini_error }}</span>{% endif %}
     </p>
     {% endif %}
@@ -216,6 +286,7 @@
           <h3>{{ program['Program Name'] }}</h3>
           {% if program.get('Acronym') and program['Acronym'] == program['Acronym'] %}<span class="acronym">{{ program['Acronym'] }}</span>{% endif %}
           {{ tier_badge(program.get('match_tier')) }}
+          {% if program.get('verified_note') %}<span class="verified-badge" title="{{ program['verified_note'] }}">Zone verified</span>{% endif %}
           {% if program.get('fit_score') and program.get('breakdown') %}
           <details class="score-toggle">
             <summary class="fit-score">{{ program['fit_score'] }}% fit</summary>
@@ -280,18 +351,18 @@
           {{ cat }}
         </label>
         {% endfor %}
+        <div class="category-filter-section">Hide zone programs</div>
+        {% for cat in ['Enterprise Zones', 'Opportunity Zones'] %}
+        <label class="category-filter-option">
+          <input type="checkbox" data-hide="{{ cat }}">
+          Hide {{ cat }}
+        </label>
+        {% endfor %}
         <div class="category-filter-clear" id="category-filter-clear">Clear filters</div>
       </div>
     </div>
     {% endif %}
 
-    {% if possible_list %}
-    <div class="pagination-controls" id="top-pagination">
-      <button type="button" onclick="goToPage(-1)" id="page-prev">&#8249; Previous</button>
-      <span id="page-label">Page 1 of {{ ((possible_list|length - 1) // 12) + 2 }}</span>
-      <button type="button" onclick="goToPage(1)" id="page-next">Next &#8250;</button>
-    </div>
-    {% endif %}
 
     <div id="match-section">
       {% if match_baltimore %}
@@ -305,7 +376,7 @@
       {% if match_statewide %}
       <div class="section-divider">
         <h2>Statewide Maryland Programs</h2>
-        <p>Not Baltimore-specific, but you still qualify — broader in scope.</p>
+        <p>Not Baltimore-specific, but you still qualify. Broader in scope.</p>
       </div>
       <div class="results-list">
         {% for program in match_statewide %}
@@ -344,18 +415,23 @@
         var totalPages = 1 + possiblePageCount;
         var currentPage = 1;
         var selectedCategories = [];
+        var hiddenCategories = [];
 
         var matchSection = document.getElementById('match-section');
         var possibleSection = document.getElementById('possible-section');
 
         function cardMatchesFilter(card) {
-          if (!card || selectedCategories.length === 0) return true;
+          if (!card) return true;
           var cats = (card.getAttribute('data-categories') || '').split(',');
+          // "Hide" options win: a hidden zone program never shows, even if
+          // it also matches a selected type (most zone programs are Tax).
+          if (hiddenCategories.some(function(h) { return cats.indexOf(h) !== -1; })) return false;
+          if (selectedCategories.length === 0) return true;
           return selectedCategories.some(function(sel) { return cats.indexOf(sel) !== -1; });
         }
 
         function render() {
-          var filtering = selectedCategories.length > 0;
+          var filtering = selectedCategories.length > 0 || hiddenCategories.length > 0;
 
           if (matchSection) {
             matchSection.querySelectorAll('.result-card').forEach(function(card) {
@@ -421,8 +497,9 @@
         var filterClear = document.getElementById('category-filter-clear');
 
         function updateFilterButton() {
-          if (selectedCategories.length > 0) {
-            filterCount.textContent = selectedCategories.length;
+          var activeCount = selectedCategories.length + hiddenCategories.length;
+          if (activeCount > 0) {
+            filterCount.textContent = activeCount;
             filterCount.style.display = '';
           } else {
             filterCount.style.display = 'none';
@@ -445,12 +522,14 @@
 
           filterDropdown.querySelectorAll('input[type="checkbox"]').forEach(function(box) {
             box.addEventListener('change', function() {
-              var cat = box.getAttribute('data-category');
-              var idx = selectedCategories.indexOf(cat);
+              var isHide = box.hasAttribute('data-hide');
+              var cat = isHide ? box.getAttribute('data-hide') : box.getAttribute('data-category');
+              var list = isHide ? hiddenCategories : selectedCategories;
+              var idx = list.indexOf(cat);
               if (box.checked && idx === -1) {
-                selectedCategories.push(cat);
+                list.push(cat);
               } else if (!box.checked && idx !== -1) {
-                selectedCategories.splice(idx, 1);
+                list.splice(idx, 1);
               }
               updateFilterButton();
               currentPage = 1;
@@ -461,6 +540,7 @@
           if (filterClear) {
             filterClear.addEventListener('click', function() {
               selectedCategories = [];
+              hiddenCategories = [];
               filterDropdown.querySelectorAll('input[type="checkbox"]').forEach(function(box) { box.checked = false; });
               updateFilterButton();
               currentPage = 1;

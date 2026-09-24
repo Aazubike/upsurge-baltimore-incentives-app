@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How Ranking Works — UpSurge Baltimore</title>
+  <title>How Ranking Works | UpSurge Baltimore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
@@ -24,17 +24,29 @@
     </p>
 
     <div class="method-block">
-      <h3 class="method-h3">Step 1 — Hard eligibility filter</h3>
+      <h3 class="method-h3">Where the data comes from</h3>
       <p class="method-p">
-        Before any AI is involved, a deterministic rules engine checks your region, business
-        stage, and any explicit industry exclusions against every program's stated
-        requirements. If a program flatly doesn't apply to your region or stage, it's
-        removed here — no AI judgment call, just a direct rule.
+        Incentive program data on UpSurge Baltimore is sourced from the
+        <a href="https://compass.maryland.gov/" target="_blank" rel="noopener">Maryland Community Compass</a>,
+        a neighborhood development platform created by the Maryland State Innovation Team in the
+        Office of Governor Wes Moore that centralizes data insights, funding resources, and support
+        to foster thriving businesses and communities statewide. UpSurge Baltimore provides
+        company-profile matching and scoring on top of the State's dataset.
       </p>
     </div>
 
     <div class="method-block">
-      <h3 class="method-h3">Step 2 — Weighted fit scoring</h3>
+      <h3 class="method-h3">Step 1: Hard eligibility filter</h3>
+      <p class="method-p">
+        Before any AI is involved, a deterministic rules engine checks your region, business
+        stage, and any explicit industry exclusions against every program's stated
+        requirements. If a program flatly doesn't apply to your region or stage, it's
+        removed here. No AI judgment call, just a direct rule.
+      </p>
+    </div>
+
+    <div class="method-block">
+      <h3 class="method-h3">Step 2: Weighted fit scoring</h3>
       <p class="method-p">
         Everything that survives the hard filter gets scored by Gemini against a fixed rubric:
       </p>
@@ -47,16 +59,16 @@
         <div class="rubric-row"><span class="rubric-label">Overall program relevance</span><span class="rubric-bar" style="width:20%"></span><span class="rubric-pct">20%</span></div>
       </div>
       <p class="method-p">
-        Some programs (from the Maryland Business Compass dataset) don't have data
+        Some programs (from the Maryland Community Compass dataset) don't have data
         for stage, size, or ownership at all. When that's the case, that dimension is
         left out of the score entirely rather than penalizing the program for missing data.
       </p>
     </div>
 
     <div class="method-block">
-      <h3 class="method-h3">Step 3 — Match tiers</h3>
+      <h3 class="method-h3">Step 3: Match tiers</h3>
       <p class="method-p">
-        Only two tiers are ever shown to you — anything scoring below 75% is
+        Only two tiers are ever shown to you. Anything scoring below 75% is
         left out entirely rather than cluttering your results with weak fits:
       </p>
 
@@ -72,33 +84,36 @@
       </div>
 
       <div class="tier-legend">
-        <span class="tier-badge tier-strong">Match</span><span class="tier-desc">90%+ fit — shown first</span>
-        <span class="tier-badge tier-possible">Possible Match</span><span class="tier-desc">75&ndash;89% fit — shown on later pages</span>
+        <span class="tier-badge tier-strong">Match</span><span class="tier-desc">90%+ fit, shown first</span>
+        <span class="tier-badge tier-possible">Possible Match</span><span class="tier-desc">75&ndash;89% fit, shown on later pages</span>
       </div>
       <p class="method-p">
-        Below 75%, a program isn't shown at all — we'd rather give you a short,
+        Below 75%, a program isn't shown at all. We'd rather give you a short,
         confident list than a long one padded with weak fits.
       </p>
     </div>
 
     <div class="method-block">
-      <h3 class="method-h3">Step 4 — Enterprise Zone programs</h3>
+      <h3 class="method-h3">Step 4: Enterprise Zone and Opportunity Zone programs</h3>
       <p class="method-p">
-        If a program requires being in a Maryland Enterprise Zone, it's checked
-        against your ZIP code against real state Enterprise Zone data — not guessed.
-        No ZIP entered means those programs are left out; a ZIP that matches a real
-        zone shows the specific zone by name. One honest limitation: this check is
-        ZIP-code level, not exact-address level, so it's a strong signal but not a
-        substitute for confirming your specific address against the zone boundary.
+        Zone programs are only shown when your street address is confirmed to be
+        inside the zone. Enterprise Zones are checked against the State's official
+        zone boundaries, and Opportunity Zones against the list of eligible census
+        tracts. Confirmed programs are marked Zone verified.
+      </p>
+      <p class="method-p">
+        If you enter only a ZIP code, Enterprise Zone programs are matched by ZIP
+        instead. That's a strong signal but not a confirmation, so confirm your
+        address with the program. With no address or ZIP, zone programs are left out.
       </p>
     </div>
 
     <div class="method-block">
-      <h3 class="method-h3">Step 5 — Baltimore-area vs. statewide</h3>
+      <h3 class="method-h3">Step 5: Baltimore-area vs. statewide</h3>
       <p class="method-p">
         Programs that specifically name a Baltimore-region county are shown first, since
         they're the most locally targeted. Statewide Maryland programs you also qualify
-        for are shown in a second section below — still eligible, just broader in scope.
+        for are shown in a second section below. They are still eligible, just broader in scope.
       </p>
     </div>
 

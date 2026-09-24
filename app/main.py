@@ -14,9 +14,12 @@ from app.data_loader import (
     load_all, get_incentives, search_companies, get_company_by_name,
     suggest_stage_from_rounds, get_industry_options, parse_employee_count,
 )
-from app.rules_engine import filter_eligible, opportunity_zone_could_apply
+from app.rules_engine import (
+    filter_eligible, opportunity_zone_could_apply, enterprise_zone_could_apply,
+)
 from app.gemini_matcher import rank_shortlist
 from app.opportunity_zones import check_opportunity_zone
+from app.enterprise_zones import check_enterprise_zone_address
 from app.submission_logger import (
     log_submission, update_feedback, log_link_click, log_program_feedback,
     save_feedback_response, get_recent_submissions, get_submission_detail,
@@ -225,6 +228,18 @@ def _run_matching_job(
         else:
             oz_eligible, oz_tract = False, None
 
+        # Address-level Enterprise Zone check. Same cheap pre-check pattern as
+        # Opportunity Zones: only make the network calls if an Enterprise
+        # Zone program could actually apply to this profile. If there's no
+        # street address, or the check can't reach the State's map, ez_result
+        # stays None or non-conclusive and the rules engine falls back to the
+        # ZIP-level check.
+        if cleaned_address and enterprise_zone_could_apply(precheck_answers):
+            _update_job(job_id, message="Checking Enterprise Zone boundaries...")
+            ez_result = check_enterprise_zone_address(cleaned_address)
+        else:
+            ez_result = None
+
         answers = {
             "county": county,
             "stage": stage,
@@ -236,6 +251,7 @@ def _run_matching_job(
             "street_address": cleaned_address,
             "oz_eligible": oz_eligible,
             "oz_tract": oz_tract,
+            "ez_result": ez_result,
         }
 
         _update_job(job_id, message="Filtering eligible programs...")

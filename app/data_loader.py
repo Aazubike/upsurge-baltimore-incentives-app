@@ -42,6 +42,17 @@ CATEGORY_KEYWORDS = {
 }
 
 
+# Zone categories are assigned by program NAME, using the same rule as
+# rules_engine._is_named_enterprise_zone_program / _is_named_opportunity_zone_program,
+# so the results filter and the eligibility check always agree on which
+# programs count as zone programs. (Not imported from rules_engine because
+# rules_engine imports this file, which would be a circular import.)
+ZONE_CATEGORIES = {
+    "Enterprise Zones": "enterprise zone",
+    "Opportunity Zones": "opportunity zone",
+}
+
+
 def _classify_categories(row) -> list[str]:
     """
     Tags each program with one or more clean, human-facing categories for
@@ -56,10 +67,16 @@ def _classify_categories(row) -> list[str]:
         str(row.get(col, "") or "")
         for col in ("Instrument Type", "Incentive Purpose", "Incentive Area")
     ).lower()
-    return [
+    categories = [
         category for category, keywords in CATEGORY_KEYWORDS.items()
         if any(kw in haystack for kw in keywords)
     ]
+    name = row.get("Program Name", "")
+    if isinstance(name, str):
+        for category, phrase in ZONE_CATEGORIES.items():
+            if phrase in name.lower():
+                categories.append(category)
+    return categories
 
 
 def load_all():

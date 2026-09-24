@@ -43,7 +43,10 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-from app.rules_engine import locality_tier, enterprise_zone_note, opportunity_zone_note
+from app.rules_engine import (
+    locality_tier, enterprise_zone_note, opportunity_zone_note,
+    _is_named_enterprise_zone_program, _is_named_opportunity_zone_program,
+)
 from app import match_cache
 
 load_dotenv(Path(__file__).parent.parent / ".env")
@@ -103,14 +106,56 @@ def _get_client():
     return _client
 
 
+def _cap_priority(row) -> int:
+    """
+    Order used when the shortlist has to be cut down to the cap.
+      -1 = Enterprise Zone or Opportunity Zone program. These only reach the
+           shortlist when the rules engine found real evidence the company is
+           in a zone, so they are never cut.
+       0 = explicitly names a Baltimore-region county
+       1 = statewide program
+    """
+    if _is_named_enterprise_zone_program(row) or _is_named_opportunity_zone_program(row):
+        return -1
+    return locality_tier(row)
+
+
 def _cap_candidates(shortlist_df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     if len(shortlist_df) <= SAFETY_NET_MAX_CANDIDATES:
         return shortlist_df, 0
     df = shortlist_df.copy()
-    df["_tier"] = df.apply(locality_tier, axis=1)
-    df = df.sort_values("_tier")
+    df["_tier"] = df.apply(_cap_priority, axis=1)
+    df = df.sort_values("_tier", kind="stable")
     capped = df.head(SAFETY_NET_MAX_CANDIDATES).drop(columns=["_tier"])
     return capped, len(shortlist_df) - SAFETY_NET_MAX_CANDIDATES
+
+
+def verified_location_status(answers: dict) -> list:
+    """
+    Plain-English facts about zones the company's address has been VERIFIED
+    to be inside, for Gemini to see. Only address-level verified results are
+    included. ZIP-only matches are not, since those aren't confirmed.
+    Shared with match_cache.make_company_hash so the cache key changes
+    whenever these facts change.
+    """
+    facts = []
+    ez = answers.get("ez_result") or {}
+    if ez.get("status") == "in_zone":
+        for z in ez.get("zones", []):
+            if z.get("name") and not z.get("expired"):
+                facts.append(
+                    f"Address verified inside the {z['name']} (official Maryland "
+                    f"Department of Commerce Enterprise Zone boundaries)."
+                )
+        for f in ez.get("focus_areas", []):
+            if f.get("name"):
+                facts.append(f"Address verified inside the {f['name']} Enterprise Zone Focus Area.")
+    if answers.get("oz_eligible") and answers.get("oz_tract"):
+        facts.append(
+            f"Address verified in census tract {answers['oz_tract']}, a designated "
+            f"Qualified Opportunity Zone."
+        )
+    return facts
 
 
 def _build_prompt(answers: dict, shortlist_df: pd.DataFrame) -> str:
@@ -122,6 +167,9 @@ def _build_prompt(answers: dict, shortlist_df: pd.DataFrame) -> str:
         "industry": answers.get("industry"),
         "ownership_groups": answers.get("mwbe_groups", []),
     }
+    location_facts = verified_location_status(answers)
+    if location_facts:
+        company_profile["verified_location_status"] = location_facts
 
     programs = []
     for _, row in shortlist_df.iterrows():
@@ -187,6 +235,12 @@ CRITICAL RULES:
    must also stay generic ("MWBE required", not "Black-owned business match"
    or "Women-owned match" or any invented specificity). Inventing demographic
    detail not in the source data is a serious error.
+7. VERIFIED ZONES: if the company profile includes "verified_location_status",
+   those facts were confirmed by checking the company's street address against
+   official government zone boundaries. For any Enterprise Zone or Opportunity
+   Zone program matching a verified zone, treat the zone location requirement
+   as MET. Do not describe it as uncertain, "likely", or "if situated in a
+   zone", and score the location dimension as a full match.
 
 Candidate programs (already passed hard filters):
 {json.dumps(programs, indent=2)}
@@ -419,13 +473,24 @@ def rank_shortlist(answers: dict, shortlist_df: pd.DataFrame, progress_callback=
                                 "possible" if (fit_score is not None and fit_score >= 75) else "below_threshold"
         record["_tier"] = locality_tier(row)
 
-        zone_note = enterprise_zone_note(row, answers.get("zip_code"))
+        # Zone notes. An address-verified zone match is good news, so it goes
+        # in "verified_note" (shown as a confirmation, not a warning) and
+        # Gemini's own flag, if any, is kept. A ZIP-only Enterprise Zone
+        # match is still unconfirmed, so it stays in "flag" as a caveat.
+        verified_notes = []
+        ez_result = answers.get("ez_result") or {}
+        zone_note = enterprise_zone_note(row, answers.get("zip_code"), ez_result)
         if zone_note:
-            record["flag"] = zone_note
+            if ez_result.get("status") == "in_zone":
+                verified_notes.append(zone_note)
+            else:
+                record["flag"] = zone_note
 
         oz_note = opportunity_zone_note(row, answers.get("oz_eligible", False), answers.get("oz_tract"))
         if oz_note:
-            record["flag"] = oz_note
+            verified_notes.append(oz_note)
+
+        record["verified_note"] = " · ".join(verified_notes) if verified_notes else None
 
         merged.append(record)
 

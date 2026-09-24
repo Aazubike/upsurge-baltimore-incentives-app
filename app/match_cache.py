@@ -53,6 +53,13 @@ def make_company_hash(answers: dict) -> str:
         "industry": answers.get("industry"),
         "ownership_groups": sorted(answers.get("mwbe_groups", []) or []),
     }
+    # Verified zone facts are also sent to Gemini, so they're part of the key.
+    # Only added when present, so companies with no verified zone keep the
+    # same key as before and their existing cached results stay valid.
+    from app.gemini_matcher import verified_location_status
+    location_facts = verified_location_status(answers)
+    if location_facts:
+        relevant["verified_location_status"] = sorted(location_facts)
     raw = json.dumps(relevant, sort_keys=True, default=str)
     return hashlib.sha256(raw.encode()).hexdigest()
 
