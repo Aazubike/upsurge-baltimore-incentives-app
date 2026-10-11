@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UpSurge Baltimore — Incentives Matching</title>
+  <title>UpSurge Baltimore | Incentives Matching</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/style.css?v=20261011b">
 </head>
 <body>
 
   <div id="intro-overlay" class="intro-overlay">
     <div class="intro-glow"></div>
-    <img id="intro-logo" class="intro-logo" src="/static/img/upsurge_logo_white_transparent.png" alt="UpSurge Baltimore">
+    <img id="intro-logo" class="intro-logo" src="/static/img/upsurge_logo_header.png" alt="UpSurge Baltimore">
   </div>
 
   <header class="site-header">
-    <img id="header-logo" class="logo" src="/static/img/upsurge_logo_white_transparent.png" alt="UpSurge Baltimore" style="opacity: 0;">
+    <img id="header-logo" class="logo" src="/static/img/upsurge_logo_header.png" alt="UpSurge Baltimore" style="opacity: 0;">
   </header>
 
   <section class="hero" id="main-hero">
-    <div class="eyebrow">Baltimore region incentive matching</div>
-    <h1>{{ program_count }} programs. <span class="accent">One shortlist</span> for your company.</h1>
+    <div class="eyebrow">Baltimore Region Incentive Matching</div>
+    <h1>{{ program_count }} Programs. <span class="accent">One Shortlist</span> for Your Company.</h1>
     <p class="sub">Type your company name to get started.</p>
 
     <div class="unified-search-wrap" id="search-wrap">
@@ -29,31 +29,40 @@
              placeholder="Type your company name..." autocomplete="off">
       <div id="company-search-results" class="unified-search-results"></div>
       <a id="scratch-link" href="#" class="scratch-link" onclick="startFromScratch(); return false;">
-        Can't find it? Continue anyway <span class="arrow">&#8599;</span>
+        Can't Find It? Continue Anyway <span class="arrow">&#8599;</span>
       </a>
     </div>
 
     <div class="ledger-stat" id="ledger-stat">
       <span class="num">{{ program_count }}</span>
-      <span class="lbl">active programs across 7 counties</span>
+      <span class="lbl">Active Programs Across 7 Counties</span>
     </div>
+
+    <p class="data-source">
+      Incentive program data on UpSurge Baltimore is sourced from the
+      <a href="https://compass.maryland.gov/" target="_blank" rel="noopener">Maryland Community Compass</a>,
+      a neighborhood development platform created by the Maryland State Innovation Team in the
+      Office of Governor Wes Moore that centralizes data insights, funding resources, and support
+      to foster thriving businesses and communities statewide. UpSurge Baltimore provides
+      company-profile matching and scoring on top of the State's dataset.
+    </p>
   </section>
 
   <section class="flow-wrap questions-section" id="questions-section" style="display: none;">
-    <div class="eyebrow">Almost there</div>
-    <h1 class="flow-h1" id="questions-heading">A few quick things</h1>
+    <div class="eyebrow">Almost There</div>
+    <h1 class="flow-h1" id="questions-heading">A Few Quick Things</h1>
     <p class="flow-sub" id="questions-sub">We'll only ask what we don't already know.</p>
 
     <form method="POST" action="/match/results" class="flow-form">
       <div class="field-group">
-        <label class="field-label new">Company name</label>
-        <input type="text" name="company_name" id="f-company-name" placeholder="Your company name" required>
+        <label class="field-label new">Company Name</label>
+        <input type="text" name="company_name" id="f-company-name" placeholder="Your Company Name" required>
       </div>
 
       <div class="field-group">
         <label class="field-label new">County</label>
         <select name="county" id="f-county" required>
-          <option value="" disabled selected>Select a county</option>
+          <option value="" disabled selected>Select a County</option>
           {% for c in counties %}
           <option value="{{ c }}">{{ c }}</option>
           {% endfor %}
@@ -61,22 +70,22 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label new">Business stage</label>
+        <label class="field-label new">Business Stage</label>
         <select name="stage" id="f-stage" required>
-          <option value="" disabled selected>Select a stage</option>
+          <option value="" disabled selected>Select a Stage</option>
           {% for s in stages %}
-          <option value="{{ s }}">{{ s }}</option>
+          <option value="{{ s }}">{{ s|title }}</option>
           {% endfor %}
         </select>
       </div>
 
       <div class="field-row">
         <div class="field-group">
-          <label class="field-label new">Employee count</label>
+          <label class="field-label new">Employee Count</label>
           <input type="number" name="employee_count" id="f-employees" min="0" placeholder="e.g. 8">
         </div>
         <div class="field-group">
-          <label class="field-label new">Annual revenue ($)</label>
+          <label class="field-label new">Annual Revenue ($)</label>
           <input type="number" name="annual_revenue" id="f-revenue" min="0" placeholder="e.g. 400000">
         </div>
       </div>
@@ -84,7 +93,7 @@
       <div class="field-group">
         <label class="field-label new">Industry</label>
         <select name="industry" id="f-industry" required>
-          <option value="" disabled selected>Select an industry</option>
+          <option value="" disabled selected>Select an Industry</option>
           {% for i in industries %}
           <option value="{{ i }}">{{ i }}</option>
           {% endfor %}
@@ -92,26 +101,26 @@
       </div>
 
       <div class="field-group field-card">
-        <label class="field-label info">Business address <span class="src">optional — also used to check Enterprise Zone-specific programs</span></label>
+        <label class="field-label info">Business Address <span class="src">Optional. Also used to check Enterprise Zone-specific programs.</span></label>
         <input type="text" name="street_address" id="f-address" placeholder="e.g. 400 E Pratt St, Baltimore, MD" style="margin-bottom: 0.85rem;">
-        <input type="text" name="zip_code" id="f-zip" placeholder="ZIP code, e.g. 21201" maxlength="10">
+        <input type="text" name="zip_code" id="f-zip" placeholder="ZIP Code, e.g. 21201" maxlength="10">
       </div>
 
       <div class="field-group field-card">
-        <label class="field-label info">Ownership <span class="src">optional — helps match certification-specific programs (e.g. MBE, WBE)</span></label>
+        <label class="field-label info">Ownership <span class="src">Optional. Helps match certification-specific programs (e.g. MBE, WBE).</span></label>
         <div class="checkbox-group">
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Black"> Black or African American-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Hispanic/Latino"> Hispanic or Latino-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Asian"> Asian-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Native American"> Native American or Indigenous-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Women"> Women-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Veteran"> Veteran-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Disabled"> Owned by a person with a disability</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of these apply / prefer not to answer</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Black"> Black or African American-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Hispanic/Latino"> Hispanic or Latino-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Asian"> Asian-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Native American"> Native American or Indigenous-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Women"> Women-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Veteran"> Veteran-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Disabled"> Owned by a Person with a Disability</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of These Apply / Prefer Not to Answer</label>
         </div>
       </div>
 
-      <button type="submit" class="submit-btn">See my matches <span class="arrow">&#8599;</span></button>
+      <button type="submit" class="submit-btn">See My Matches <span class="arrow">&#8599;</span></button>
     </form>
   </section>
 
@@ -218,7 +227,7 @@
           if (data.employee_count) document.getElementById('f-employees').value = data.employee_count;
           if (data.address) document.getElementById('f-address').value = data.address;
           if (data.zip_code) document.getElementById('f-zip').value = data.zip_code;
-          revealQuestions('Confirm a few things for ' + accountName, "Pulled from your record on file — fix anything that's changed.");
+          revealQuestions('Confirm a Few Things for ' + accountName, "Pulled from your record on file. Fix anything that's changed.");
         });
     }
 

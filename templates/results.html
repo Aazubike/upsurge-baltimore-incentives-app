@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your matches | UpSurge Baltimore</title>
+  <title>Your Matches | UpSurge Baltimore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
@@ -246,22 +246,26 @@
     {% set ineligible_list = shortlist | selectattr('eligibility', 'equalto', 'likely_ineligible') | list %}
 
     {% if match_list %}
-    <h1 class="flow-h1">{{ match_list|length }} Match{{ 'es' if match_list|length != 1 else '' }} for your company</h1>
+    <h1 class="flow-h1">{{ match_list|length }} Match{{ 'es' if match_list|length != 1 else '' }} for Your Company</h1>
     <p class="flow-sub">
       {% if possible_list %}Plus {{ possible_list|length }} more possible match{{ 'es' if possible_list|length != 1 else '' }} on the next page.{% endif %}
-      {% if gemini_error %}<span class="notice">{{ gemini_error }}</span>{% endif %}
+      {% if gemini_error %}<span class="notice">Uh oh, some programs couldn't be checked right now. Try again later to see the full list.</span>{% endif %}
     </p>
     {% elif possible_list %}
-    <h1 class="flow-h1">{{ possible_list|length }} possible match{{ 'es' if possible_list|length != 1 else '' }} found</h1>
+    <h1 class="flow-h1">{{ possible_list|length }} Possible Match{{ 'es' if possible_list|length != 1 else '' }} Found</h1>
     <p class="flow-sub">
       Worth a look, but not exact fits.
-      {% if gemini_error %}<span class="notice">{{ gemini_error }}</span>{% endif %}
+      {% if gemini_error %}<span class="notice">Uh oh, some programs couldn't be checked right now. Try again later to see the full list.</span>{% endif %}
+    </p>
+    {% elif gemini_error %}
+    <h1 class="flow-h1">Something Went Wrong</h1>
+    <p class="flow-sub">
+      Uh oh, we couldn't finish checking programs for your company. Please try again later.
     </p>
     {% else %}
-    <h1 class="flow-h1">No matches found</h1>
+    <h1 class="flow-h1">No Matches Found</h1>
     <p class="flow-sub">
       This usually means the criteria were narrow. Try adjusting your answers.
-      {% if gemini_error %}<span class="notice">{{ gemini_error }}</span>{% endif %}
     </p>
     {% endif %}
 
@@ -286,10 +290,10 @@
           <h3>{{ program['Program Name'] }}</h3>
           {% if program.get('Acronym') and program['Acronym'] == program['Acronym'] %}<span class="acronym">{{ program['Acronym'] }}</span>{% endif %}
           {{ tier_badge(program.get('match_tier')) }}
-          {% if program.get('verified_note') %}<span class="verified-badge" title="{{ program['verified_note'] }}">Zone verified</span>{% endif %}
+          {% if program.get('verified_note') %}<span class="verified-badge" title="{{ program['verified_note'] }}">Zone Verified</span>{% endif %}
           {% if program.get('fit_score') and program.get('breakdown') %}
           <details class="score-toggle">
-            <summary class="fit-score">{{ program['fit_score'] }}% fit</summary>
+            <summary class="fit-score">{{ program['fit_score'] }}% Fit</summary>
             <div class="breakdown-panel">
               {% for key, label in [('location','Location'),('stage','Stage'),('size','Size'),('industry','Industry'),('mwbe','MWBE'),('overall','Overall')] %}
                 {% set item = program['breakdown'].get(key) %}
@@ -304,7 +308,7 @@
             </div>
           </details>
           {% elif program.get('fit_score') %}
-          <span class="fit-score">{{ program['fit_score'] }}% fit</span>
+          <span class="fit-score">{{ program['fit_score'] }}% Fit</span>
           {% endif %}
         </div>
 
@@ -328,7 +332,7 @@
           <span><span class="ml">Award</span> {{ min_award if min_ok else 'N/A' }} &ndash; {{ max_award if max_ok else 'N/A' }}</span>
           {% endif %}
           {% if link and link == link and link is string and link.startswith('http') %}
-          <a href="/go?submission_id={{ submission_id }}&program={{ program['Program Name'] | urlencode }}&url={{ link | urlencode }}" target="_blank" rel="noopener" class="program-link" data-program="{{ program['Program Name'] }}">Apply / learn more &#8599;</a>
+          <a href="/go?submission_id={{ submission_id }}&program={{ program['Program Name'] | urlencode }}&url={{ link | urlencode }}" target="_blank" rel="noopener" class="program-link" data-program="{{ program['Program Name'] }}">Apply / Learn More &#8599;</a>
           {% endif %}
         </div>
       </div>
@@ -340,7 +344,7 @@
     {% if shortlist %}
     <div class="category-filter-wrap">
       <button type="button" class="category-filter-btn" id="category-filter-btn">
-        Filter by type
+        Filter by Type
         <span class="category-filter-count" id="category-filter-count" style="display:none;"></span>
         <span class="chevron">&#9662;</span>
       </button>
@@ -351,14 +355,14 @@
           {{ cat }}
         </label>
         {% endfor %}
-        <div class="category-filter-section">Hide zone programs</div>
+        <div class="category-filter-section">Hide Zone Programs</div>
         {% for cat in ['Enterprise Zones', 'Opportunity Zones'] %}
         <label class="category-filter-option">
           <input type="checkbox" data-hide="{{ cat }}">
           Hide {{ cat }}
         </label>
         {% endfor %}
-        <div class="category-filter-clear" id="category-filter-clear">Clear filters</div>
+        <div class="category-filter-clear" id="category-filter-clear">Clear Filters</div>
       </div>
     </div>
     {% endif %}
@@ -553,15 +557,15 @@
       })();
     </script>
 
-    <a href="/" class="flow-alt-link">&larr; Start over</a>
-    <a href="/how-it-works" class="flow-alt-link" style="margin-left: 1.5rem;">How ranking works &#8599;</a>
+    <a href="/" class="flow-alt-link">&larr; Start Over</a>
+    <a href="/how-it-works" class="flow-alt-link" style="margin-left: 1.5rem;">How Ranking Works &#8599;</a>
 
     <div class="results-feedback-cta" id="results-feedback-cta">
       <div class="quick-rating-question">How were these results?</div>
       <div class="quick-rating-buttons" id="quick-rating-buttons">
-        <button type="button" class="quick-rating-btn" data-rating="1">Not great</button>
+        <button type="button" class="quick-rating-btn" data-rating="1">Not Great</button>
         <button type="button" class="quick-rating-btn" data-rating="2">OK</button>
-        <button type="button" class="quick-rating-btn" data-rating="3">Very good</button>
+        <button type="button" class="quick-rating-btn" data-rating="3">Very Good</button>
       </div>
       <div class="quick-rating-thanks" id="quick-rating-thanks" style="display:none;">
         Thanks! <a href="/feedback/survey/{{ submission_id }}?job_id={{ job_id }}">Have more to share?</a>
@@ -595,7 +599,7 @@
   <div class="rate-popup" id="rate-popup">
     <span class="rate-popup-text" id="rate-popup-text"></span>
     <button type="button" class="rate-yes" id="rate-yes">Yes</button>
-    <button type="button" class="rate-no" id="rate-no">Not yet</button>
+    <button type="button" class="rate-no" id="rate-no">Not Yet</button>
     <button type="button" class="rate-close" id="rate-close" aria-label="Dismiss">&times;</button>
   </div>
 

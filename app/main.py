@@ -8,7 +8,10 @@ from fastapi import FastAPI, Request, Form, HTTPException, Depends
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import RedirectResponse, Response
+from fastapi.responses import RedirectResponse, Response, JSONResponse
+from fastapi.exceptions import RequestValidationError
+from fastapi.exception_handlers import http_exception_handler
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from pydantic import BaseModel
 from typing import List, Optional
 from uuid import uuid4
@@ -33,6 +36,59 @@ app = FastAPI(title="Baltimore Incentives Matching Tool")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 templates.env.filters["eastern"] = format_eastern
+
+# ---------------------------------------------------------------------------
+# Friendly error pages. Visitors only ever see a generic "Uh oh" message.
+# The real error is printed to the server log (Render logs) for debugging.
+# ---------------------------------------------------------------------------
+GENERIC_ERROR_HEADING = "Something Went Wrong"
+GENERIC_ERROR_MESSAGE = "Uh oh, something went wrong. Please try again later."
+
+
+def _wants_json(request: Request) -> bool:
+    """Background calls from page scripts get JSON; normal page visits get HTML."""
+    accept = request.headers.get("accept", "")
+    return request.url.path.startswith("/api/") or "text/html" not in accept
+
+
+def _friendly_error(request: Request, status_code: int, heading: str, message: str):
+    if _wants_json(request):
+        return JSONResponse({"status": "error", "message": message}, status_code=status_code)
+    return templates.TemplateResponse(
+        "error.html",
+        {"request": request, "heading": heading, "message": message},
+        status_code=status_code,
+    )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def friendly_http_error(request: Request, exc: StarletteHTTPException):
+    # 401 keeps its default behavior so the /internal password prompt still works.
+    if exc.status_code == 401:
+        return await http_exception_handler(request, exc)
+    print(f"[error] {exc.status_code} on {request.method} {request.url.path}: {exc.detail!r}")
+    if exc.status_code == 404:
+        return _friendly_error(
+            request, 404, "Page Not Found",
+            "Uh oh, we couldn't find that page. Head back home and try again.",
+        )
+    return _friendly_error(request, exc.status_code, GENERIC_ERROR_HEADING, GENERIC_ERROR_MESSAGE)
+
+
+@app.exception_handler(RequestValidationError)
+async def friendly_validation_error(request: Request, exc: RequestValidationError):
+    print(f"[error] invalid input on {request.method} {request.url.path}: {exc.errors()!r}")
+    return _friendly_error(
+        request, 422, GENERIC_ERROR_HEADING,
+        "Uh oh, something was missing from the form. Please go back and try again.",
+    )
+
+
+@app.exception_handler(Exception)
+async def friendly_server_error(request: Request, exc: Exception):
+    print(f"[error] unhandled error on {request.method} {request.url.path}: {exc!r}")
+    return _friendly_error(request, 500, GENERIC_ERROR_HEADING, GENERIC_ERROR_MESSAGE)
+
 
 COUNTIES = ["Baltimore City", "Baltimore County", "Anne Arundel", "Harford", "Howard", "Carroll", "Cecil"]
 STAGES = ["pre-seed", "seed", "early", "growth", "established"]
@@ -346,7 +402,7 @@ def _run_matching_job(
             job = _jobs.get(job_id)
             if job is not None:
                 job["status"] = "error"
-                job["message"] = "Something went wrong while matching. Please try again."
+                job["message"] = "Uh oh, something went wrong. Please try again later."
 
 
 @app.post("/match/results")

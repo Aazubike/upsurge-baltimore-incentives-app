@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirm details — UpSurge Baltimore</title>
+  <title>Confirm Details | UpSurge Baltimore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
@@ -16,14 +16,14 @@
   </header>
 
   <section class="flow-wrap">
-    <h1 class="flow-h1">Confirm a few things</h1>
+    <h1 class="flow-h1">Confirm a Few Things</h1>
     <p class="flow-sub">Pulled from your record on file. Fix anything that's changed.</p>
 
     <form method="POST" action="/match/results" class="flow-form">
       <input type="hidden" name="company_name" value="{{ company.get('Account Name', '') }}">
 
       <div class="field-group">
-        <label class="field-label confirmed">County <span class="src">from record</span></label>
+        <label class="field-label confirmed">County <span class="src">From Record</span></label>
         <select name="county" required>
           {% for c in counties %}
           <option value="{{ c }}" {% if c == default_county %}selected{% endif %}>{{ c }}</option>
@@ -33,29 +33,29 @@
 
       <div class="field-group">
         <label class="field-label {% if suggested_stage %}suggested{% else %}new{% endif %}">
-          Business stage
-          {% if suggested_stage %}<span class="src">suggested from funding history</span>{% else %}<span class="src">not tracked — please select</span>{% endif %}
+          Business Stage
+          {% if suggested_stage %}<span class="src">Suggested From Funding History</span>{% else %}<span class="src">Not Tracked. Please Select.</span>{% endif %}
         </label>
         <select name="stage" required>
           {% for s in stages %}
-          <option value="{{ s }}" {% if s == suggested_stage %}selected{% endif %}>{{ s }}</option>
+          <option value="{{ s }}" {% if s == suggested_stage %}selected{% endif %}>{{ s|title }}</option>
           {% endfor %}
         </select>
       </div>
 
       <div class="field-row">
         <div class="field-group">
-          <label class="field-label confirmed">Employee count <span class="src">from record</span></label>
+          <label class="field-label confirmed">Employee Count <span class="src">From Record</span></label>
           <input type="number" name="employee_count" value="{{ default_employees or '' }}" min="0">
         </div>
         <div class="field-group">
-          <label class="field-label confirmed">Annual revenue ($) <span class="src">from record</span></label>
+          <label class="field-label confirmed">Annual Revenue ($) <span class="src">From Record</span></label>
           <input type="number" name="annual_revenue" value="{{ default_revenue or '' }}" min="0">
         </div>
       </div>
 
       <div class="field-group">
-        <label class="field-label confirmed">Industry <span class="src">from record</span></label>
+        <label class="field-label confirmed">Industry <span class="src">From Record</span></label>
         <select name="industry" required>
           {% for i in industries %}
           <option value="{{ i }}" {% if i == default_industry %}selected{% endif %}>{{ i }}</option>
@@ -65,29 +65,29 @@
 
       <div class="field-group field-card">
         <label class="field-label {{ 'confirmed' if default_address else 'info' }}">
-          Business address
-          <span class="src">{{ 'from record' if default_address else 'not on file — optional, also used to check Enterprise Zone-specific programs' }}</span>
+          Business Address
+          <span class="src">{{ 'From Record' if default_address else 'Not on file. Optional, also used to check Enterprise Zone-specific programs.' }}</span>
         </label>
         <input type="text" name="street_address" value="{{ default_address or '' }}" placeholder="e.g. 400 E Pratt St, Baltimore, MD" style="margin-bottom: 0.85rem;">
-        <input type="text" name="zip_code" value="{{ default_zip or '' }}" placeholder="ZIP code, e.g. 21201" maxlength="10">
+        <input type="text" name="zip_code" value="{{ default_zip or '' }}" placeholder="ZIP Code, e.g. 21201" maxlength="10">
       </div>
 
       <div class="field-group field-card">
-        <label class="field-label info">Ownership <span class="src">optional — helps match certification-specific programs (e.g. MBE, WBE)</span></label>
+        <label class="field-label info">Ownership <span class="src">Optional. Helps match certification-specific programs (e.g. MBE, WBE).</span></label>
         <div class="checkbox-group">
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Black"> Black or African American-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Hispanic/Latino"> Hispanic or Latino-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Asian"> Asian-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Native American"> Native American or Indigenous-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Women"> Women-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Veteran"> Veteran-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Disabled"> Owned by a person with a disability</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of these apply / prefer not to answer</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Black"> Black or African American-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Hispanic/Latino"> Hispanic or Latino-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Asian"> Asian-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Native American"> Native American or Indigenous-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Women"> Women-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Veteran"> Veteran-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Disabled"> Owned by a Person with a Disability</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of These Apply / Prefer Not to Answer</label>
         </div>
       </div>
 
       <div class="field-group field-card">
-        <label class="field-label info">Personalized help <span class="src">optional</span></label>
+        <label class="field-label info">Personalized Help <span class="src">Optional</span></label>
         <div class="checkbox-group">
           <label class="checkbox-option">
             <input type="checkbox" name="wants_contact" value="yes" id="wants-contact-checkbox">
@@ -100,13 +100,13 @@
             <input type="email" name="contact_email" id="contact-email-input" placeholder="you@company.com">
           </div>
           <div class="field-group">
-            <label class="field-label info">Phone <span class="src">optional</span></label>
+            <label class="field-label info">Phone <span class="src">Optional</span></label>
             <input type="text" name="contact_phone" placeholder="e.g. (410) 555-0100">
           </div>
         </div>
       </div>
 
-      <button type="submit" class="submit-btn">See my matches <span class="arrow">&#8599;</span></button>
+      <button type="submit" class="submit-btn">See My Matches <span class="arrow">&#8599;</span></button>
     </form>
   </section>
 

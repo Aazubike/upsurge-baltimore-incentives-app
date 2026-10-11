@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tell us about your company — UpSurge Baltimore</title>
+  <title>Tell Us About Your Company | UpSurge Baltimore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
@@ -12,23 +12,23 @@
 
   <header class="site-header">
     <a href="/"><img class="logo" src="/static/img/upsurge_logo.png" alt="UpSurge Baltimore"></a>
-    <span class="mark">{{ prefilled_name if prefilled_name else "New company" }}</span>
+    <span class="mark">{{ prefilled_name if prefilled_name else "New Company" }}</span>
   </header>
 
   <section class="flow-wrap">
-    <h1 class="flow-h1">{% if prefilled_name %}Tell us about {{ prefilled_name }}{% else %}Tell us about your company{% endif %}</h1>
-    <p class="flow-sub">Not on file yet — five quick questions and you're set.</p>
+    <h1 class="flow-h1">{% if prefilled_name %}Tell Us About {{ prefilled_name }}{% else %}Tell Us About Your Company{% endif %}</h1>
+    <p class="flow-sub">Not on file yet. Five quick questions and you're set.</p>
 
     <form method="POST" action="/match/results" class="flow-form">
       <div class="field-group">
-        <label class="field-label new">Company name</label>
-        <input type="text" name="company_name" value="{{ prefilled_name if prefilled_name else '' }}" placeholder="Your company name" required>
+        <label class="field-label new">Company Name</label>
+        <input type="text" name="company_name" value="{{ prefilled_name if prefilled_name else '' }}" placeholder="Your Company Name" required>
       </div>
 
       <div class="field-group">
         <label class="field-label new">County</label>
         <select name="county" required>
-          <option value="" disabled selected>Select a county</option>
+          <option value="" disabled selected>Select a County</option>
           {% for c in counties %}
           <option value="{{ c }}">{{ c }}</option>
           {% endfor %}
@@ -36,22 +36,22 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label new">Business stage</label>
+        <label class="field-label new">Business Stage</label>
         <select name="stage" required>
-          <option value="" disabled selected>Select a stage</option>
+          <option value="" disabled selected>Select a Stage</option>
           {% for s in stages %}
-          <option value="{{ s }}">{{ s }}</option>
+          <option value="{{ s }}">{{ s|title }}</option>
           {% endfor %}
         </select>
       </div>
 
       <div class="field-row">
         <div class="field-group">
-          <label class="field-label new">Employee count</label>
+          <label class="field-label new">Employee Count</label>
           <input type="number" name="employee_count" min="0" placeholder="e.g. 8">
         </div>
         <div class="field-group">
-          <label class="field-label new">Annual revenue ($)</label>
+          <label class="field-label new">Annual Revenue ($)</label>
           <input type="number" name="annual_revenue" min="0" placeholder="e.g. 400000">
         </div>
       </div>
@@ -59,7 +59,7 @@
       <div class="field-group">
         <label class="field-label new">Industry</label>
         <select name="industry" required>
-          <option value="" disabled selected>Select an industry</option>
+          <option value="" disabled selected>Select an Industry</option>
           {% for i in industries %}
           <option value="{{ i }}">{{ i }}</option>
           {% endfor %}
@@ -67,27 +67,27 @@
       </div>
 
       <div class="field-group field-card">
-        <label class="field-label info">Business address <span class="src">optional — also used to check Enterprise Zone-specific programs</span></label>
+        <label class="field-label info">Business Address <span class="src">Optional. Also used to check Enterprise Zone-specific programs.</span></label>
         <input type="text" name="street_address" placeholder="e.g. 400 E Pratt St, Baltimore, MD" style="margin-bottom: 0.85rem;">
-        <input type="text" name="zip_code" placeholder="ZIP code, e.g. 21201" maxlength="10">
+        <input type="text" name="zip_code" placeholder="ZIP Code, e.g. 21201" maxlength="10">
       </div>
 
       <div class="field-group field-card">
-        <label class="field-label info">Ownership <span class="src">optional — helps match certification-specific programs (e.g. MBE, WBE)</span></label>
+        <label class="field-label info">Ownership <span class="src">Optional. Helps match certification-specific programs (e.g. MBE, WBE).</span></label>
         <div class="checkbox-group">
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Black"> Black or African American-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Hispanic/Latino"> Hispanic or Latino-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Asian"> Asian-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Native American"> Native American or Indigenous-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Women"> Women-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Veteran"> Veteran-owned</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Disabled"> Owned by a person with a disability</label>
-          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of these apply / prefer not to answer</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Black"> Black or African American-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Hispanic/Latino"> Hispanic or Latino-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Asian"> Asian-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Native American"> Native American or Indigenous-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Women"> Women-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Veteran"> Veteran-Owned</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="Disabled"> Owned by a Person with a Disability</label>
+          <label class="checkbox-option"><input type="checkbox" name="mwbe_groups" value="none"> None of These Apply / Prefer Not to Answer</label>
         </div>
       </div>
 
       <div class="field-group field-card">
-        <label class="field-label info">Personalized help <span class="src">optional</span></label>
+        <label class="field-label info">Personalized Help <span class="src">Optional</span></label>
         <div class="checkbox-group">
           <label class="checkbox-option">
             <input type="checkbox" name="wants_contact" value="yes" id="wants-contact-checkbox">
@@ -100,13 +100,13 @@
             <input type="email" name="contact_email" id="contact-email-input" placeholder="you@company.com">
           </div>
           <div class="field-group">
-            <label class="field-label info">Phone <span class="src">optional</span></label>
+            <label class="field-label info">Phone <span class="src">Optional</span></label>
             <input type="text" name="contact_phone" placeholder="e.g. (410) 555-0100">
           </div>
         </div>
       </div>
 
-      <button type="submit" class="submit-btn">See my matches <span class="arrow">&#8599;</span></button>
+      <button type="submit" class="submit-btn">See My Matches <span class="arrow">&#8599;</span></button>
       <p class="flow-alt" style="text-align: center; margin-top: 0.75rem;">By submitting, you agree to our <a href="/privacy">Privacy &amp; Confidentiality Policy</a>.</p>
     </form>
   </section>
