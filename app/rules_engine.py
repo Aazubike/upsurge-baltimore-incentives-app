@@ -68,6 +68,17 @@ def _mwbe_ok(row, mwbe_groups: list) -> bool:
     return True
 
 
+def _org_type_ok(row, org_type) -> bool:
+    """For-profit companies only see programs open to for-profits; nonprofits
+    only see programs open to nonprofits. Programs with no org-type data
+    (older rows) pass through. A missing answer is treated as for-profit,
+    which is who the tool served before this question existed."""
+    allowed = row.get("Eligible_Org_Types")
+    if allowed is None or pd.isna(allowed) or not str(allowed).strip():
+        return True
+    return (org_type or "for-profit") in str(allowed)
+
+
 def _employee_ok(row, employee_count) -> bool:
     cap = row.get("Norm_Employee_Max")
     if pd.isna(cap) or cap is None or employee_count is None:
@@ -183,6 +194,7 @@ def enterprise_zone_could_apply(answers: dict) -> bool:
     mask = ez_rows.apply(
         lambda row: (
             _county_ok(row, answers.get("county"))
+            and _org_type_ok(row, answers.get("org_type"))
             and _stage_ok(row, answers.get("stage"))
             and _mwbe_ok(row, answers.get("mwbe_groups", []))
             and _employee_ok(row, answers.get("employee_count"))
@@ -239,6 +251,7 @@ def opportunity_zone_could_apply(answers: dict) -> bool:
     mask = oz_rows.apply(
         lambda row: (
             _county_ok(row, answers.get("county"))
+            and _org_type_ok(row, answers.get("org_type"))
             and _stage_ok(row, answers.get("stage"))
             and _mwbe_ok(row, answers.get("mwbe_groups", []))
             and _employee_ok(row, answers.get("employee_count"))
@@ -262,6 +275,7 @@ def filter_eligible(answers: dict) -> pd.DataFrame:
     keep_mask = df.apply(
         lambda row: (
             _county_ok(row, answers.get("county"))
+            and _org_type_ok(row, answers.get("org_type"))
             and _stage_ok(row, answers.get("stage"))
             and _mwbe_ok(row, answers.get("mwbe_groups", []))
             and _employee_ok(row, answers.get("employee_count"))

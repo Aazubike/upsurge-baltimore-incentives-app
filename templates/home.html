@@ -60,6 +60,14 @@
       </div>
 
       <div class="field-group">
+        <label class="field-label new">Organization Type</label>
+        <select name="org_type" id="f-org-type" required>
+          <option value="for-profit" selected>For-Profit Business</option>
+          <option value="non-profit">Nonprofit Organization</option>
+        </select>
+      </div>
+
+      <div class="field-group">
         <label class="field-label new">County</label>
         <select name="county" id="f-county" required>
           <option value="" disabled selected>Select a County</option>
@@ -209,6 +217,7 @@
     function clearForm() {
       ['f-county', 'f-stage', 'f-industry'].forEach(id => document.getElementById(id).value = '');
       ['f-employees', 'f-revenue', 'f-address', 'f-zip'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('f-org-type').value = 'for-profit';
     }
 
     function selectCompany(accountName) {

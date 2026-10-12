@@ -192,6 +192,23 @@
       border-top: 1px solid var(--surface-2);
       margin-top: 0.35rem;
     }
+    .next-cycle-badge {
+      display: inline-block;
+      background: #8a5a00;
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .result-next-cycle {
+      font-size: 0.85rem;
+      color: #e0a43a;
+      border-left: 2px solid #e0a43a;
+      padding: 0.35rem 0 0.35rem 0.7rem;
+      margin: 0.6rem 0;
+    }
+    .category-filter-section-first { border-top: none; margin-top: 0; }
     .verified-badge {
       display: inline-block;
       background: #1a7f37;
@@ -291,6 +308,7 @@
           {% if program.get('Acronym') and program['Acronym'] == program['Acronym'] %}<span class="acronym">{{ program['Acronym'] }}</span>{% endif %}
           {{ tier_badge(program.get('match_tier')) }}
           {% if program.get('verified_note') %}<span class="verified-badge" title="{{ program['verified_note'] }}">Zone Verified</span>{% endif %}
+          {% if program.get('Status') == 'Reopens Next Cycle' %}<span class="next-cycle-badge">Reopens Next Cycle</span>{% endif %}
           {% if program.get('fit_score') and program.get('breakdown') %}
           <details class="score-toggle">
             <summary class="fit-score">{{ program['fit_score'] }}% Fit</summary>
@@ -312,6 +330,9 @@
           {% endif %}
         </div>
 
+        {% if program.get('Status') == 'Reopens Next Cycle' %}
+        <p class="result-next-cycle">&#9203; Not accepting applications right now. This program reopens on a recurring cycle, so check the program page for the next application window.</p>
+        {% endif %}
         {% if program.get('reasoning') %}
         <p class="result-reasoning">{{ program['reasoning'] }}</p>
         {% endif %}
@@ -344,15 +365,23 @@
     {% if shortlist %}
     <div class="category-filter-wrap">
       <button type="button" class="category-filter-btn" id="category-filter-btn">
-        Filter by Type
+        Filter Results
         <span class="category-filter-count" id="category-filter-count" style="display:none;"></span>
         <span class="chevron">&#9662;</span>
       </button>
       <div class="category-filter-dropdown" id="category-filter-dropdown">
+        <div class="category-filter-section category-filter-section-first">Type</div>
         {% for cat in ['Tax', 'Grants', 'Loans', 'Workforce / Training', 'Equity / Venture Capital', 'Property / Development', 'Technical Assistance'] %}
         <label class="category-filter-option">
           <input type="checkbox" data-category="{{ cat }}">
           {{ cat }}
+        </label>
+        {% endfor %}
+        <div class="category-filter-section">Availability</div>
+        {% for av in ['Open Now', 'Reopens Next Cycle', 'Check With Agency'] %}
+        <label class="category-filter-option">
+          <input type="checkbox" data-availability="{{ av }}">
+          {{ av }}
         </label>
         {% endfor %}
         <div class="category-filter-section">Hide Zone Programs</div>
@@ -420,6 +449,7 @@
         var currentPage = 1;
         var selectedCategories = [];
         var hiddenCategories = [];
+        var selectedAvailability = [];
 
         var matchSection = document.getElementById('match-section');
         var possibleSection = document.getElementById('possible-section');
@@ -430,12 +460,16 @@
           // "Hide" options win: a hidden zone program never shows, even if
           // it also matches a selected type (most zone programs are Tax).
           if (hiddenCategories.some(function(h) { return cats.indexOf(h) !== -1; })) return false;
+          // Availability is its own group: a card must match one of the
+          // selected availability options AND one of the selected types.
+          if (selectedAvailability.length > 0 &&
+              !selectedAvailability.some(function(a) { return cats.indexOf(a) !== -1; })) return false;
           if (selectedCategories.length === 0) return true;
           return selectedCategories.some(function(sel) { return cats.indexOf(sel) !== -1; });
         }
 
         function render() {
-          var filtering = selectedCategories.length > 0 || hiddenCategories.length > 0;
+          var filtering = selectedCategories.length > 0 || hiddenCategories.length > 0 || selectedAvailability.length > 0;
 
           if (matchSection) {
             matchSection.querySelectorAll('.result-card').forEach(function(card) {
@@ -501,7 +535,7 @@
         var filterClear = document.getElementById('category-filter-clear');
 
         function updateFilterButton() {
-          var activeCount = selectedCategories.length + hiddenCategories.length;
+          var activeCount = selectedCategories.length + hiddenCategories.length + selectedAvailability.length;
           if (activeCount > 0) {
             filterCount.textContent = activeCount;
             filterCount.style.display = '';
@@ -527,8 +561,11 @@
           filterDropdown.querySelectorAll('input[type="checkbox"]').forEach(function(box) {
             box.addEventListener('change', function() {
               var isHide = box.hasAttribute('data-hide');
-              var cat = isHide ? box.getAttribute('data-hide') : box.getAttribute('data-category');
-              var list = isHide ? hiddenCategories : selectedCategories;
+              var isAvail = box.hasAttribute('data-availability');
+              var cat = isHide ? box.getAttribute('data-hide')
+                      : isAvail ? box.getAttribute('data-availability')
+                      : box.getAttribute('data-category');
+              var list = isHide ? hiddenCategories : isAvail ? selectedAvailability : selectedCategories;
               var idx = list.indexOf(cat);
               if (box.checked && idx === -1) {
                 list.push(cat);
@@ -545,6 +582,7 @@
             filterClear.addEventListener('click', function() {
               selectedCategories = [];
               hiddenCategories = [];
+              selectedAvailability = [];
               filterDropdown.querySelectorAll('input[type="checkbox"]').forEach(function(box) { box.checked = false; });
               updateFilterButton();
               currentPage = 1;

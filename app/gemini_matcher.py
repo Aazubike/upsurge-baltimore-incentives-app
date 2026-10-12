@@ -167,6 +167,8 @@ def _build_prompt(answers: dict, shortlist_df: pd.DataFrame) -> str:
         "industry": answers.get("industry"),
         "ownership_groups": answers.get("mwbe_groups", []),
     }
+    if answers.get("org_type") == "non-profit":
+        company_profile["organization_type"] = "nonprofit"
     location_facts = verified_location_status(answers)
     if location_facts:
         company_profile["verified_location_status"] = location_facts
@@ -241,6 +243,13 @@ CRITICAL RULES:
    Zone program matching a verified zone, treat the zone location requirement
    as MET. Do not describe it as uncertain, "likely", or "if situated in a
    zone", and score the location dimension as a full match.
+8. If a program's status is "Reopens Next Cycle", it is recurring but not
+   accepting applications right now. Score its fit exactly as if it were open.
+   Timing is shown to the user separately, so do not lower the score, mark it
+   ineligible, or flag it because of the current application window.
+9. If the company profile includes "organization_type": "nonprofit", the
+   applicant is a nonprofit organization, not a business. Programs reaching you
+   already accept nonprofits, so judge fit for a nonprofit applicant.
 
 Candidate programs (already passed hard filters):
 {json.dumps(programs, indent=2)}

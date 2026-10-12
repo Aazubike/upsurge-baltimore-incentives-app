@@ -53,6 +53,11 @@ def make_company_hash(answers: dict) -> str:
         "industry": answers.get("industry"),
         "ownership_groups": sorted(answers.get("mwbe_groups", []) or []),
     }
+    # Nonprofits are scored with their organization type in the prompt, so it's
+    # part of their key. Left out for for-profits so their existing cached
+    # results stay valid.
+    if answers.get("org_type") == "non-profit":
+        relevant["organization_type"] = "nonprofit"
     # Verified zone facts are also sent to Gemini, so they're part of the key.
     # Only added when present, so companies with no verified zone keep the
     # same key as before and their existing cached results stay valid.

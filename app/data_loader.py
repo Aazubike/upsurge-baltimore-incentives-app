@@ -76,6 +76,16 @@ def _classify_categories(row) -> list[str]:
         for category, phrase in ZONE_CATEGORIES.items():
             if phrase in name.lower():
                 categories.append(category)
+    # Availability, used by the results page filter and the "Reopens Next
+    # Cycle" warning on each card.
+    status = row.get("Status")
+    if status == "Reopens Next Cycle":
+        categories.append("Reopens Next Cycle")
+    elif status == "Open":
+        categories.append("Open Now")
+    else:
+        # Compass doesn't say whether these are taking applications right now.
+        categories.append("Check With Agency")
     return categories
 
 

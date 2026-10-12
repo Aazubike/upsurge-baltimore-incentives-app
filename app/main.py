@@ -270,6 +270,7 @@ def _run_matching_job(
     wants_contact: bool = False,
     contact_email: str = "",
     contact_phone: str = "",
+    org_type: str = "for-profit",
 ):
     """Runs the full matching pipeline on a background thread, updating the
     job's status/message/progress as it goes so the loading page has
@@ -277,6 +278,7 @@ def _run_matching_job(
     stashed on the job for /match/results/{job_id} to render."""
     try:
         precheck_answers = {
+            "org_type": org_type,
             "county": county,
             "stage": stage,
             "employee_count": cleaned_employee_count,
@@ -302,6 +304,7 @@ def _run_matching_job(
             ez_result = None
 
         answers = {
+            "org_type": org_type,
             "county": county,
             "stage": stage,
             "employee_count": cleaned_employee_count,
@@ -419,6 +422,7 @@ def match_results(
     wants_contact: Optional[str] = Form(None),
     contact_email: Optional[str] = Form(None),
     contact_phone: Optional[str] = Form(None),
+    org_type: Optional[str] = Form("for-profit"),
 ):
     def to_int_or_none(val):
         if val is None or val.strip() == "":
@@ -436,6 +440,7 @@ def match_results(
     cleaned_wants_contact = wants_contact == "yes"
     cleaned_contact_email = contact_email.strip() if contact_email else ""
     cleaned_contact_phone = contact_phone.strip() if contact_phone else ""
+    cleaned_org_type = "non-profit" if org_type == "non-profit" else "for-profit"
 
     job_id = str(uuid4())
     with _jobs_lock:
@@ -454,6 +459,7 @@ def match_results(
             cleaned_employee_count, cleaned_annual_revenue,
             cleaned_mwbe_groups, cleaned_zip, cleaned_address,
             cleaned_wants_contact, cleaned_contact_email, cleaned_contact_phone,
+            cleaned_org_type,
         ),
         daemon=True,
     )

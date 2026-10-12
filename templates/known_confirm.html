@@ -23,6 +23,14 @@
       <input type="hidden" name="company_name" value="{{ company.get('Account Name', '') }}">
 
       <div class="field-group">
+        <label class="field-label new">Organization Type</label>
+        <select name="org_type" required>
+          <option value="for-profit" selected>For-Profit Business</option>
+          <option value="non-profit">Nonprofit Organization</option>
+        </select>
+      </div>
+
+      <div class="field-group">
         <label class="field-label confirmed">County <span class="src">From Record</span></label>
         <select name="county" required>
           {% for c in counties %}
