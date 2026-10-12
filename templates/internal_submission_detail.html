@@ -111,6 +111,7 @@
     <div class="detail-card">
       <div class="detail-grid">
         <div><div class="k">Submitted</div><div class="v">{{ s.created_at | eastern }}</div></div>
+        <div><div class="k">Organization Type</div><div class="v">{% if s.org_type == 'non-profit' %}Nonprofit{% elif s.org_type == 'for-profit' %}For-Profit{% else %}Not Asked{% endif %}</div></div>
         <div><div class="k">Flow</div><div class="v">{{ s.flow_type }}</div></div>
         <div><div class="k">Region</div><div class="v">{{ s.region }}</div></div>
         <div><div class="k">Stage</div><div class="v">{{ s.stage }}</div></div>

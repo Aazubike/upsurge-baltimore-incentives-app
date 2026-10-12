@@ -227,6 +227,7 @@
         <tr>
           <th class="sortable" data-key="date" data-type="text">Date <span class="arrow"></span></th>
           <th class="sortable" data-key="company" data-type="text">Company <span class="arrow"></span></th>
+          <th class="sortable" data-key="orgtype" data-type="text">Org Type <span class="arrow"></span></th>
           <th class="sortable" data-key="stage" data-type="text">Stage <span class="arrow"></span></th>
           <th class="sortable" data-key="industry" data-type="text">Industry <span class="arrow"></span></th>
           <th>Flow</th>
@@ -245,11 +246,12 @@
         {% if group_by_day and s.day != ns.day %}
           {% set ns.day = s.day %}
           {% set day_count = submissions | selectattr('day', 'equalto', s.day) | list | length %}
-          <tr class="group-row"><td colspan="12">{{ s.day.strftime('%A, %b %-d, %Y') if s.day else 'No date' }}<span class="group-count">{{ day_count }} submission{{ '' if day_count == 1 else 's' }}</span></td></tr>
+          <tr class="group-row"><td colspan="13">{{ s.day.strftime('%A, %b %-d, %Y') if s.day else 'No date' }}<span class="group-count">{{ day_count }} submission{{ '' if day_count == 1 else 's' }}</span></td></tr>
         {% endif %}
         <tr onclick="window.location.href='/internal/submissions/{{ s.submission_id }}'"
             data-date="{{ s.created_at.isoformat() if s.created_at else '' }}"
             data-company="{{ (s.company_name or '') | lower }}"
+            data-orgtype="{{ s.org_type or 'not asked' }}"
             data-stage="{{ (s.stage or '') | lower }}"
             data-industry="{{ (s.industry or '') | lower }}"
             data-clicks="{{ s.click_count }}"
@@ -258,6 +260,7 @@
             data-contact="{{ 1 if s.wants_contact else 0 }}">
           <td>{{ s.created_at | eastern }}</td>
           <td><a href="/internal/submissions/{{ s.submission_id }}">{{ s.company_name or '(unnamed)' }}</a></td>
+          <td>{% if s.org_type == 'non-profit' %}Nonprofit{% elif s.org_type == 'for-profit' %}For-Profit{% else %}Not Asked{% endif %}</td>
           <td>{{ s.stage or '&mdash;' }}</td>
           <td>{{ s.industry or '&mdash;' }}</td>
           <td>{{ s.flow_type }}</td>

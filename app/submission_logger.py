@@ -86,6 +86,7 @@ def log_submission(
     wants_contact: bool = False,
     contact_email: str = "",
     contact_phone: str = "",
+    org_type: str = "",
 ) -> None:
     """
     Writes one row to match_submissions: every intake answer, the tiered
@@ -109,8 +110,8 @@ def log_submission(
                  stage, employee_count, annual_revenue, industry, ownership,
                  zip_code, street_address, oz_eligible, oz_tract,
                  tier_90_plus, tier_80_89, tier_75_79, full_results,
-                 wants_contact, contact_email, contact_phone)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                 wants_contact, contact_email, contact_phone, org_type)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 submission_id,
@@ -134,6 +135,7 @@ def log_submission(
                 wants_contact,
                 contact_email,
                 contact_phone,
+                org_type,
             ),
         )
         conn.commit()
@@ -298,7 +300,7 @@ def search_submissions(q: str = "", date_from=None, date_to=None, flow_type: str
                 s.region, s.stage, s.industry, s.employee_count, s.annual_revenue,
                 s.ownership, s.zip_code, s.street_address, s.oz_eligible, s.oz_tract,
                 s.tier_90_plus, s.tier_80_89, s.tier_75_79,
-                s.wants_contact, s.contact_email, s.contact_phone,
+                s.wants_contact, s.contact_email, s.contact_phone, s.org_type,
                 (SELECT COUNT(*) FROM link_clicks c WHERE c.submission_id = s.submission_id) AS click_count,
                 (SELECT COUNT(*) FROM program_feedback pf WHERE pf.submission_id = s.submission_id) AS feedback_count,
                 fr.relevance_rating, fr.found_what_needed

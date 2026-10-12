@@ -379,6 +379,7 @@ def _run_matching_job(
                 wants_contact=wants_contact,
                 contact_email=contact_email,
                 contact_phone=contact_phone,
+                org_type=org_type,
             )
         except Exception as e:
             print(f"[match job {job_id}] submission logging failed (non-fatal): {e!r}")
@@ -673,6 +674,12 @@ def internal_submissions(
     })
 
 
+def _org_type_label(value) -> str:
+    """Submissions made before the organization type question existed show
+    as "Not Asked" rather than guessing."""
+    return {"for-profit": "For-Profit", "non-profit": "Nonprofit"}.get(value or "", "Not Asked")
+
+
 def _tier_count(value) -> int:
     return len(value.split("|")) if value else 0
 
@@ -695,7 +702,7 @@ def internal_submissions_csv(
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow([
-        "Date (Baltimore time)", "Company", "Flow", "Region", "Stage", "Industry",
+        "Date (Baltimore time)", "Company", "Organization Type", "Flow", "Region", "Stage", "Industry",
         "Employees", "Annual revenue", "Ownership", "ZIP", "Street address",
         "Opportunity Zone", "OZ tract",
         "Matches 90+ (count)", "Matches 80-89 (count)", "Matches 75-79 (count)",
@@ -707,7 +714,8 @@ def internal_submissions_csv(
         local = r.get("created_local")
         writer.writerow([
             local.strftime("%Y-%m-%d %I:%M %p") if local else "",
-            r.get("company_name") or "", r.get("flow_type") or "", r.get("region") or "",
+            r.get("company_name") or "", _org_type_label(r.get("org_type")),
+            r.get("flow_type") or "", r.get("region") or "",
             r.get("stage") or "", r.get("industry") or "",
             r.get("employee_count") or "", r.get("annual_revenue") or "",
             r.get("ownership") or "", r.get("zip_code") or "", r.get("street_address") or "",
